@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="pure-g-r">
+  <div class="pure-u-1">
+    <p>{{ photo.title }} has been uploaded.</p>
+    <img class="display" src="{{ photo.photo_url() }}">
+  </div>
+</div>
+{% endblock %}

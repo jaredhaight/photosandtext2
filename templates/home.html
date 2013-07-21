@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="pure-g-r">
+  {% for photo in photos %}
+  <div class="pure-u-1-5">
+    <img src="{{ photo.photo_url() }}">
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
