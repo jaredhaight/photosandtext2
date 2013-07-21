@@ -3,7 +3,7 @@
 <div class="pure-g-r">
   {% for photo in photos %}
   <div class="pure-u-1-5">
-    <img src="{{ photo.photo_url() }}">
+    <a href="photo/{{ photo.id }}"><img src="{{ photo.get_thumbnail("thumb400") }}"></a>
   </div>
   {% endfor %}
 </div>

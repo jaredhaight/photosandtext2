@@ -3,6 +3,7 @@
 <div class="pure-g-r">
   <div class="pure-u-1">
     <form id="dropbox" class="pure-form" action="/upload" method="POST" enctype="multipart/form-data">
+      <p>Drop photos here.</p>
     </form>
   </div>
 </div>
@@ -18,11 +19,12 @@
 <script src="{{ url_for('static',filename='js/dropzone.js') }}"></script>
 <script>
 $(document).ready(function() {
-  console.log("resady");
   $("#dropbox").dropzone({
       previewsContainer: "#previewBox",
       dictDefaultMessage: "Drop files here to upload",
       maxThumbnailFilesize: 15,
+      thumbnailWidth: 300,
+      thumbnailHeight: 300
     });
   });
 </script>

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}<title> {{ photo.title }} - Photos and Text </title>{% endblock %}
+
+
+{% block header %}{% endblock %}
+{% block body %}
+<div class="pure-g-r">
+  <div class="pure-u-4-5">
+    <img src="{{ photo.url() }}">
+  </div>
+  <div class="pure-u-1-5">
+    <p>{{ photo.title }}</p>
+  </div>
+</div>
+{% endblock %}
+{% block javascript %}
+
+{% endblock %}

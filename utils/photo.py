@@ -3,19 +3,18 @@ from PIL.ExifTags import TAGS
 from decimal import Decimal
 from datetime import datetime
 from photosandtext2 import app
-from photosandtext2.models import Photo
+from photosandtext2.models import Photo, Crop
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
+CROP_STORE = app.config["CROP_STORE"]
 
 def new_photo(photoFile):
     exif = get_exif(PHOTO_STORE+'/'+photoFile)
-    photo = Photo(title=exif['date_taken'], image=photoFile)
+    thumbnail = make_crop(photoFile, 400, 400)
+    crop = Crop(name="thumb400", file=thumbnail)
+    photo = Photo(title=exif['date_taken'], image=photoFile, crops=[crop], created=datetime.utcnow())
     photo.save()
     return photo
-
-def list_photos():
-    photos = Photo.query.all()
-    return photos
 
 def resize_image(image, height, width):
     slash = image.name.find('/')+1
@@ -31,13 +30,13 @@ def resize_image(image, height, width):
 
     return filename
 
-def make_thumbnail(image, height, width):
-    slash = image.name.find('/')+1
-    dot = image.name.find('.')
-    filename = MEDIA_ROOT+'crops/'+str(image.name[slash:dot])+'_thumb_h'+str(height)+'_w'+str(width)+'.jpg'
-    t_img = Image.open(image.path)
+def make_crop(image, height, width):
+    slash = image.find('/')+1
+    dot = image.find('.')
+    filename = image[slash:dot]+'_thumb_h'+str(height)+'_w'+str(width)+'.jpg'
+    t_img = Image.open(PHOTO_STORE+"/"+image)
     t_fit = ImageOps.fit(t_img, (height,width), Image.ANTIALIAS, 0, (0.5,0.5))
-    t_fit.save(filename,"JPEG", quality=95)
+    t_fit.save(CROP_STORE+'/'+filename,"JPEG", quality=95)
 
     return filename
 

@@ -11,6 +11,9 @@ form#dropbox {
     border-radius: 5px;
 }
 
+#dropbox p {
+    padding-top: 35px;
+}
 .dropzone span {
     margin-top: 10px;
 }
@@ -20,13 +23,38 @@ form#dropbox {
     display: inline-block;
     margin: 10px;
     text-align: center;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #ccc;
 }
 
 .dz-details {
     text-align: center;
     border: #525252;
-    border-style: solid;
-    border-width: 1px;
     padding: 10px;
     margin: 10px auto;
+}
+
+.dz-progress {
+    background: #d7d7d7;
+    position: relative;
+    height: 10px;
+    margin: 10px;
+}
+
+.dz-upload {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    background-color: #8cc657;
+}
+
+.dz-success-mark span {
+    display: none;
+}
+
+.dz-error-mark span {
+    display: none;
 }
