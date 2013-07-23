@@ -9,7 +9,11 @@
     <img src="{{ photo.url() }}">
   </div>
   <div class="pure-u-1-5">
-    <p>{{ photo.title }}</p>
+    <p class="taken">Taken on {{ photo.exif_date_taken }}</p>
+    <p class="shutter">Shutter: {{ photo.exif_shutter }}</p>
+    <p class="apurture">Aperture: {{ photo.exif_aperture }}</p>
+    <p class="focal">Focal Length: {{ photo.exif_focal }}</p>
+    <p class="iso">ISO: {{ photo.exif_iso }}</p>
   </div>
 </div>
 {% endblock %}

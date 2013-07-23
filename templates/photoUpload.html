@@ -2,13 +2,15 @@
 {% block body %}
 <div class="pure-g-r">
   <div class="pure-u-1">
-    <form id="dropbox" class="pure-form" action="/upload" method="POST" enctype="multipart/form-data">
-      <p>Drop photos here.</p>
-    </form>
+    <p>Drop photos here.</p>
+    <input id="dropbox" type=file name="files[]" action="{{ url_for('api_photo_list') }}" data-url="{{ url_for('api_photo_list') }}" method="POST" enctype="multipart/form-data" multiple>
   </div>
 </div>
 <div class="pure-g-r">
   <div class="pure-u-1">
+    <div id="progress">
+      <div class="bar" style="width: 0%;"></div>
+    </div>
     <div id="previewBox">
 
     </div>
@@ -16,16 +18,26 @@
 </div>
 {% endblock %}
 {% block javascript %}
-<script src="{{ url_for('static',filename='js/dropzone.js') }}"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="{{ url_for('static',filename='js/jquery.fileupload.js') }}"></script>
 <script>
+
 $(document).ready(function() {
-  $("#dropbox").dropzone({
-      previewsContainer: "#previewBox",
-      dictDefaultMessage: "Drop files here to upload",
-      maxThumbnailFilesize: 15,
-      thumbnailWidth: 300,
-      thumbnailHeight: 300
+       $('#dropbox').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result, function (index, result) {
+              $("#previewBox").prepend('<div class="pure-u-1-5"><img id="theImg" src='+(result.crops.thumb200)+'/></div>');
+            });
+        },
+        progress: function (e, data) {
+          var progress = parseInt(data.loaded / data.total * 100, 10);
+          $('#progress .bar').css(
+              'width',
+              progress + '%'
+          );
+        }
     });
-  });
+});
 </script>
 {% endblock %}
