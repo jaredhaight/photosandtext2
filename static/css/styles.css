@@ -1,14 +1,39 @@
-.display img {
-    max-width: 400px;
+/* Photo View Page */
+#photoSidebar {
+    color: #525252;
+}
+#photoSidebar h3 {
+    color: #111111;
+    margin-top: 5px;
 }
 
-form#dropbox {
-    width: 50%;
-    margin: 0 auto;
+#photoSidebar .section {
+    padding: 10px;
+    border-bottom: #ccc;
+    border-width: 1px;
+    border-bottom-style: solid;
+}
+
+#photoInfo p{
+    margin: .5em 0;
+}
+
+.placeHolder {
+    color: #888;
+}
+
+#galleryList {
+    padding-bottom: 10px;
+}
+
+/* Photo Upload Page */
+#dropbox {
+    margin: 10px auto;
+    width: 100%;
     text-align: center;
     height: 100px;
-    background: #ccc;
-    border-radius: 5px;
+    background: #eee;
+    font-size: 20px;
 }
 
 #dropbox p {
@@ -20,14 +45,30 @@ form#dropbox {
     text-align: center;
 }
 
+#stickyFooter {
+    display: none;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    height: 60px;
+    background: #fff;
+    padding-bottom: 20px;
+    border-top: #ccc;
+    border-width: 1px;
+    border-top-style: solid;
+}
+
 #progress {
     width: 80%;
     margin: 0 auto;
     padding: 20px;
 }
 
+.counts {
+    margin-bottom: 10px;
+}
+
 .bar {
-    width: 100%;
     height: 10px;
     background: greenyellow;
 }

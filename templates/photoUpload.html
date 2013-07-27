@@ -2,18 +2,23 @@
 {% block body %}
 <div class="pure-g-r">
   <div class="pure-u-1">
-    <p>Drop photos here.</p>
-    <input id="dropbox" type=file name="files[]" action="{{ url_for('api_photo_list') }}" data-url="{{ url_for('api_photo_list') }}" method="POST" enctype="multipart/form-data" multiple>
+    <div id="dropbox">
+      <p>Drop photos here.</p>
+    </div>
   </div>
 </div>
 <div class="pure-g-r">
   <div class="pure-u-1">
-    <div id="progress">
-      <div class="bar" style="width: 0%;"></div>
-    </div>
     <div id="previewBox">
-
     </div>
+  </div>
+</div>
+<div id="stickyFooter">
+  <div id="progress">
+    <div class="counts">
+      Uploading photo <span id="done">1</span> of <span id="count"></span>
+    </div>
+    <div class="bar" style="width: 0%;"></div>
   </div>
 </div>
 {% endblock %}
@@ -23,11 +28,25 @@
 <script>
 
 $(document).ready(function() {
+       var done = 0;
        $('#dropbox').fileupload({
+        url: "{{ url_for('api_photo_list') }}",
         dataType: 'json',
+        dropZone: $("#dropbox"),
+        drop: function (e, data) {
+          var count = 0;
+          $("#stickyFooter").show();
+          $.each(data.files, function (index, file) {
+              count = count + 1;
+              $("#count").text(count);
+              console.log('Dropped file: ' + file.name);
+          });
+        },
         done: function (e, data) {
             $.each(data.result, function (index, result) {
-              $("#previewBox").prepend('<div class="pure-u-1-5"><img id="theImg" src='+(result.crops.thumb200)+'/></div>');
+              done = done +1;
+              $("#previewBox").prepend('<div class="pure-u-1-6"><img id='+result.id+' src='+(result.crops.thumb200)+'/></div>');
+              $("#done").text(done);
             });
         },
         progress: function (e, data) {
@@ -36,8 +55,18 @@ $(document).ready(function() {
               'width',
               progress + '%'
           );
+          console.log((data.bitrate / 1024 * 8)+" KBps");
+        },
+        stop: function (e, data) {
+          $("#stickyFooter").hide();
+        },
+        dragover: function(e, data) {
+          $("#dropbox").css("background","#ccc");
         }
     });
+    $('#dropbox').on('dragleave', function (e) {
+      $("#dropbox").css("background","#eee");
+  });
 });
 </script>
 {% endblock %}

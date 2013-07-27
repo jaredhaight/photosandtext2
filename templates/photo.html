@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block metadata %}
+<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.tagit.css') }}">
+{% endblock %}
 {% block title %}<title> {{ photo.title }} - Photos and Text </title>{% endblock %}
 
 
@@ -9,14 +13,76 @@
     <img src="{{ photo.url() }}">
   </div>
   <div class="pure-u-1-5">
-    <p class="taken">Taken on {{ photo.exif_date_taken }}</p>
-    <p class="shutter">Shutter: {{ photo.exif_shutter }}</p>
-    <p class="apurture">Aperture: {{ photo.exif_aperture }}</p>
-    <p class="focal">Focal Length: {{ photo.exif_focal }}</p>
-    <p class="iso">ISO: {{ photo.exif_iso }}</p>
+    <div id="photoSidebar">
+      <div id="photoDesc" class="section">
+        {% if photo.desc %}
+          <div id="photoDescContent">{{ photo.desc|safe }}</div>
+        {% else %}
+          <div id="photoDescContent" class="placeHolder"></div>
+        {% endif %}
+      </div>
+      <div id="photoGalleries" class="section">
+        <h3>Galleries</h3>
+        <ul id="galleryList">
+
+        </ul>
+      </div>
+      <div id="photoInfo" class="section">
+        <h3>Photo Details</h3>
+        <p class="taken">Taken on {{ photo.exif_date_taken }}</p>
+        <p class="shutter">Shutter: {{ photo.exif_shutter }}</p>
+        <p class="aperture">Aperture: {{ photo.exif_aperture }}</p>
+        <p class="focal">Focal Length: {{ photo.exif_focal }}</p>
+        <p class="iso">ISO: {{ photo.exif_iso }}</p>
+      </div>
+      <div id="location" class="section">
+        <h3>Location</h3>
+        <img src="http://f.cl.ly/items/0w2w2b2z0P3W3824412B/Screen%20Shot%202013-07-23%20at%209.08.44%20PM.png"
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
 {% block javascript %}
-
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="{{ url_for('static', filename="js/jquery.contenteditable.js") }}"></script>
+<script src="{{ url_for('static', filename="js/tag-it.min.js") }}"></script>
+<script>
+$(document).ready(function() {
+  $.getJSON('http://127.0.0.1:5000/api/galleries/', function(data) {
+      var items = [];
+      var list = [];
+      $.each(data.results, function(key, val) {
+        list.push(val.name);
+      });
+      $("#galleryList").tagit({
+        availableTags: list,
+        autocomplete: {delay: 0, minLength: 2}
+      });
+  });
+  $.getJSON('http://127.0.0.1:5000/api/photos/{{ photo.id }}/', function(data){
+    for (gallery in data.galleries) {
+      console.log(data.galleries[gallery].name);
+      $("#galleryList").tagit("createTag",data.galleries[gallery].name);
+    }
+  });
+  $("#photoDescContent").contentEditable({
+    "newLineOnEnterKey": true,
+    "onFocusIn": function(){
+      $("#photoDescContent").removeClass('placeHolder');
+    },
+    "onBlur" : function(element){
+        var data = {desc:element.content};
+        $.ajax({
+          type: 'POST',
+          url: "{{ url_for('api_photo', photoID=photo.id) }}",
+          data: data,
+          success: function(data) {
+            console.log(data);
+          }
+        });
+      }
+    });
+});
+</script>
 {% endblock %}

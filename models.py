@@ -1,3 +1,4 @@
+from flask import url_for
 from photosandtext2 import db, app
 from utils.general import slugify
 from utils.photo import get_exif, make_crop
@@ -12,6 +13,9 @@ association_table = db.Table('photo_gallery_association',
 )
 
 def create_crops(photo):
+    """
+    Used when a Photo object is saved. Any crops in the Crops Settings table that don't exist will be created.
+    """
     cropTypes = CropSettings.query.all()
     for cropType in cropTypes:
         search = photo.crops.filter_by(name=cropType.name).first()
@@ -40,13 +44,19 @@ class Photo(db.Model):
     updated = db.Column(db.DateTime, nullable=True)
 
     def __repr__(self):
-        return '<Photo %r>' % self.title
+        return '<Photo %r>' % self.id
 
     def path(self):
         return app.config["PHOTO_STORE"]+'/'+self.image
 
     def url(self):
         return app.config["PHOTO_BASE_URL"]+'/'+self.image
+
+    def api_url(self):
+        return url_for('api_photo', photoID=self.id, _external=True)
+
+    def site_url(self):
+        return url_for('return_photo', photoID=self.id, _external=True)
 
     def get_thumbnail(self, thumbnailName):
         crop = Crop.query.filter_by(photo_id=self.id, name=thumbnailName).first()
@@ -79,7 +89,7 @@ class Crop(db.Model):
 class CropSettings(db.Model):
     """
     This table stores the details for the crops we want. We iterate through this
-    when a photo is saved. Any crops that don't exist will be created.
+    when a photo is saved.
     """
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
@@ -89,19 +99,37 @@ class CropSettings(db.Model):
 
 class Gallery(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256))
+    name = db.Column(db.String(256), unique=True)
     description = db.Column(db.Text)
-    slug = db.Column(db.String(256))
+    slug = db.Column(db.String(256), unique=True)
 
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
-        return '<Category %r>' % self.name
+        return '<Gallery %r>' % self.name
+
+    def site_url(self):
+        return url_for('return_gallery', gallerySlug=self.slug, _external=True)
+
+    def api_url(self):
+        return url_for('api_gallery', galleryID=self.id)
 
     def save(self):
-        self.slug = slugify(self.name)
+        self.name = self.name.lower()
+        if (Gallery.query.filter_by(name=self.name.lower()).count() > 0):
+            return "A gallery with this name already exists"
+        slug = slugify(unicode(self.name))
+        slugs = Gallery.query.filter_by(slug=slug).count()
+        if slugs > 0:
+            self.slug = slug+unicode(slugs+1)
+        else:
+            self.slug = slug
         db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
 
 class Location(db.Model):

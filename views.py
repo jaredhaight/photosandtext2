@@ -1,6 +1,6 @@
 from flask import request, render_template, flash, send_from_directory
 from photosandtext2 import app
-from photosandtext2.models import Photo
+from photosandtext2.models import Photo, Gallery
 import os
 
 
@@ -14,6 +14,10 @@ def return_photo(photoID):
     photo = Photo.query.filter_by(id=photoID).first()
     return render_template("photo.html", photo=photo)
 
+@app.route('/gallery/<gallerySlug>')
+def return_gallery(gallerySlug):
+    gallery = Gallery.query.filter_by(slug=gallerySlug).first()
+    return render_template("gallery.html", gallery=gallery)
 
 @app.route('/upload')
 def upload_photo():
