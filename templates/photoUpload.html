@@ -5,6 +5,9 @@
     <div id="dropbox">
       <p>Drop photos here.</p>
     </div>
+    <div id="galleryInfo">
+      <input type="text" placeholder="Would you like to give this gallery a name?"></input>
+    </div>
   </div>
 </div>
 <div class="pure-g-r">
@@ -36,6 +39,8 @@ $(document).ready(function() {
         drop: function (e, data) {
           var count = 0;
           $("#stickyFooter").show();
+          $("#dropbox").hide();
+          $("#galleryInfo").show();
           $.each(data.files, function (index, file) {
               count = count + 1;
               $("#count").text(count);
@@ -43,7 +48,8 @@ $(document).ready(function() {
           });
         },
         done: function (e, data) {
-            $.each(data.result, function (index, result) {
+            console.log(data.result);
+            $.each(data.result.results, function (index, result) {
               done = done +1;
               $("#previewBox").prepend('<div class="pure-u-1-6"><img id='+result.id+' src='+(result.crops.thumb200)+'/></div>');
               $("#done").text(done);
@@ -58,7 +64,6 @@ $(document).ready(function() {
           console.log((data.bitrate / 1024 * 8)+" KBps");
         },
         stop: function (e, data) {
-          $("#stickyFooter").hide();
         },
         dragover: function(e, data) {
           $("#dropbox").css("background","#ccc");

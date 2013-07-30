@@ -1,10 +1,19 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="pure-g-r">
+<div id="filmstrip" class="pure-g-r">
   {% for photo in photos %}
-  <div class="pure-u-1-5">
-    <a href="photo/{{ photo.id }}"><img src="{{ photo.get_thumbnail("thumb400") }}"></a>
-  </div>
+    <div class="photoThumb">
+      <a href="photo/{{ photo.id }}"><img src="{{ photo.get_thumbnail("home400") }}"></a>
+    </div>
   {% endfor %}
 </div>
+{% endblock %}
+{% block javascript %}
+<script src="{{ url_for('static', filename="js/jquery.mosaicflow.min.js") }}"></script>
+<script>
+  $('#filmstrip').mosaicflow({
+    itemSelector: '.photoThumb',
+    minItemWidth: 300
+});
+</script>
 {% endblock %}

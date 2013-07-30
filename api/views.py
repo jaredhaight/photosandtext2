@@ -2,7 +2,7 @@ from flask import request
 from werkzeug import secure_filename
 from flask.ext.restful import Resource, Api, abort
 from photosandtext2 import app
-from photosandtext2.models import Photo, Gallery
+from photosandtext2.models import Photo, Tag, Gallery
 from utils import render_photo_to_dict, clean_response_data, get_data_from_request, clean_photo_data
 import os
 api = Api(app)
@@ -20,10 +20,12 @@ class api_photo(Resource):
         return result
 
     def post(self,photoID):
+        print "Request data "+str(request.json)
         photo = Photo.query.filter_by(id=photoID).first()
         edited = False
         error = None
         data = get_data_from_request(request)
+        print "data: "+str(data)
         cleanData = clean_photo_data(data)
         print "Recieved CleanData: "+str(cleanData)
 
@@ -42,8 +44,7 @@ class api_photo(Resource):
             pass
 
         try:
-            for gallery in cleanData['galleries']:
-                photo.galleries.append(gallery)
+            photo.tags = cleanData['tags']
             edited = True
         except:
             pass
@@ -84,17 +85,17 @@ class api_photo_list(Resource):
                 return 'Failed Validation'
         return {"count": len(results), "results":results}
 
-class api_gallery(Resource):
-    def get(self, galleryID):
-        gallery = Gallery.query.filter_by(id=galleryID).first()
+class api_tag(Resource):
+    def get(self, tagID):
+        tag = Tag.query.filter_by(id=tagID).first()
         photos = []
         result = dict()
-        result["id"] = gallery.id
-        result["name"] = gallery.name
-        result['slug'] = gallery.slug
-        result["site_url"] = gallery.site_url()
-        result["api_url"] = gallery.api_url()
-        for p in gallery.photos:
+        result["id"] = tag.id
+        result["name"] = tag.name
+        result['slug'] = tag.slug
+        result["site_url"] = tag.site_url()
+        result["api_url"] = tag.api_url()
+        for p in tag.photos:
             photo = dict()
             photo["id"] = p.id
             photo["url"] = p.url()
@@ -108,7 +109,21 @@ class api_gallery(Resource):
         result["photos"] = photos
         return result
 
-class api_galleries_list(Resource):
+class api_tags_list(Resource):
+    def get(self):
+        tags = Tag.query.all()
+        results = []
+        for tag in tags:
+            result = dict()
+            result["id"] = tag.id
+            result["name"] = tag.name
+            result['slug'] = tag.slug
+            result["site_url"] = tag.site_url()
+            result["api_url"] = tag.api_url()
+            results.append(result)
+        return {"count": len(results), "results":results}
+
+class api_gallery_list(Resource):
     def get(self):
         galleries = Gallery.query.all()
         results = []
@@ -116,14 +131,12 @@ class api_galleries_list(Resource):
             result = dict()
             result["id"] = gallery.id
             result["name"] = gallery.name
-            result['slug'] = gallery.slug
-            result["site_url"] = gallery.site_url()
             result["api_url"] = gallery.api_url()
-            results.append(result)
-        return {"count": len(results), "results":results}
+            result["site_url"] = gallery.site_url()
+
 
 
 api.add_resource(api_photo_list, '/api/photos/')
 api.add_resource(api_photo, '/api/photos/<photoID>/')
-api.add_resource(api_galleries_list, '/api/galleries/')
-api.add_resource(api_gallery, '/api/galleries/<galleryID>')
+api.add_resource(api_tags_list, '/api/tags/')
+api.add_resource(api_tag, '/api/tags/<tagID>')

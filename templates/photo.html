@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block metadata %}
-<link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.tagit.css') }}">
 {% endblock %}
 {% block title %}<title> {{ photo.title }} - Photos and Text </title>{% endblock %}
@@ -10,22 +10,19 @@
 {% block body %}
 <div class="pure-g-r">
   <div class="pure-u-4-5">
-    <img src="{{ photo.url() }}">
+    <div id="photo">
+      <img src="{{ photo.get_thumbnail("display1280") }}">
+    </div>
   </div>
   <div class="pure-u-1-5">
     <div id="photoSidebar">
-      <div id="photoDesc" class="section">
+      <h2>Photos and Text</h2>
+      <div id="photoDesc">
         {% if photo.desc %}
           <div id="photoDescContent">{{ photo.desc|safe }}</div>
         {% else %}
           <div id="photoDescContent" class="placeHolder"></div>
         {% endif %}
-      </div>
-      <div id="photoGalleries" class="section">
-        <h3>Galleries</h3>
-        <ul id="galleryList">
-
-        </ul>
       </div>
       <div id="photoInfo" class="section">
         <h3>Photo Details</h3>
@@ -34,6 +31,14 @@
         <p class="aperture">Aperture: {{ photo.exif_aperture }}</p>
         <p class="focal">Focal Length: {{ photo.exif_focal }}</p>
         <p class="iso">ISO: {{ photo.exif_iso }}</p>
+      </div>
+      <div id="photoGalleries" class="section">
+        <h3>Tags</h3>
+        <ul id="tagList">
+          {% for tag in photo.tags %}
+          <li>{{ tag.name }}</li>
+          {% endfor %}
+        </ul>
       </div>
       <div id="location" class="section">
         <h3>Location</h3>
@@ -49,28 +54,51 @@
 <script src="{{ url_for('static', filename="js/tag-it.min.js") }}"></script>
 <script>
 $(document).ready(function() {
-  $.getJSON('http://127.0.0.1:5000/api/galleries/', function(data) {
+
+  $.getJSON('http://127.0.0.1:5000/api/tags/', function(data) {
       var items = [];
       var list = [];
       $.each(data.results, function(key, val) {
         list.push(val.name);
       });
-      $("#galleryList").tagit({
+      $("#tagList").tagit({
         availableTags: list,
-        autocomplete: {delay: 0, minLength: 2}
+        autocomplete: {delay: 0, minLength: 2},
+        showAutocompleteOnFocus: true,
+        afterTagAdded: function(event, ui) {
+          var tagList = $("#tagList").tagit("assignedTags");
+          var data = JSON.stringify({tags:tagList});
+          $.ajax({
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            url: "{{ url_for('api_photo', photoID=photo.id) }}",
+            data: data,
+            success: function(data) {
+            console.log(data);
+            }
+          })
+        },
+        afterTagRemoved: function(event, ui) {
+          var tagList = $("#tagList").tagit("assignedTags");
+          var data = JSON.stringify({tags:tagList});
+          $.ajax({
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            url: "{{ url_for('api_photo', photoID=photo.id) }}",
+            data: data,
+            success: function(data) {
+            console.log(data);
+            }
+          })
+        }
       });
   });
-  $.getJSON('http://127.0.0.1:5000/api/photos/{{ photo.id }}/', function(data){
-    for (gallery in data.galleries) {
-      console.log(data.galleries[gallery].name);
-      $("#galleryList").tagit("createTag",data.galleries[gallery].name);
-    }
-  });
+
   $("#photoDescContent").contentEditable({
     "newLineOnEnterKey": true,
     "onFocusIn": function(){
       $("#photoDescContent").removeClass('placeHolder');
-    },
+      },
     "onBlur" : function(element){
         var data = {desc:element.content};
         $.ajax({

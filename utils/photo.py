@@ -17,7 +17,7 @@ def resize_image(image, height, width):
     if height == 0:
         height = t_img.size[1] * width / t_img.size[0]
     t_img.thumbnail((width,height), Image.ANTIALIAS)
-    t_img.save(filename, 'JPEG', quality=95)
+    t_img.save(filename, 'JPEG', quality=90)
 
     return filename
 
@@ -26,8 +26,22 @@ def make_crop(image, cropName, height, width):
     dot = image.find('.')
     filename = image[slash:dot]+'_'+cropName+'.jpg'
     t_img = Image.open(PHOTO_STORE+"/"+image)
+    if width > t_img.size[0]:
+        width = t_img.size[0]
+    if height > t_img.size[1]:
+        height = t_img.size[1]
+    if width == 0:
+        width = t_img.size[0] * height / t_img.size[1]
+        t_img.thumbnail((width,height), Image.ANTIALIAS)
+        t_img.save(CROP_STORE+'/'+filename, 'JPEG', quality=90)
+        return filename
+    if height == 0:
+        height = t_img.size[1] * width / t_img.size[0]
+        t_img.thumbnail((width,height), Image.ANTIALIAS)
+        t_img.save(CROP_STORE+'/'+filename, 'JPEG', quality=90)
+        return filename
     t_fit = ImageOps.fit(t_img, (height,width), Image.ANTIALIAS, 0, (0.5,0.5))
-    t_fit.save(CROP_STORE+'/'+filename,"JPEG", quality=95)
+    t_fit.save(CROP_STORE+'/'+filename,"JPEG", quality=90)
     return filename
 
 def get_orientation(image):

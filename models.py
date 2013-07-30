@@ -7,10 +7,22 @@ from datetime import datetime
 PHOTO_STORE = app.config["PHOTO_STORE"]
 CROP_STORE = app.config["CROP_STORE"]
 
-association_table = db.Table('photo_gallery_association',
+association_table = db.Table('photo_tag_association',
     db.Column('photo_id', db.Integer, db.ForeignKey('photo.id')),
-    db.Column('gallery_id', db.Integer, db.ForeignKey('gallery.id'))
+    db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
 )
+
+def init_dev():
+    crop1 = CropSettings(name="thumb200",height=200,width=200)
+    crop2 = CropSettings(name="thumb400",height=400,width=400)
+    crop3 = CropSettings(name="home400",height=0,width=400)
+    crop4 = CropSettings(name="display1280",height=0,width=1280)
+
+    for crop in (crop1, crop2, crop3, crop4):
+        db.session.add(crop)
+
+    db.session.commit()
+
 
 def create_crops(photo):
     """
@@ -37,8 +49,9 @@ class Photo(db.Model):
     image = db.Column(db.String(256), nullable=False)
     raw_file = db.Column(db.String(256), nullable=True)
     orientation = db.Column(db.String(256), nullable=True)
-    galleries = db.relationship('Gallery', secondary=association_table, backref=db.backref('photos', lazy='dynamic'))
+    tags = db.relationship('Tag', secondary=association_table, backref=db.backref('photos', lazy='dynamic'))
     crops = db.relationship('Crop', backref=db.backref('photo'), lazy='dynamic')
+    gallery_id = db.Column(db.Integer, db.ForeignKey('gallery.id'))
     permissions = db.Column(db.String(256), nullable=True)
     uploaded = db.Column(db.DateTime, nullable=True)
     updated = db.Column(db.DateTime, nullable=True)
@@ -86,6 +99,17 @@ class Crop(db.Model):
     def url(self):
         return app.config["CROP_BASE_URL"]+'/'+self.file
 
+class Gallery(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256))
+    slug = db.Column(db.String(256))
+    date = db.Column(db.DateTime)
+    photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
+
+    def site_url(self):
+        return
+
+
 class CropSettings(db.Model):
     """
     This table stores the details for the crops we want. We iterate through this
@@ -97,7 +121,7 @@ class CropSettings(db.Model):
     width = db.Column(db.Integer)
 
 
-class Gallery(db.Model):
+class Tag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256), unique=True)
     description = db.Column(db.Text)
@@ -107,26 +131,27 @@ class Gallery(db.Model):
         self.name = name
 
     def __repr__(self):
-        return '<Gallery %r>' % self.name
+        return '<Tag %r>' % self.name
 
     def site_url(self):
-        return url_for('return_gallery', gallerySlug=self.slug, _external=True)
+        return url_for('return_tag', tagSlug=self.slug, _external=True)
 
     def api_url(self):
-        return url_for('api_gallery', galleryID=self.id)
+        return url_for('api_tag', tagID=self.id)
 
     def save(self):
         self.name = self.name.lower()
-        if (Gallery.query.filter_by(name=self.name.lower()).count() > 0):
-            return "A gallery with this name already exists"
+        if (Tag.query.filter_by(name=self.name.lower()).count() > 0):
+            return "A tag with this name already exists"
         slug = slugify(unicode(self.name))
-        slugs = Gallery.query.filter_by(slug=slug).count()
+        slugs = Tag.query.filter_by(slug=slug).count()
         if slugs > 0:
             self.slug = slug+unicode(slugs+1)
         else:
             self.slug = slug
         db.session.add(self)
         db.session.commit()
+        return self
 
     def delete(self):
         db.session.delete(self)
