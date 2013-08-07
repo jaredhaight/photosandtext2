@@ -16,7 +16,6 @@
   </div>
   <div class="pure-u-1-5">
     <div id="photoSidebar">
-      <h2>Photos and Text</h2>
       <div id="photoDesc">
         {% if photo.desc %}
           <div id="photoDescContent">{{ photo.desc|safe }}</div>
@@ -26,11 +25,11 @@
       </div>
       <div id="photoInfo" class="section">
         <h3>Photo Details</h3>
-        <p class="taken">Taken on {{ photo.exif_date_taken }}</p>
-        <p class="shutter">Shutter: {{ photo.exif_shutter }}</p>
-        <p class="aperture">Aperture: {{ photo.exif_aperture }}</p>
-        <p class="focal">Focal Length: {{ photo.exif_focal }}</p>
-        <p class="iso">ISO: {{ photo.exif_iso }}</p>
+        <p class="taken">Taken on <span class="info">{{ photo.exif_date_taken }}</span></p>
+        <p class="shutter">Shutter: <span class="info">{{ photo.exif_shutter }}</span></p>
+        <p class="aperture">Aperture: <span class="info">{{ photo.exif_aperture }}</span></p>
+        <p class="focal">Focal Length: <span class="info">{{ photo.exif_focal }}</span></p>
+        <p class="iso">ISO: <span class="info">{{ photo.exif_iso }}</span></p>
       </div>
       <div id="photoGalleries" class="section">
         <h3>Tags</h3>

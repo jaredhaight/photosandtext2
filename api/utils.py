@@ -37,7 +37,8 @@ def render_photo_to_dict(photo):
         "crops": crops,
         "tags": tags,
         "uploaded": photo.uploaded,
-        "updated":photo.updated
+        "updated":photo.updated,
+        "filename": photo.filename()
     })
     return result
 

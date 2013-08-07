@@ -1,4 +1,8 @@
 /* Site wide */
+body {
+    font-family:"Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
 #header a {
     color: #111;
     text-decoration: none;
@@ -53,7 +57,11 @@
 }
 
 #photoInfo p{
-    margin: .5em 0;
+    margin: 0;
+}
+
+.info {
+    color: #888;
 }
 
 .placeHolder {
@@ -70,6 +78,24 @@
 }
 
 /* Photo Upload Page */
+#galleryHeader {
+    height: 70px;
+}
+
+.galleryHeaderSection {
+    text-align: center;
+    padding-top: 30px;
+}
+
+#galleryInfo {
+    display: none;
+    padding-right: 10px;
+}
+
+#galleryInfo input {
+    width: 400px;
+}
+
 #dropbox {
     margin: 10px auto;
     width: 100%;
@@ -81,17 +107,6 @@
 
 #dropbox p {
     padding-top: 35px;
-}
-
-#galleryInfo {
-    display: none;
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-}
-
-#galleryInfo input {
-    width: 400px;
 }
 
 #previewBox {
@@ -112,17 +127,32 @@
     border-top-style: solid;
 }
 
-#progress {
-    width: 80%;
-    margin: 0 auto;
-    padding: 20px;
-}
 
 .counts {
-    margin-bottom: 10px;
+    margin-top: 30px;
+    margin-left: 10px;
+}
+
+.progress {
+    display: inline-block;
+    width: 60%;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .bar {
+    width: 0;
     height: 10px;
     background: greenyellow;
+}
+
+#galleryButtons {
+    display: inline-block;
+    text-align: right;
+    float: right;
+    padding: 10px;
+}
+
+#galleryButtons button {
+    margin-top: 20px;
 }

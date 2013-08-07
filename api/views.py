@@ -123,6 +123,30 @@ class api_tags_list(Resource):
             results.append(result)
         return {"count": len(results), "results":results}
 
+class api_gallery(Resource):
+    def get(self, galleryID):
+        gallery = Gallery.query.filter_by(id=galleryID).first()
+        photos = []
+        result = dict()
+        for photo in gallery.photos:
+            r = dict()
+            crops = dict()
+            r["id"] = photo.id
+            r["taken"] = photo.exif_date_taken
+            r["uploaded"] = photo.uploaded
+            for crop in photo.crops:
+                crops[crop.name] = crop.url()
+            r["crops"] = crops
+            r = clean_response_data(r)
+            photos.append(r)
+        result["id"] = gallery.id
+        result["name"] = gallery.name
+        result["photos"] = photos
+        result["site_url"] = gallery.site_url()
+        result["api_url"] = gallery.api_url()
+        return result
+
+
 class api_gallery_list(Resource):
     def get(self):
         galleries = Gallery.query.all()
@@ -133,10 +157,12 @@ class api_gallery_list(Resource):
             result["name"] = gallery.name
             result["api_url"] = gallery.api_url()
             result["site_url"] = gallery.site_url()
-
-
+            results.append(result)
+        return {"count": len(results), "results":results}
 
 api.add_resource(api_photo_list, '/api/photos/')
 api.add_resource(api_photo, '/api/photos/<photoID>/')
 api.add_resource(api_tags_list, '/api/tags/')
 api.add_resource(api_tag, '/api/tags/<tagID>')
+api.add_resource(api_gallery_list, '/api/galleries/')
+api.add_resource(api_gallery, '/api/galleries/<galleryID>/')

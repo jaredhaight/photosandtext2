@@ -1,12 +1,18 @@
 {% extends "base.html" %}
+{% block header %}
+{% endblock %}
 {% block body %}
+<div class="pure-g-r">
+  <div id="galleryHeader">
+    <div class="pure-u-1-3">
+      <h1>Photos and Text</h1>
+    </div>
+  </div>
+</div>
 <div class="pure-g-r">
   <div class="pure-u-1">
     <div id="dropbox">
       <p>Drop photos here.</p>
-    </div>
-    <div id="galleryInfo">
-      <input type="text" placeholder="Would you like to give this gallery a name?"></input>
     </div>
   </div>
 </div>
@@ -16,12 +22,25 @@
     </div>
   </div>
 </div>
-<div id="stickyFooter">
-  <div id="progress">
+<div id="stickyFooter" class="pure-g-r">
+  <div class="pure-u-1-4">
     <div class="counts">
       Uploading photo <span id="done">1</span> of <span id="count"></span>
     </div>
-    <div class="bar" style="width: 0%;"></div>
+  </div>
+  <div class="pure-u-1-2">
+    <div id="galleryInfo" class="galleryHeaderSection">
+      <input type="text" placeholder="Would you like to give this gallery a name?"></input>
+    </div>
+  </div>
+  <div class="pure-u-1-4">
+    <div id="galleryButtons">
+      <select>
+        <option value="private">Private</option>
+        <option value="public">Public</option>
+      </select>
+      <button>Submit</button>
+    </div>
   </div>
 </div>
 {% endblock %}
@@ -34,7 +53,6 @@ $(document).ready(function() {
        var done = 0;
        $('#dropbox').fileupload({
         url: "{{ url_for('api_photo_list') }}",
-        dataType: 'json',
         dropZone: $("#dropbox"),
         drop: function (e, data) {
           var count = 0;
@@ -45,25 +63,29 @@ $(document).ready(function() {
               count = count + 1;
               $("#count").text(count);
               console.log('Dropped file: ' + file.name);
+              $("#previewBox").prepend('<div id='+file.name+' class="pure-u-1-6"><div class="progress"><p class="bar"></p></div></div>');
+
           });
         },
         done: function (e, data) {
-            console.log(data.result);
             $.each(data.result.results, function (index, result) {
               done = done +1;
-              $("#previewBox").prepend('<div class="pure-u-1-6"><img id='+result.id+' src='+(result.crops.thumb200)+'/></div>');
+              console.log(result.filename);
+              $("div[id='"+result.filename+"'] .progress").hide();
+              $("div[id='"+result.filename+"']").append('<img id='+result.id+' src='+(result.crops.thumb200)+'/>');
               $("#done").text(done);
             });
         },
         progress: function (e, data) {
+          console.log(data);
           var progress = parseInt(data.loaded / data.total * 100, 10);
-          $('#progress .bar').css(
+          $.each(data.files, function (index, file) {
+            console.log(file.name);
+            $("div[id='"+file.name+"'] .progress .bar").css(
               'width',
               progress + '%'
           );
-          console.log((data.bitrate / 1024 * 8)+" KBps");
-        },
-        stop: function (e, data) {
+          });
         },
         dragover: function(e, data) {
           $("#dropbox").css("background","#ccc");
@@ -71,7 +93,7 @@ $(document).ready(function() {
     });
     $('#dropbox').on('dragleave', function (e) {
       $("#dropbox").css("background","#eee");
-  });
+    });
 });
 </script>
 {% endblock %}

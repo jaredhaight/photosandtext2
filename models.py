@@ -71,6 +71,9 @@ class Photo(db.Model):
     def site_url(self):
         return url_for('return_photo', photoID=self.id, _external=True)
 
+    def filename(self):
+        return self.image
+
     def get_thumbnail(self, thumbnailName):
         crop = Crop.query.filter_by(photo_id=self.id, name=thumbnailName).first()
         return crop.url()
@@ -103,12 +106,21 @@ class Gallery(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
     slug = db.Column(db.String(256))
-    date = db.Column(db.DateTime)
+    date = db.Column(db.Date)
     photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
 
     def site_url(self):
-        return
+        return url_for("return_gallery", year=self.date.year, month=self.date.month, day=self.date.day, gallerySlug=self.slug, _external=True)
 
+    def api_url(self):
+        return url_for('api_gallery', galleryID=self.id, _external=True)
+
+    def save(self):
+        if not self.date:
+            self.date = datetime.utcnow().date()
+        self.slug = slugify(self.name)
+        db.session.add(self)
+        db.session.commit()
 
 class CropSettings(db.Model):
     """
