@@ -3,9 +3,19 @@ body {
     font-family:"Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+#header {
+    width: 98%;
+    margin: 0 auto;
+}
+
 #header a {
     color: #111;
     text-decoration: none;
+}
+
+#headerLinks {
+    padding-top: 30px;
+    text-align: right;
 }
 
 /* Home Page */
@@ -82,18 +92,15 @@ body {
     height: 70px;
 }
 
-.galleryHeaderSection {
+#galleryInfo {
+    display: none;
+    padding-right: 10px;
     text-align: center;
     padding-top: 30px;
 }
 
-#galleryInfo {
-    display: none;
-    padding-right: 10px;
-}
-
 #galleryInfo input {
-    width: 400px;
+    width: 100%;
 }
 
 #dropbox {
@@ -114,23 +121,46 @@ body {
     text-align: center;
 }
 
-#stickyFooter {
-    display: none;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    height: 60px;
-    background: #fff;
-    padding-bottom: 20px;
-    border-top: #ccc;
+.uploadWrap {
+    margin: 5px;
+    border: #eee;
     border-width: 1px;
-    border-top-style: solid;
+    border-style: solid;
+    width: 200px;
+    display: inline-block;
+}
+
+.uploadResult .desc {
+    border: #ccc;
+    border-style: solid;
+    border-width: 1px;
+    margin-top: -3px;
+    width: 198px;
+    height: 50px;
+    color: #888;
+    font-weight: 200
+}
+
+#uploadSidebar {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    border-left: #ccc;
+    border-width: 1px;
+    border-left-style: solid;
+    background: #fff;
 }
 
 
 .counts {
-    margin-top: 30px;
-    margin-left: 10px;
+
+}
+
+.tags {
+    display: none;
 }
 
 .progress {
@@ -146,8 +176,18 @@ body {
     background: greenyellow;
 }
 
+#uploadHelpText {
+    height: 200px;
+    padding-top: 100px;
+    text-align: center;
+}
+
+
 #galleryButtons {
     display: inline-block;
+    position: absolute;
+    bottom: 0;
+    right: 0;
     text-align: right;
     float: right;
     padding: 10px;

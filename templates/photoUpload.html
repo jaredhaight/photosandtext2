@@ -1,14 +1,5 @@
 {% extends "base.html" %}
-{% block header %}
-{% endblock %}
 {% block body %}
-<div class="pure-g-r">
-  <div id="galleryHeader">
-    <div class="pure-u-1-3">
-      <h1>Photos and Text</h1>
-    </div>
-  </div>
-</div>
 <div class="pure-g-r">
   <div class="pure-u-1">
     <div id="dropbox">
@@ -17,29 +8,28 @@
   </div>
 </div>
 <div class="pure-g-r">
-  <div class="pure-u-1">
+  <div class="pure-u-4-5">
     <div id="previewBox">
     </div>
   </div>
-</div>
-<div id="stickyFooter" class="pure-g-r">
-  <div class="pure-u-1-4">
-    <div class="counts">
-      Uploading photo <span id="done">1</span> of <span id="count"></span>
+  <div id="uploadSidebar" class="pure-u-1-5">
+    <div id="galleryInfo">
+      <input type="text" placeholder="Give this gallery a name?"></input>
     </div>
-  </div>
-  <div class="pure-u-1-2">
-    <div id="galleryInfo" class="galleryHeaderSection">
-      <input type="text" placeholder="Would you like to give this gallery a name?"></input>
+    <div id="uploadHelpText">
+      <div class="counts">
+        Uploading photo <span id="done">1</span> of <span id="count"></span>
+      </div>
+      <div class="tags">
+        Select a photo (or photos) to add tags.
+      </div>
     </div>
-  </div>
-  <div class="pure-u-1-4">
     <div id="galleryButtons">
       <select>
         <option value="private">Private</option>
         <option value="public">Public</option>
       </select>
-      <button>Submit</button>
+      <button class="pure-button pure-button-primary">Submit</button>
     </div>
   </div>
 </div>
@@ -56,14 +46,14 @@ $(document).ready(function() {
         dropZone: $("#dropbox"),
         drop: function (e, data) {
           var count = 0;
-          $("#stickyFooter").show();
+          $("#uploadSidebar").css('display','inline-block');
           $("#dropbox").hide();
           $("#galleryInfo").show();
           $.each(data.files, function (index, file) {
               count = count + 1;
               $("#count").text(count);
               console.log('Dropped file: ' + file.name);
-              $("#previewBox").prepend('<div id='+file.name+' class="pure-u-1-6"><div class="progress"><p class="bar"></p></div></div>');
+              $("#previewBox").prepend('<div id='+file.name+' class="uploadWrap"><div class="progress"><p class="bar"></p></div></div>');
 
           });
         },
@@ -72,7 +62,7 @@ $(document).ready(function() {
               done = done +1;
               console.log(result.filename);
               $("div[id='"+result.filename+"'] .progress").hide();
-              $("div[id='"+result.filename+"']").append('<img id='+result.id+' src='+(result.crops.thumb200)+'/>');
+              $("div[id='"+result.filename+"']").append('<div id='+result.id+' class="uploadResult"><img src='+(result.crops.thumb200)+'/><div class="desc" contenteditable=true>Enter a Description..</div>');
               $("#done").text(done);
             });
         },
@@ -86,6 +76,10 @@ $(document).ready(function() {
               progress + '%'
           );
           });
+        },
+        stop: function (e, data) {
+          $("#uploadHelpText .counts").hide();
+          $("#uploadHelpText .tags").show();
         },
         dragover: function(e, data) {
           $("#dropbox").css("background","#ccc");

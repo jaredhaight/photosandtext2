@@ -7,7 +7,7 @@ from utils import render_photo_to_dict, clean_response_data, get_data_from_reque
 import os
 api = Api(app)
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif','JPG'])
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -82,7 +82,7 @@ class api_photo_list(Resource):
                 result = render_photo_to_dict(photo)
                 results.append(result)
             else:
-                return 'Failed Validation'
+                return abort(400, message='Invalid File Type')
         return {"count": len(results), "results":results}
 
 class api_tag(Resource):
