@@ -1,6 +1,6 @@
 from flask import url_for
 import datetime
-from photosandtext2.models import Tag
+from pat2_backend.models import Tag
 
 def clean_response_data(res):
     """
@@ -8,11 +8,11 @@ def clean_response_data(res):
     """
     for key, value in res.iteritems():
         if isinstance(key, datetime.datetime):
-            stringKey = key.strftime("%Y-%m-%d %H:%M:%S")
+            stringKey = key.isoformat()
             res[stringKey] = value
             del(res[key])
         if isinstance(value, datetime.datetime):
-            res[key] = value.strftime("%Y-%m-%d %H:%M:%S")
+            res[key] = value.isoformat()
     return res
 
 def render_photo_to_dict(photo):
@@ -20,6 +20,7 @@ def render_photo_to_dict(photo):
     Takes a Photo object, crunches it and spits out a dict for Restful response.
     """
     crops = dict()
+    exif=dict()
     tags = []
     for crop in photo.crops:
         crops[crop.name] = crop.url()
@@ -28,17 +29,23 @@ def render_photo_to_dict(photo):
         result["name"] = tag.name
         result["id"] = tag.id
         result["api_url"] = tag.api_url()
-        result["site_url"] = tag.site_url()
         tags.append(result)
+    exif['aperture'] = photo.exif_aperture
+    exif['date_taken'] = photo.exif_date_taken
+    exif['focal_length'] = photo.exif_focal
+    exif['shutter_speed'] = photo.exif_shutter
+    exif['iso'] = photo.exif_iso
+    exif = clean_response_data(exif)
     result = clean_response_data({
         "id":photo.id,
-        "url": photo.site_url(),
         "full_image":photo.url(),
         "crops": crops,
         "tags": tags,
         "uploaded": photo.uploaded,
         "updated":photo.updated,
-        "filename": photo.filename()
+        "filename": photo.filename(),
+        "desc": photo.desc,
+        "exif":exif
     })
     return result
 

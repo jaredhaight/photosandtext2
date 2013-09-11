@@ -2,7 +2,7 @@ from PIL import Image, ImageOps
 from PIL.ExifTags import TAGS
 from decimal import Decimal
 from datetime import datetime
-from photosandtext2 import app
+from pat2_backend import app
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
 CROP_STORE = app.config["CROP_STORE"]

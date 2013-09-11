@@ -1,8 +1,8 @@
 from flask import request
 from werkzeug import secure_filename
 from flask.ext.restful import Resource, Api, abort
-from photosandtext2 import app
-from photosandtext2.models import Photo, Tag, Gallery
+from pat2_backend import app
+from pat2_backend.models import Photo, Tag, Gallery
 from utils import render_photo_to_dict, clean_response_data, get_data_from_request, clean_photo_data
 import os
 api = Api(app)
@@ -15,13 +15,15 @@ def allowed_file(filename):
 
 class api_photo(Resource):
     def get(self,photoID):
-        photo = Photo.query.filter_by(id=photoID).first()
+        photo = Photo.query.get(photoID)
+        if not photo:
+            return abort(404)
         result = render_photo_to_dict(photo)
         return result
 
     def post(self,photoID):
         print "Request data "+str(request.json)
-        photo = Photo.query.filter_by(id=photoID).first()
+        photo = Photo.query.get(photoID)
         edited = False
         error = None
         data = get_data_from_request(request)

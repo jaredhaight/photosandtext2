@@ -1,5 +1,5 @@
 from flask import url_for
-from photosandtext2 import db, app
+from pat2_backend import db, app
 from utils.general import slugify
 from utils.photo import get_exif, make_crop
 from datetime import datetime
@@ -67,9 +67,6 @@ class Photo(db.Model):
 
     def api_url(self):
         return url_for('api_photo', photoID=self.id, _external=True)
-
-    def site_url(self):
-        return url_for('return_photo', photoID=self.id, _external=True)
 
     def filename(self):
         return self.image

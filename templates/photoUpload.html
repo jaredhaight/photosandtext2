@@ -57,13 +57,15 @@ $(document).ready(function() {
 
           });
         },
+        start: function (e, data) {
+          done = done +1;
+          $("#done").text(done);
+        },
         done: function (e, data) {
             $.each(data.result.results, function (index, result) {
-              done = done +1;
               console.log(result.filename);
               $("div[id='"+result.filename+"'] .progress").hide();
               $("div[id='"+result.filename+"']").append('<div id='+result.id+' class="uploadResult"><img src='+(result.crops.thumb200)+'/><div class="desc" contenteditable=true>Enter a Description..</div>');
-              $("#done").text(done);
             });
         },
         progress: function (e, data) {

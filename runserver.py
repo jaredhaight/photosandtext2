@@ -1,2 +1,2 @@
-from photosandtext2 import app
+from pat2_backend import app
 app.run()

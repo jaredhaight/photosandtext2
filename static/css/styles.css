@@ -19,21 +19,20 @@ body {
 }
 
 /* Home Page */
-.mosaicflow__column {
-    float:left;
+#filmstrip {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .photoThumb {
-    padding: 5px;
-}
-.photoThumb img {
-    display:block;
-    width:100%;
-    height:auto;
+    width: 19%;
     border-style: solid;
-    border-width: 1px;
-    border-color: #000;
+    border-width: 5px;
+    border-color: #fff;
 }
+
+
 /* Photo View Page */
 #photo {
     position: relative;
@@ -195,4 +194,39 @@ body {
 
 #galleryButtons button {
     margin-top: 20px;
+}
+
+#galleryButtons select {
+    text-transform: none;
+    -webkit-appearance: none;
+    width: 100px;
+    padding: 7px;
+    border-radius: 0;
+    text-align: center;
+    background: yellow;
+    border-color: #ccc;
+}
+
+@media (max-width: 1140px) {
+    .photoThumb {
+        width: 24%;
+    }
+}
+
+@media (max-width: 940px) {
+    .photoThumb {
+        width: 32%;
+    }
+}
+
+@media (max-width: 724px) {
+    .photoThumb {
+        width: 48%;
+    }
+}
+
+@media (max-width: 475px) {
+    .photoThumb {
+        width: 98%;
+    }
 }

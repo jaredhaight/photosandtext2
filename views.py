@@ -1,6 +1,6 @@
 from flask import request, render_template, flash, send_from_directory
-from photosandtext2 import app
-from photosandtext2.models import Photo, Tag, Gallery
+from pat2_backend import app
+from pat2_backend.models import Photo, Tag, Gallery
 import datetime
 import os
 
