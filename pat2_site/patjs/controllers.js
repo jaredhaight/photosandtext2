@@ -4,6 +4,7 @@ function photoListCtrl($scope, photoClient, $route, $routeParams, $rootScope, $h
     delete $http.defaults.headers.common['X-Requested-With'];
     $scope.photos = photoClient.get();
 
+    //This is our photo viewer.
     $scope.open = function (photo) {
         var lastRoute = $route.current;
         $rootScope.hideScrollEnabled = true;
