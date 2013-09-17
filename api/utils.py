@@ -1,10 +1,10 @@
-from flask import url_for
 import datetime
+from flask.ext.restful import abort
 from pat2_backend.models import Tag
 
 def clean_response_data(res):
     """
-    Cleans a dict so that it can be sent out through Restful.
+    Takes a response and converts non-string values to strings so we can sent it out as JSON
     """
     for key, value in res.iteritems():
         if isinstance(key, datetime.datetime):
@@ -17,7 +17,8 @@ def clean_response_data(res):
 
 def render_photo_to_dict(photo):
     """
-    Takes a Photo object, crunches it and spits out a dict for Restful response.
+    Takes a Photo object, combines it with relevant Crop and Tag objects and converts it to a dict.
+    Used to create responses for Photo API
     """
     crops = dict()
     exif=dict()
@@ -63,27 +64,38 @@ def get_data_from_request(request):
 
 def clean_photo_data(data):
     """
-    Takes a data dict and makes some sense of it.
+    Takes a photo request from POST and makes sure that it fits what we want from a photo object.
+    Mainly used to convert random tag strings (ex: {"tags":"foo, bar, banana"}) into an actual list of tags.
+    If we're given a string, it will creates tags that don't exist yet.
     """
+    tagList = []
     try:
-        tagList = []
+        # If we received a string, look up tags and append them. Create tags as needed.
         if isinstance(data["tags"],str):
             data["tags"] = data["tags"].split()
-        for tag in data['tags']:
-            tagLookup = Tag.query.filter_by(name=tag.lower()).first()
-            print tagLookup
-            if tagLookup:
-                tagList.append(tagLookup)
-            else:
-                g = Tag(name=tag.lower())
-                newTag = g.save()
-                print "tag type: "+ str(type(newTag))
-                if isinstance(newTag, Tag):
-                    tagList.append(newTag)
+            for tag in data['tags']:
+                tagLookup = Tag.query.filter_by(name=tag.lower()).first()
+                print tagLookup
+                if tagLookup:
+                    tagList.append(tagLookup)
                 else:
-                    return {"message":newTag}
-        data['tags'] = tagList
-        print "returning tags as: "+str(data['tags'])
-    except:
-        pass
+                    g = Tag(name=tag.lower())
+                    newTag = g.save()
+                    print "tag type: "+ str(type(newTag))
+                    if isinstance(newTag, Tag):
+                        tagList.append(newTag)
+                    else:
+                        return {"message":newTag}
+            print "returning tags as: "+str(data['tags'])
+        #if we received a dict, look up tags and append them. Can't create from a dict (yet).
+        elif isinstance(data["tags"],list):
+            for tag in data["tags"]:
+                tagLookup = Tag.query.filter_by(name=tag["name"].lower()).first()
+                if tagLookup:
+                    tagList.append(tagLookup)
+                else:
+                    abort(500, message="Could not find the tags you passed. You can create new tags by passing them in as a string")
+    except Exception, e:
+        abort(500, message="Error while cleaning data", error=str(e))
+    data['tags'] = tagList
     return data

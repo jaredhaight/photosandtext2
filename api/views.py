@@ -22,34 +22,25 @@ class api_photo(Resource):
         return result
 
     def post(self,photoID):
-        print "Request data "+str(request.json)
         photo = Photo.query.get(photoID)
         edited = False
         error = None
         data = get_data_from_request(request)
-        print "data: "+str(data)
         cleanData = clean_photo_data(data)
-        print "Recieved CleanData: "+str(cleanData)
-
-        try:
-            error = cleanData["message"]
-        except:
-            pass
-
-        if error:
-            return abort(400, message=error)
+        print "Received CleanData: "+str(cleanData)
 
         try:
             photo.desc = cleanData['desc']
             edited = True
         except:
-            pass
+            abort(500, message="Error while applying desc to photo", error=str(e))
 
         try:
+            print "Clean photo tags: "+str(cleanData['tags'])
             photo.tags = cleanData['tags']
             edited = True
-        except:
-            pass
+        except Exception, e:
+            abort(500, message="Error applying tags to photo.", error=str(e))
 
         if edited is True:
             photo.save()
@@ -162,9 +153,9 @@ class api_gallery_list(Resource):
             results.append(result)
         return {"count": len(results), "results":results}
 
-api.add_resource(api_photo_list, '/api/photos/')
-api.add_resource(api_photo, '/api/photos/<photoID>/')
-api.add_resource(api_tags_list, '/api/tags/')
+api.add_resource(api_photo_list, '/api/photos')
+api.add_resource(api_photo, '/api/photos/<photoID>')
+api.add_resource(api_tags_list, '/api/tags')
 api.add_resource(api_tag, '/api/tags/<tagID>')
-api.add_resource(api_gallery_list, '/api/galleries/')
-api.add_resource(api_gallery, '/api/galleries/<galleryID>/')
+api.add_resource(api_gallery_list, '/api/galleries')
+api.add_resource(api_gallery, '/api/galleries/<galleryID>')
