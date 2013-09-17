@@ -1,0 +1,33 @@
+<div ng-controller="loginCtrl">
+  <div id="alertWrap" ng-show="alert" class="row">
+    <div class="large-12 columns">
+        <div data-alert class="alert-box alert">
+            {{ alertMessage }}
+            <a class="close" ng-click="alertClear()">&times;</a>
+        </div>
+    </div>
+  </div>
+  <div class="loginWrap">
+    <div class="row">
+        <div class="small-2 columns">
+            <label for='userInput' class="right inline">Username</label>
+        </div>
+        <div class="small-10 columns">
+            <input id="userInput" type="text" ng-model="juser"><br>
+        </div>
+    </div>
+    <div class="row">
+      <div class="small-2 columns">
+          <label for='passInput' class="right inline">Password</label>
+      </div>
+      <div class="small-10 columns">
+          <input id="passInput" type="password" ng-model="jpass"><br>
+      </div>
+    </div>
+    <div class="row">
+        <div class="small-12 columns">
+            <button class="right" ng-click="login()">Login</button>
+        </div>
+    </div>
+  </div>
+</div>

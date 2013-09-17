@@ -1,0 +1,25 @@
+
+<div ng-controller="photoUploadCtrl">
+  <div class="pure-g-r">
+    <div id="dropbox" class="pure-u-1">
+      <form id="fileupload" action="/api/photos" data-file-upload="options" method="POST" enctype="multipart/form-data" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
+        Upload Photos
+      </form>
+    </div>
+  </div>
+  <div class="pure-g-r">
+    <div class="pure-u-1">
+      <div class="pure-u-1-5" ng-repeat="photo in photoList">
+        <div class="uploadResult">
+          <div class="uploadThumb">
+            <img src="{{ photo.crops.thumb400 }}">
+          </div>
+            <textarea placeholder="Description">{{ photo.desc }}</textarea>
+            <textarea placeholder="Tags">{{ photo.tags }}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    

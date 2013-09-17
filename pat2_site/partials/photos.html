@@ -1,0 +1,14 @@
+<div ng-controller="photoListCtrl">
+  <div class="pure-g-r">
+    <div id="header" class="pure-u-1-2">
+      <h2>Photos and Text</h2> THE NEXT GENERATION!
+    </div>
+  </div>
+  <div class="pure-g-r">
+    <div class="pure-u-1-5" ng-repeat="photo in photos.results">
+      <div class="photoThumb">
+        <a ng-click="open(photo)"><img ng-src="{{ photo.crops.thumb400 }}"></a>
+      </div>
+    </div>
+  </div>
+</div>
