@@ -5,7 +5,6 @@ function photoListCtrl($scope, photoClient, $route, $routeParams, $rootScope, $h
     $scope.photos = photoClient.get();
 
     $scope.open = function (photo) {
-        $scope.selectedPhoto = photo;
         var lastRoute = $route.current;
         $rootScope.hideScrollEnabled = true;
         $scope.$on('$locationChangeSuccess', function(event) {
@@ -17,7 +16,7 @@ function photoListCtrl($scope, photoClient, $route, $routeParams, $rootScope, $h
           controller: photoCtrl,
           resolve: {
               selectedPhoto: function () {
-                return photoClient.get({photoID: $scope.selectedPhoto.id});
+                return photoClient.get({photoID: photo.id});
               }
           }
         });
@@ -32,6 +31,11 @@ function photoListCtrl($scope, photoClient, $route, $routeParams, $rootScope, $h
             $location.path('/');
         });
     };
+
+    if ($routeParams.photoID) {
+        var photo = photoClient.get({photoID: $routeParams.photoID});
+        $scope.open(photo);
+    }
 }
 
 function photoCtrl($scope, $modalInstance, selectedPhoto) {
