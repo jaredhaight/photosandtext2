@@ -2,16 +2,20 @@
 
 function photoListCtrl($scope, photoClient, $route, $routeParams, $rootScope, $http, $cookieStore, $cookies, $location, $modal) {
     delete $http.defaults.headers.common['X-Requested-With'];
-    $scope.photos = photoClient.get();
 
     //This is our photo viewer.
     $scope.open = function (photo) {
         var lastRoute = $route.current;
+        console.log('Opened Photo Lightbox');
+        console.log('Location path is: '+$location.path());
         $rootScope.hideScrollEnabled = true;
         $scope.$on('$locationChangeSuccess', function(event) {
             $route.current = lastRoute;
         });
-        $location.path('photo/'+photo.id);
+        if (($location.path()) != ('photo/'+photo.id)) {
+            $location.path('photo/'+photo.id).replace();
+        }
+
         var modalInstance = $modal.open({
           templateUrl: '/partials/photo.html',
           controller: photoCtrl,
@@ -34,8 +38,13 @@ function photoListCtrl($scope, photoClient, $route, $routeParams, $rootScope, $h
     };
 
     if ($routeParams.photoID) {
-        var photo = photoClient.get({photoID: $routeParams.photoID});
-        $scope.open(photo);
+        console.log('Got routeparams: '+$routeParams.photoID);
+        var urlPhoto = photoClient.get({photoID: $routeParams.photoID});
+        $scope.open(urlPhoto);
+    }
+    if (!($scope.photos)){
+        console.log('scope.photos not defined');
+        $scope.photos = photoClient.get();
     }
 }
 
