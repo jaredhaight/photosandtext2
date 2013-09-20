@@ -71,7 +71,9 @@ def clean_photo_data(data):
     tagList = []
     try:
         # If we received a string, look up tags and append them. Create tags as needed.
-        if isinstance(data["tags"],str):
+        print "Tag data type: "+str(type(data["tags"]))
+        if isinstance(data["tags"],str) or isinstance(data["tags"],unicode):
+            print "Got string of tags: "+data["tags"]
             data["tags"] = data["tags"].split()
             for tag in data['tags']:
                 tagLookup = Tag.query.filter_by(name=tag.lower()).first()
