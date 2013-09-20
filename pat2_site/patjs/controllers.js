@@ -83,7 +83,15 @@ function photoUploadCtrl($scope, photoClient, $routeParams, $http, $cookieStore,
     });
     $scope.$on('fileuploaddone', function(event, files){
         $.each(files.result.results, function (index, file) {
-            $scope.photoList.push(file);
+            var photoObj = new photoClient(file);
+            $scope.photoList.push(photoObj);
         })
     });
+
+    $scope.savePhotos = function() {
+        $.each($scope.photoList, function(index, photo) {
+              photo.$save();
+        })
+    };
 }
+
