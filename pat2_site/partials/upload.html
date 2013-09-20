@@ -5,6 +5,7 @@
       <form id="fileupload" action="/api/photos" data-file-upload="options" method="POST" enctype="multipart/form-data" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
         Upload Photos
       </form>
+      <button ng-click="savePhotos()">Save Photos</button>
     </div>
   </div>
   <div class="pure-g-r">
@@ -14,9 +15,10 @@
           <div class="uploadThumb">
             <img src="{{ photo.crops.thumb400 }}">
           </div>
-            <textarea placeholder="Description">{{ photo.desc }}</textarea>
-            <textarea placeholder="Tags">{{ photo.tags }}</textarea>
+            <textarea placeholder="Description" ng-model="photo.desc">{{ photo.desc }}</textarea>
+            <textarea placeholder="Tags" ng-model="photo.tags"></textarea>
         </div>
+        Desc = {{ photo.desc }}
       </div>
     </div>
   </div>
