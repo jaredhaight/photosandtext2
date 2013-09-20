@@ -1,37 +1,20 @@
-<div>
+<div id="photoWindow">
   <div class="pure-g-r">
-  	<div class="pure-u-1">
+    <div class="pure-u-4-5">
       <div id="photo">
-        <div id="closePhoto" ng-click="close()">&times;</div>
-  			<img ng-src="{{ photo.crops.display1280 }}"></img>
-  		</div>
-  	</div>
-  </div>
-  <div id="photoBar" class="pure-g-r">
-    <div class="pure-u-1-12">
-      <div class="nav left">
-        <i class="icon-angle-left"></i>
+        <img ng-src="{{ photo.crops.display1280 }}"></img>
       </div>
     </div>
-    <div class="pure-u-2-3">
-      <div id="desc" ng-show="photo.desc">
-        <p id="descContent" ng-model="photo.desc" ng-bind-html-unsafe="photo.desc" contenteditable="true">Description</p>
-      </div>
-    </div>
-    <div class="pure-u-1-6">
-      <div id="tags" ng-show="photo.tags">
-        <ul><li ng-repeat="tag in photo.tags">{{ tag.name }}</li></ul>
-      </div>
-    </div>
-    <div class="pure-u-1-12">
-      <div class="nav right">
-        <i class="icon-angle-right"></i>
-      </div>
-    </div>
-  </div>
-  <div class="pure-g-r">
-    <div class="pure-u-1">
-        <div id="exif">
+    <div class="pure-u-1-5">
+      <div id="closePhoto"><a href="#/"  ng-click="close()">&times;</a></div>
+      <div id="photoSidebar">
+        <div id="desc" ng-show="photo.desc">
+          <p id="descContent" ng-model="photo.desc" ng-bind-html-unsafe="photo.desc" contenteditable="true">Description</p>
+        </div>
+        <div id="tags" ng-show="photo.tags">
+          <ul><li ng-repeat="tag in photo.tags">{{ tag.name }}</li></ul>
+        </div>
+        <div class="" id="exif">
           <p class="taken">Taken on {{ photo.exif.date_taken | date:'MMMM dd yyyy' }} at {{ photo.exif.date_taken | date: 'HH:mm' }}</p>
           <p class="shutter">Shutter: {{ photo.exif.shutter_speed }}</p>
           <p class="aperture">Aperture: {{ photo.exif.aperture }}</p>
@@ -41,5 +24,7 @@
         <button class="pure-button" ng-click=photoSave(photo)>Save</button>
         <p ng-show="message">{{ message }}</p>
         <p ng-show="error">{{ error }}</p>
+      </div>
     </div>
   </div>
+</div>
