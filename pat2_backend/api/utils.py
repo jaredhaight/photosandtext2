@@ -1,6 +1,6 @@
 import datetime
 from flask.ext.restful import abort
-from pat2_backend.models import Tag
+from pat2_backend.models import Tag, Gallery
 
 def clean_response_data(res):
     """
@@ -23,6 +23,10 @@ def render_photo_to_dict(photo):
     crops = dict()
     exif=dict()
     tags = []
+    gallery = dict()
+    gallery["name"] = photo.gallery.name
+    gallery["id"] = photo.gallery_id
+    gallery["api_url"] = photo.gallery.api_url()
     for crop in photo.crops:
         crops[crop.name] = crop.url()
     for tag in photo.tags:
@@ -46,7 +50,8 @@ def render_photo_to_dict(photo):
         "updated":photo.updated,
         "filename": photo.filename(),
         "desc": photo.desc,
-        "exif":exif
+        "exif":exif,
+        "gallery": gallery
     })
     return result
 
@@ -100,4 +105,7 @@ def clean_photo_data(data):
     except Exception, e:
         abort(500, message="Error while cleaning data", error=str(e))
     data['tags'] = tagList
+    if isinstance(data["gallery"],str) or isinstance(data["gallery"],unicode):
+        gallery = Gallery.query.filter_by(name=data["gallery"]).first()
+        data["gallery"] = gallery
     return data

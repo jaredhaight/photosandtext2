@@ -111,7 +111,6 @@ class api_tags_list(Resource):
             result["id"] = tag.id
             result["name"] = tag.name
             result['slug'] = tag.slug
-            result["site_url"] = tag.site_url()
             result["api_url"] = tag.api_url()
             results.append(result)
         return {"count": len(results), "results":results}
@@ -136,6 +135,8 @@ class api_gallery(Resource):
         result["name"] = gallery.name
         result["photos"] = photos
         result["api_url"] = gallery.api_url()
+        result["created"] = gallery.created.isoformat()
+        result["updated"] = gallery.updated.isoformat()
         return result
 
 
@@ -150,6 +151,13 @@ class api_gallery_list(Resource):
             result["api_url"] = gallery.api_url()
             results.append(result)
         return {"count": len(results), "results":results}
+
+    def post(self):
+        data = get_data_from_request(request)
+        gallery = Gallery(name=data["name"])
+        gallery.save()
+        return {"id":gallery.id, "name":gallery.name, "api_url":gallery.api_url()}
+
 
 api.add_resource(api_photo_list, '/api/photos')
 api.add_resource(api_photo, '/api/photos/<photoID>')
