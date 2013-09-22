@@ -118,7 +118,7 @@ class api_tags_list(Resource):
 
 class api_gallery(Resource):
     def get(self, galleryID):
-        gallery = Gallery.query.filter_by(id=galleryID).first()
+        gallery = Gallery.query.get(galleryID)
         photos = []
         result = dict()
         for photo in gallery.photos:
@@ -135,7 +135,6 @@ class api_gallery(Resource):
         result["id"] = gallery.id
         result["name"] = gallery.name
         result["photos"] = photos
-        result["site_url"] = gallery.site_url()
         result["api_url"] = gallery.api_url()
         return result
 
@@ -149,7 +148,6 @@ class api_gallery_list(Resource):
             result["id"] = gallery.id
             result["name"] = gallery.name
             result["api_url"] = gallery.api_url()
-            result["site_url"] = gallery.site_url()
             results.append(result)
         return {"count": len(results), "results":results}
 
