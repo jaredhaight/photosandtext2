@@ -107,5 +107,8 @@ def clean_photo_data(data):
     data['tags'] = tagList
     if isinstance(data["gallery"],str) or isinstance(data["gallery"],unicode):
         gallery = Gallery.query.filter_by(name=data["gallery"]).first()
+        if not gallery:
+            gallery = Gallery(name=data["gallery"])
+            gallery.save()
         data["gallery"] = gallery
     return data

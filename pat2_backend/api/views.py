@@ -26,6 +26,7 @@ class api_photo(Resource):
         edited = False
         error = None
         data = get_data_from_request(request)
+        print "Received Data: "+str(data)
         cleanData = clean_photo_data(data)
         print "Received CleanData: "+str(cleanData)
 
@@ -41,6 +42,11 @@ class api_photo(Resource):
             edited = True
         except Exception, e:
             abort(500, message="Error applying tags to photo.", error=str(e))
+        try:
+            photo.gallery = cleanData["gallery"]
+            edited = True
+        except Exception, e:
+            abort(500, message="Error applying gallery to photo.", error=str(e))
 
         if edited is True:
             photo.save()

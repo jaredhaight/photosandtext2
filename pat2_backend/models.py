@@ -79,8 +79,8 @@ class Photo(db.Model):
     def save(self):
         if self.uploaded is None:
             self.uploaded = datetime.utcnow()
-        if self.gallery_id is None:
-            self.gallery_id = 1
+        if self.gallery is None:
+            self.gallery = Gallery.query.get(1)
         self.updated = datetime.utcnow()
         #Get EXIF
         exif = get_exif(PHOTO_STORE+"/"+self.image)
@@ -109,6 +109,9 @@ class Gallery(db.Model):
     photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
     created = db.Column(db.DateTime, nullable=True)
     updated = db.Column(db.DateTime, nullable=True)
+
+    def __repr__(self):
+        return '<Gallery %r>' % self.name
 
     def api_url(self):
         return url_for('api_gallery', galleryID=self.id, _external=True)
