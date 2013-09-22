@@ -20,7 +20,8 @@ def init_dev():
 
     for crop in (crop1, crop2, crop3, crop4):
         db.session.add(crop)
-
+    gallery = Gallery(name="All Photos")
+    gallery.save()
     db.session.commit()
 
 
@@ -78,6 +79,8 @@ class Photo(db.Model):
     def save(self):
         if self.uploaded is None:
             self.uploaded = datetime.utcnow()
+        if self.gallery_id is None:
+            self.gallery_id = 1
         self.updated = datetime.utcnow()
         #Get EXIF
         exif = get_exif(PHOTO_STORE+"/"+self.image)
@@ -102,16 +105,18 @@ class Crop(db.Model):
 class Gallery(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
-    slug = db.Column(db.String(256))
     date = db.Column(db.Date)
     photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
+    created = db.Column(db.DateTime, nullable=True)
+    updated = db.Column(db.DateTime, nullable=True)
 
     def api_url(self):
         return url_for('api_gallery', galleryID=self.id, _external=True)
 
     def save(self):
         if not self.date:
-            self.date = datetime.utcnow().date()
+            self.created = datetime.utcnow()
+        self.updated = datetime.utcnow()
         self.slug = slugify(self.name)
         db.session.add(self)
         db.session.commit()

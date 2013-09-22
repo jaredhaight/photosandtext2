@@ -2,10 +2,11 @@
 <div ng-controller="photoUploadCtrl">
   <div class="pure-g-r">
     <div id="dropbox" class="pure-u-1">
-      <form id="fileupload" action="/api/photos" data-file-upload="options" method="POST" enctype="multipart/form-data" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
-        Upload Photos
+      <p ng-hide="photoListShow">Upload Photos</p>
+      <form id="fileupload" data-file-upload="options" method="POST" enctype="multipart/form-data" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
+        <input type="text" ng-show="photoListShow" placeholder="Give this gallery a name?">{{ galleryName }}</input>
+        <button class="pure-button pure-button-primary" ng-show="photoListShow" " ng-click="savePhotos()">Save Photos</button>
       </form>
-      <button ng-click="savePhotos()">Save Photos</button>
     </div>
   </div>
   <div class="pure-g-r">
