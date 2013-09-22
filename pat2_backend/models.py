@@ -106,9 +106,6 @@ class Gallery(db.Model):
     date = db.Column(db.Date)
     photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
 
-    def site_url(self):
-        return url_for("return_gallery", year=self.date.year, month=self.date.month, day=self.date.day, gallerySlug=self.slug, _external=True)
-
     def api_url(self):
         return url_for('api_gallery', galleryID=self.id, _external=True)
 
