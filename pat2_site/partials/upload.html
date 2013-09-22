@@ -4,22 +4,25 @@
     <div id="dropbox" class="pure-u-1">
       <p ng-hide="photoListShow">Upload Photos</p>
       <form id="fileupload" data-file-upload="options" method="POST" enctype="multipart/form-data" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
-        <input type="text" ng-show="photoListShow" placeholder="Give this gallery a name?">{{ galleryName }}</input>
-        <button class="pure-button pure-button-primary" ng-show="photoListShow" " ng-click="savePhotos()">Save Photos</button>
+        <input type="text" ng-show="photoListShow" placeholder="Give this gallery a name?" ng-model="galleryName"></input>
       </form>
     </div>
   </div>
   <div class="pure-g-r">
-    <div class="pure-u-1">
-      <div class="pure-u-1-5" ng-repeat="photo in photoList">
-        <div class="uploadResult">
-          <div class="uploadThumb">
-            <img src="{{ photo.crops.thumb400 }}">
-          </div>
-            <textarea placeholder="Description" ng-model="photo.desc">{{ photo.desc }}</textarea>
-            <textarea placeholder="Tags" ng-model="photo.tags"></textarea>
+    <div class="pure-u-1-5" ng-repeat="photo in photoList">
+      <div class="uploadResult">
+        <div class="uploadThumb">
+          <img src="{{ photo.crops.thumb400 }}">
         </div>
-        Desc = {{ photo.desc }}
+          <textarea placeholder="Description" ng-model="photo.desc">{{ photo.desc }}</textarea>
+          <textarea placeholder="Tags" ng-model="photo.tags"></textarea>
+      </div>
+    </div>
+  </div>
+  <div ng-show="photoListShow" id="saveBar">
+    <div class="pure-g-r">
+      <div class="pure-u-1">
+        <button class="pure-button pure-button-primary" ng-click="savePhotos()">Save Photos</button>
       </div>
     </div>
   </div>
