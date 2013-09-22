@@ -152,12 +152,24 @@
 
 /* Photo Upload Page */
 #dropbox {
-    height: 100px;
-    background: #cccccc;
+    background: #f2f2f2;
     text-align: center;
-    padding-top: 20px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin-bottom: 10px;
 }
 
+#dropbox input[type=text] {
+    float: left;
+    margin: 10px;
+    width: 40%;
+    padding: 5px;
+}
+
+#dropbox button {
+    float: right;
+    margin: 10px;
+}
 .uploadResult {
     border: solid;
     border-width: 1px;
