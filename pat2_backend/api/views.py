@@ -151,10 +151,16 @@ class api_gallery_list(Resource):
         galleries = Gallery.query.all()
         results = []
         for gallery in galleries:
+            photoList = gallery.photos.limit(5)
+            photos = []
+            for photo in photoList:
+                result = render_photo_to_dict(photo)
+                photos.append(result)
             result = dict()
             result["id"] = gallery.id
             result["name"] = gallery.name
             result["api_url"] = gallery.api_url()
+            result["photos"] = photos
             results.append(result)
         return {"count": len(results), "results":results}
 

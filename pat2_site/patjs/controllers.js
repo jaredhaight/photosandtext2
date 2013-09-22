@@ -1,6 +1,6 @@
 'use strict';
 
-function photoListCtrl($scope, photoClient, $route, $routeParams, $rootScope, $http, $cookieStore, $cookies, $location, $modal) {
+function photoListCtrl($scope, photoClient, galleryClient, $route, $routeParams, $rootScope, $http, $cookieStore, $cookies, $location, $modal) {
     delete $http.defaults.headers.common['X-Requested-With'];
 
     //This is our photo viewer.
@@ -42,9 +42,9 @@ function photoListCtrl($scope, photoClient, $route, $routeParams, $rootScope, $h
         var urlPhoto = photoClient.get({photoID: $routeParams.photoID});
         $scope.open(urlPhoto);
     }
-    if (!($scope.photos)){
-        console.log('scope.photos not defined');
-        $scope.photos = photoClient.get();
+
+    if (!($scope.galleries)) {
+        $scope.galleries = galleryClient.get();
     }
 }
 
