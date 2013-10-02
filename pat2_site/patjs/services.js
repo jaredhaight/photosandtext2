@@ -10,7 +10,7 @@ angular.module('patSvc', ['ngResource']).
             });
         }).
     factory('galleryClient', function($resource, $routeParams){
-        return $resource('http://127.0.0.1:port/api/galleries/:galleryID/', {port: ':8001'},{
+        return $resource('http://127.0.0.1:port/api/galleries/:galleryID/', {port: ':8001', galleryID:'@id'},{
             common: {withCredentials: true, crossDomain: true}
         });
     });

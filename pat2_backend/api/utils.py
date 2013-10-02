@@ -105,8 +105,7 @@ def clean_photo_data(data):
     except Exception, e:
         abort(500, message="Error while cleaning data", error=str(e))
     data['tags'] = tagList
-    if isinstance(data["gallery"],str) or isinstance(data["gallery"],unicode):
-        gallery = Gallery(name=data["gallery"])
-        gallery.save()
+    if isinstance(data["gallery"],int):
+        gallery = Gallery.query.get(data["gallery"])
         data["gallery"] = gallery
     return data
