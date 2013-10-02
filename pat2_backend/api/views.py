@@ -151,7 +151,7 @@ class api_gallery_list(Resource):
         galleries = Gallery.query.all()
         results = []
         for gallery in galleries:
-            photoList = gallery.photos.limit(5)
+            photoList = gallery.photos.limit(10)
             photos = []
             for photo in photoList:
                 result = render_photo_to_dict(photo)
@@ -161,6 +161,9 @@ class api_gallery_list(Resource):
             result["name"] = gallery.name
             result["api_url"] = gallery.api_url()
             result["photos"] = photos
+            result["photo_count"] = gallery.photos.count()
+            result["created"] = gallery.created.isoformat()
+            result["updated"] = gallery.updated.isoformat()
             results.append(result)
         return {"count": len(results), "results":results}
 

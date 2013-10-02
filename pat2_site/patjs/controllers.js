@@ -4,43 +4,27 @@ function photoListCtrl($scope, photoClient, galleryClient, $route, $routeParams,
     delete $http.defaults.headers.common['X-Requested-With'];
 
     //This is our photo viewer.
-    $scope.open = function (photo) {
-        var lastRoute = $route.current;
+    $scope.open = function (photoId) {
         console.log('Opened Photo Lightbox');
-        console.log('Location path is: '+$location.path());
-        $rootScope.hideScrollEnabled = true;
-        $scope.$on('$locationChangeSuccess', function(event) {
-            $route.current = lastRoute;
-        });
-        if (($location.path()) != ('photo/'+photo.id)) {
-            $location.path('photo/'+photo.id).replace();
-        }
 
         var modalInstance = $modal.open({
           templateUrl: '/partials/photo.html',
           controller: photoCtrl,
           resolve: {
               selectedPhoto: function () {
-                return photoClient.get({photoID: photo.id});
+                return photoClient.get({photoID: photoId});
               }
           }
         });
 
         modalInstance.result.then(function () {
-        var lastRoute = $route.current;
-        $scope.$on('$locationChangeSuccess', function(event) {
-            $route.current = lastRoute;
-        });
         }, function () {
             $rootScope.hideScrollEnabled = false;
-            $location.path('/');
         });
     };
 
-    if ($routeParams.photoID) {
-        console.log('Got routeparams: '+$routeParams.photoID);
-        var urlPhoto = photoClient.get({photoID: $routeParams.photoID});
-        $scope.open(urlPhoto);
+    if ($location.search()['photo']) {
+        $scope.open($location.search()['photo']);
     }
 
     if (!($scope.galleries)) {
@@ -67,7 +51,7 @@ function photoCtrl($scope, $modalInstance, selectedPhoto) {
     }
 }
 
-function photoUploadCtrl($scope, photoClient, $routeParams, $http, $cookieStore, $cookies) {
+function photoUploadCtrl($scope, photoClient, galleryClient, $routeParams, $http, $cookieStore, $cookies) {
     delete $http.defaults.headers.common['X-Requested-With'];
     $scope.options = {
         autoUpload: true,
@@ -90,10 +74,12 @@ function photoUploadCtrl($scope, photoClient, $routeParams, $http, $cookieStore,
     });
 
     $scope.savePhotos = function() {
+        var gallery = new galleryClient({'name':$scope.galleryName});
+        gallery.$save();
+        console.log(gallery);
         $.each($scope.photoList, function(index, photo) {
-              if ($scope.galleryName) {
-                  photo.gallery = $scope.galleryName;
-              }
+              console.log(gallery.id);
+              photo.gallery = gallery.id;
               photo.$save();
         })
     };

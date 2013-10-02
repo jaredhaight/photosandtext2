@@ -4,7 +4,7 @@
 angular.module('patjs', ['patjs.filters', 'patjs.directives','patSvc', 'ngCookies', 'blueimp.fileupload', 'ui.bootstrap']).
   config(['$routeProvider','$locationProvider', function($routeProvider, $locationProvider) {
     //$locationProvider.html5Mode(true);
-    $routeProvider.when('/', {templateUrl: 'partials/photos.html', controller: photoListCtrl});
+    $routeProvider.when('/', {templateUrl: 'partials/photos.html',  reloadOnSearch: false, controller: photoListCtrl});
     $routeProvider.when('/photo/:photoID', {templateUrl: 'partials/photos.html', controller: photoListCtrl});
     $routeProvider.when('/upload', {templateUrl: 'partials/upload.html', controller: photoUploadCtrl});
     $routeProvider.otherwise({redirectTo: '/'});
