@@ -33,7 +33,7 @@ class api_photo(Resource):
         try:
             photo.desc = cleanData['desc']
             edited = True
-        except:
+        except Exception, e:
             abort(500, message="Error while applying desc to photo", error=str(e))
 
         try:
@@ -145,10 +145,31 @@ class api_gallery(Resource):
         result["updated"] = gallery.updated.isoformat()
         return result
 
+    def post(self, galleryID):
+        gallery = Gallery.query.get(galleryID)
+        data = get_data_from_request(request)
+        try:
+            gallery.name = data["name"]
+            files = request.files.getlist('files[]')
+            for file in files:
+                if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    file.save(os.path.join(app.config['PHOTO_STORE'], filename))
+                    photo = Photo(image=filename)
+                    photo.save()
+                    result = render_photo_to_dict(photo)
+                    gallery.append(result)
+                else:
+                    return abort(400, message='Invalid File Type')
+            return api_gallery.get(self, galleryID)
+        except:
+            gallery.name = data["name"]
+            return api_gallery.get(self, galleryID)
+
 
 class api_gallery_list(Resource):
     def get(self):
-        galleries = Gallery.query.all()
+        galleries = Gallery.query.filter(Gallery.name != "Uncategorized Photos").order_by(Gallery.id.desc())
         results = []
         for gallery in galleries:
             photoList = gallery.photos.limit(10)
