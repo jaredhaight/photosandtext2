@@ -32,7 +32,7 @@ function photoListCtrl($scope, photoClient, galleryClient, $route, $routeParams,
     }
 }
 
-function photoCtrl($scope, $modalInstance, selectedPhoto) {
+function photoCtrl($scope, $modalInstance, selectedPhoto, $location) {
     $scope.photo = selectedPhoto;
     $scope.message = false;
     $scope.photoSave = function(photo) {
@@ -48,7 +48,14 @@ function photoCtrl($scope, $modalInstance, selectedPhoto) {
     };
     $scope.close = function() {
         $modalInstance.dismiss();
-    }
+    };
+
+    $scope.$on('$routeUpdate',function(e) {
+      console.log($location.search().count());
+      if($location.search().count() == 0){
+          $scope.close()
+        };
+    });
 }
 
 function photoUploadCtrl($scope, photoClient, galleryClient, $routeParams, $http, $cookieStore, $cookies) {
@@ -57,6 +64,8 @@ function photoUploadCtrl($scope, photoClient, galleryClient, $routeParams, $http
         autoUpload: true,
         url: '/api/photos'
     };
+
+    $scope.gallery = new galleryClient;
 
     $scope.photoList =[];
     $scope.uploadList = [];
@@ -69,19 +78,33 @@ function photoUploadCtrl($scope, photoClient, galleryClient, $routeParams, $http
         $scope.photoListShow = true;
         $.each(files.result.results, function (index, file) {
             var photoObj = new photoClient(file);
+            photoObj.gallery = $scope.gallery;
             $scope.photoList.push(photoObj);
         })
     });
 
     $scope.savePhotos = function() {
-        var gallery = new galleryClient({'name':$scope.galleryName});
-        gallery.$save();
-        console.log(gallery);
-        $.each($scope.photoList, function(index, photo) {
-              console.log(gallery.id);
-              photo.gallery = gallery.id;
-              photo.$save();
-        })
-    };
-}
+        $scope.gallery.$save(
+         function(successResult) {
+            $.each($scope.photoList, function(index, photo) {
+            console.log(photo.gallery);
+            photo.$save(
+                function(success) {
 
+                },
+                function(error) {
+                    photo.error = "Could not upload this file.";
+                    console.log(error);
+                }
+
+            );
+            })
+         },
+        function(errorResult) {
+            $scope.error = "Shit's broken!";
+            if(errorResult.status === 404) {
+
+            }
+        })
+    }
+}
