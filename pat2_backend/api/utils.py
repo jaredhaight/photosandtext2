@@ -94,7 +94,7 @@ def clean_photo_data(data):
                     else:
                         return {"message":newTag}
             print "returning tags as: "+str(data['tags'])
-        #if we received a dict, look up tags and append them. Can't create from a dict (yet).
+        #if we received a list, look up tags and append them. Can't create from a list (yet).
         elif isinstance(data["tags"],list):
             for tag in data["tags"]:
                 tagLookup = Tag.query.filter_by(name=tag["name"].lower()).first()
@@ -105,7 +105,18 @@ def clean_photo_data(data):
     except Exception, e:
         abort(500, message="Error while cleaning data", error=str(e))
     data['tags'] = tagList
-    if isinstance(data["gallery"],int):
-        gallery = Gallery.query.get(data["gallery"])
-        data["gallery"] = gallery
+    try:
+        if isinstance(data["gallery"],int):
+            print "Got gallery int"+str(data["gallery"])
+            gallery = Gallery.query.get(data["gallery"])
+            data["gallery"] = gallery
+        elif isinstance(data["gallery"],dict):
+            print "Got gallery dict"
+            gallery = Gallery.query.get(data["gallery"]["id"])
+            data["gallery"] = gallery
+    except Exception, e:
+        if not data["gallery"]:
+            pass
+        else:
+            abort(500, message="Error while trying to set gallery", error=str(e))
     return data

@@ -17,10 +17,9 @@ def init_dev():
     crop2 = CropSettings(name="thumb400",height=400,width=400)
     crop3 = CropSettings(name="home400",height=0,width=400)
     crop4 = CropSettings(name="display1280",height=0,width=1280)
-
     for crop in (crop1, crop2, crop3, crop4):
         db.session.add(crop)
-    gallery = Gallery(name="All Photos")
+    gallery = Gallery(name="Uncategorized Photos")
     gallery.save()
     db.session.commit()
 
@@ -67,7 +66,7 @@ class Photo(db.Model):
         return app.config["PHOTO_BASE_URL"]+'/'+self.image
 
     def api_url(self):
-        return url_for('api_photo', photoID=self.id, _external=True)
+        return url_for('api_photo', photoID=self.id)
 
     def filename(self):
         return self.image
@@ -80,7 +79,7 @@ class Photo(db.Model):
         if self.uploaded is None:
             self.uploaded = datetime.utcnow()
         if self.gallery is None:
-            self.gallery = Gallery.query.get(1)
+            self.gallery = Gallery.query.filter_by(name="Uncategorized Photos").first()
         self.updated = datetime.utcnow()
         #Get EXIF
         exif = get_exif(PHOTO_STORE+"/"+self.image)
@@ -114,7 +113,7 @@ class Gallery(db.Model):
         return '<Gallery %r>' % self.name
 
     def api_url(self):
-        return url_for('api_gallery', galleryID=self.id, _external=True)
+        return url_for('api_gallery', galleryID=self.id)
 
     def save(self):
         if not self.date:
@@ -148,7 +147,7 @@ class Tag(db.Model):
         return '<Tag %r>' % self.name
 
     def site_url(self):
-        return url_for('return_tag', tagSlug=self.slug, _external=True)
+        return url_for('return_tag', tagSlug=self.slug)
 
     def api_url(self):
         return url_for('api_tag', tagID=self.id)
