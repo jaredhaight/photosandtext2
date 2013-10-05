@@ -26,6 +26,12 @@
 .icon-angle-right:before {
 	content: "\f105";
 }
+/* Site wide */
+#errorBar {
+    height: 25px;
+    background: #FF9494;
+    color: #fff;
+}
 
 /* Home Page */
 #header {
@@ -42,6 +48,32 @@
 
 .hideScroll {
     overflow: hidden;
+}
+
+.galleryListWrap {
+    width: 100%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-top: #eee;
+    border-top-width: 1px;
+    border-top-style: solid;
+}
+
+.galleryListName {
+    font-weight: 100;
+    margin: 0;
+}
+
+.galleryListDate {
+    font-weight: 100;
+    text-align: right;
+    margin: 0;
+}
+
+.galleryListLink {
+    text-align: right;
 }
 
 /* Photo Page */
