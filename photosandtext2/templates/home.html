@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <h1>PhotosandText2</h1>
+  <div class="row">
+  {% for crop in crops %}
+    <div class="small-12 medium-6 large-3 columns">
+      <img src="{{ crop.url() }}">
+    </div>
+  {% endfor %}
+  </div>
+{% endblock %}

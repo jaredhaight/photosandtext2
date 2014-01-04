@@ -1,8 +1,11 @@
-from flask import url_for
-from pat2_backend import db, app
-from utils.general import slugify
-from utils.photo import get_exif, make_crop
 from datetime import datetime
+
+from flask import url_for
+
+from photosandtext2 import db, app
+from photosandtext2.utils.general import slugify
+from photosandtext2.utils.photo import get_exif, make_crop
+
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
 CROP_STORE = app.config["CROP_STORE"]
@@ -17,7 +20,8 @@ def init_dev():
     crop2 = CropSettings(name="thumb400",height=400,width=400)
     crop3 = CropSettings(name="home400",height=0,width=400)
     crop4 = CropSettings(name="display1280",height=0,width=1280)
-    for crop in (crop1, crop2, crop3, crop4):
+    crop5 = CropSettings(name="home300h",height=300,width=0)
+    for crop in (crop1, crop2, crop3, crop4, crop5):
         db.session.add(crop)
     gallery = Gallery(name="Uncategorized Photos")
     gallery.save()
