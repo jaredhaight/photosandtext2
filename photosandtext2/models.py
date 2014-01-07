@@ -19,9 +19,11 @@ def init_dev():
     crop1 = CropSettings(name="thumb200",height=200,width=200)
     crop2 = CropSettings(name="thumb400",height=400,width=400)
     crop3 = CropSettings(name="home400",height=0,width=400)
-    crop4 = CropSettings(name="display1280",height=0,width=1280)
-    crop5 = CropSettings(name="home300h",height=300,width=0)
-    for crop in (crop1, crop2, crop3, crop4, crop5):
+    crop4 = CropSettings(name="home600",height=0,width=600)
+    crop5 = CropSettings(name="home800",height=0,width=800)
+    crop6 = CropSettings(name="display1280",height=0,width=1280)
+    crop7 = CropSettings(name="home300h",height=300,width=0)
+    for crop in (crop1, crop2, crop3, crop4, crop5, crop6, crop7):
         db.session.add(crop)
     gallery = Gallery(name="Uncategorized Photos")
     gallery.save()
@@ -30,14 +32,15 @@ def init_dev():
 
 def create_crops(photo):
     """
-    Used when a Photo object is saved. Any crops in the Crops Settings table that don't exist will be created.
+    Used when a Photo object is saved. Any crops in the Crops Settings table
+    that don't exist will be created.
     """
     cropTypes = CropSettings.query.all()
     for cropType in cropTypes:
         search = photo.crops.filter_by(name=cropType.name).first()
         if search is None:
             thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
-            crop = Crop(name=cropType.name, file=thumbnail)
+            crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
             photo.crops.append(crop)
     db.session.add(photo)
     db.session.commit()
@@ -59,6 +62,8 @@ class Photo(db.Model):
     permissions = db.Column(db.String(256), nullable=True)
     uploaded = db.Column(db.DateTime, nullable=True)
     updated = db.Column(db.DateTime, nullable=True)
+    height = db.Column(db.Integer, nullable=True)
+    width = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         return '<Photo %r>' % self.id
@@ -101,6 +106,8 @@ class Crop(db.Model):
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'))
     name = db.Column(db.String(256))
     file = db.Column(db.String(256))
+    height = db.Column(db.Integer, nullable=True)
+    width = db.Column(db.Integer, nullable=True)
 
     def url(self):
         return app.config["CROP_BASE_URL"]+'/'+self.file

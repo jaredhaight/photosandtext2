@@ -1,4 +1,91 @@
 /* Foundation Overides */
+img {
+    vertical-align: bottom;
+}
+
 .row {
     max-width: 100%;
+}
+/* Base CSS */
+#header {
+    padding-left: 10px;
+}
+
+/* Galleries */
+#galleryWrap {
+    padding: 10px;
+}
+
+#gallery img {
+    height: 250px;
+    width: auto;
+}
+
+.crop {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #000;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+/* Photo View */
+.photo {
+    background: #000;
+    padding: 10px;
+    text-align: center;
+}
+
+.photo img {
+    max-height: 1280px;
+}
+
+.photoExif {
+    color: #808080;
+    margin-bottom: 1em;
+}
+
+.photoExif p {
+    margin-bottom: 0;
+}
+
+.photoNav {
+    margin-top: 30px;
+}
+
+.photoNav button {
+    width: 33%;
+}
+.photoNav .prev {
+    float: left;
+}
+
+.photoNav .next {
+    float: right;
+}
+
+/* Medium screens */
+@media only screen and (min-width: 40.063em) {
+
+}
+
+/* Large screens */
+@media only screen and (min-width: 64.063em) {
+
+    /* Photos Page on Large Screens */
+    .photoSidebar {
+        position: fixed;
+        top: 0;
+    }
+
+    .photoNav {
+        position: fixed;
+        bottom: 10px;
+        left: 76%;
+        width: 23%;
+    }
+
+    .photoNav button {
+        width: 49%;
+    }
+
 }

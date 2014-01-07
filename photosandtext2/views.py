@@ -10,5 +10,10 @@ if app.config['DEBUG']:
 
 @app.route('/')
 def home():
-    crops = Crop.query.filter_by(name="home400")
+    crops = Crop.query.filter_by(name="home600")
     return render_template('home.html', crops=crops)
+
+@app.route('/photo/<int:photo_id>')
+def photo_view(photo_id):
+    photo = Photo.query.get_or_404(photo_id)
+    return render_template('photo_view.html', photo=photo)

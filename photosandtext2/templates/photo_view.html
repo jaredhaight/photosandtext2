@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Photo{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="small-12 large-9 columns photo">
+    <img src="{{ photo.crops.filter_by(name="display1280").first().url() }}">
+  </div>
+  <div class="small-12 large-3 columns">
+    <div class="photoSidebar">
+      {% if photo.desc %}
+        <p>{{ photo.desc }}</p>
+      {% endif %}
+      <div class="photoExif">
+        <h4>EXIF Info</h4>
+        <p>Taken {{ photo.exif_date_taken }}</p>
+        <p>Focal Length: {{ photo.exif_focal }}</p>
+        <p>Aperture: {{ photo.exif_aperture }}</p>
+        <p>ISO: {{ photo.exif_iso }}</p>
+        <p>Shutter {{ photo.exif_shutter }}</p>
+      </div>
+      <a href="{{ photo.url() }}"><button>Download</button></a>
+      <div class="photoNav">
+          <button class="button prev">Previous</button>
+          <button class="button next">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
