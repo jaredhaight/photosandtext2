@@ -7,6 +7,7 @@ class Config(object):
     RAW_STORE = '/Users/jared/Documents/PycharmProjects/photosandtext2/media/raw'
     CROP_STORE = '/Users/jared/Documents/PycharmProjects/photosandtext2/media/crops'
     CROP_BASE_URL = '/media/crops'
+    ALLOWED_EXTENSIONS = set(['jpg', 'jpeg'])
     SECRET_KEY = os.environ.get('SECRET_KEY')
     DEBUG = False
 
