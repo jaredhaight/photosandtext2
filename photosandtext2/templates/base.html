@@ -9,6 +9,17 @@
     {% endblock %}
   </head>
   <body>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="row">
+        <div class="small-12 columns message">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+    {% endwith %}
     <div id="header">{% block header %}{% endblock %}</div>
     <div id="content">{% block content %}{% endblock %}</div>
     <div id="footer">

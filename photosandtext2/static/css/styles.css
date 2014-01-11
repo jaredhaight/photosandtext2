@@ -11,6 +11,13 @@ img {
     padding-left: 10px;
 }
 
+.message {
+    width: 100%;
+    text-align: center;
+    padding-top: 15px;
+    background: #F4E790;
+}
+
 /* Galleries */
 #galleryWrap {
     padding: 10px;
