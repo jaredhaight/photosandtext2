@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Upload{% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone/jah-dz.css') }}">
+{% endblock %}
+
 {% block header %}
 <div class="row">
   <div class="small-4 small-centered text-center columns">
@@ -13,10 +17,40 @@
 <div class="row">
   <div class="small-4 small-centered columns text-center">
     <p>Imma funky robot, gimme food.</p>
-    <form action="" method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <button type=submit value=Upload>Upload</button>
+    <form id="upload" class="dropbox" action="/upload" method=post enctype=multipart/form-data>
+      <div>
+        <p>Om nom nom.</p>
+      </div>
     </form>
   </div>
 </div>
+<div class="row">
+  <div id="upload-results" class="small-12 columns text-center dropzone-previews">
+
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url_for('static', filename="js/dropzone.min.js") }}"></script>
+<script>
+$(document ).ready(function() {
+  $("#upload").dropzone({
+    url: "/upload",
+    previewsContainer: "#upload-results",
+    thumbnailWidth: 200,
+    thumbnailHeight: 200,
+    maxThumbnailFilesize: 20,
+    previewTemplate: '\
+    <div class="dz-preview dz-file-preview"> \
+      <div class="dz-details"> \
+      <div class="dz-size" data-dz-size></div> \
+      <img data-dz-thumbnail /> \
+    </div> \
+    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div> \
+    <div class="dz-error-message"><span data-dz-errormessage></span></div> \
+  </div>'
+  });
+});
+</script>
 {% endblock %}

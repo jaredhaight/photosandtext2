@@ -1,12 +1,11 @@
 <!doctype html>
 <html>
   <head>
-    {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/foundation.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/normalize.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    {% block head %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
-    {% endblock %}
   </head>
   <body>
     {% with messages = get_flashed_messages() %}
