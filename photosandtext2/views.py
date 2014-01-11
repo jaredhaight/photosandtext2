@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for, render_template, send_from_directory, flash
+from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify
 from werkzeug import secure_filename
 from photosandtext2 import app
 from photosandtext2.models.photo import Photo, Crop
@@ -9,7 +9,7 @@ import os
 #Serve photos from dev
 if app.config['DEBUG']:
     @app.route('/media/<path:filename>')
-    def send_foo(filename):
+    def send_file(filename):
         return send_from_directory('/Users/jared/Documents/PycharmProjects/photosandtext2/media', filename)
 
 @app.route('/')
@@ -32,8 +32,7 @@ def upload():
             photo = Photo(image=filename)
             photo.save()
             flash("Photo Uploaded")
-            return redirect(url_for('photo_view',
-                                    photo_id=photo.id))
+            return jsonify({"photo":{"id":photo.id, "url":photo.url()}})
         else:
             flash("Something went wrong")
             return render_template('upload.html')
