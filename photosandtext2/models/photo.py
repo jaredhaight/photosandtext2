@@ -3,6 +3,7 @@ from flask import url_for
 
 from photosandtext2 import db, app
 from photosandtext2.utils.photo import get_exif, make_crop
+from photosandtext2.models.gallery import Gallery
 
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
@@ -72,8 +73,6 @@ class Photo(db.Model):
     def save(self):
         if self.uploaded is None:
             self.uploaded = datetime.utcnow()
-        if self.gallery is None:
-            self.gallery = Gallery.query.filter_by(name="Uncategorized Photos").first()
         self.updated = datetime.utcnow()
         #Get EXIF
         exif = get_exif(PHOTO_STORE+"/"+self.image)
