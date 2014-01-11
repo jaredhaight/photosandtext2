@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block header %}
+<h1>PhotosandText2</h1>
+{% endblock %}
+{% block content %}
+
+  <div id="galleryWrap" class="row">
+    <div id="gallery">
+      {% for crop in crops %}
+        <a href="{{ url_for('photo_view', photo_id=crop.photo.id) }}">
+          <!--<img class="crop" style="height: {{ crop.height }}px; width: {{ crop.width }}px;" src="{{ crop.url() }}"> -->
+           <div class="crop" style="height: {{ crop.height/1.4 }}px; width: {{ crop.width/1.4 }}px; background-image: url('{{ crop.url() }}');"></div>
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url_for('static', filename="js/freewall.js") }}"></script>
+<script>
+$(window).load(function () {
+  $(document ).ready(function() {
+    var wall = new freewall("#gallery");
+    wall.reset({
+      selector: '.crop',
+      animate: false,
+      cellW: 300,
+      cellH: 125,
+      onResize: function() {
+        wall.fitWidth();
+      }
+    });
+    wall.fitWidth();
+  });
+});
+/*
+$(window).load(function () {
+  $( document ).ready(function() {
+   $('.gallery').collagePlus({
+      'targetHeight':200,
+      'allowPartialLastRow': true,
+      'direction':'horizontal'
+    });
+  });
+});
+*/
+</script>
+{% endblock %}

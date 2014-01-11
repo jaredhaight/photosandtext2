@@ -1,8 +1,10 @@
-from flask import url_for
-from pat2_backend import db, app
-from utils.general import slugify
-from utils.photo import get_exif, make_crop
 from datetime import datetime
+from flask import url_for
+
+from photosandtext2 import db, app
+from photosandtext2.utils.photo import get_exif, make_crop
+from photosandtext2.models.gallery import Gallery
+
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
 CROP_STORE = app.config["CROP_STORE"]
@@ -12,28 +14,19 @@ association_table = db.Table('photo_tag_association',
     db.Column('tag_id', db.Integer, db.ForeignKey('tag.id'))
 )
 
-def init_dev():
-    crop1 = CropSettings(name="thumb200",height=200,width=200)
-    crop2 = CropSettings(name="thumb400",height=400,width=400)
-    crop3 = CropSettings(name="home400",height=0,width=400)
-    crop4 = CropSettings(name="display1280",height=0,width=1280)
-    for crop in (crop1, crop2, crop3, crop4):
-        db.session.add(crop)
-    gallery = Gallery(name="Uncategorized Photos")
-    gallery.save()
-    db.session.commit()
 
 
 def create_crops(photo):
     """
-    Used when a Photo object is saved. Any crops in the Crops Settings table that don't exist will be created.
+    Used when a Photo object is saved. Any crops in the Crops Settings table
+    that don't exist will be created.
     """
     cropTypes = CropSettings.query.all()
     for cropType in cropTypes:
         search = photo.crops.filter_by(name=cropType.name).first()
         if search is None:
             thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
-            crop = Crop(name=cropType.name, file=thumbnail)
+            crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
             photo.crops.append(crop)
     db.session.add(photo)
     db.session.commit()
@@ -55,6 +48,8 @@ class Photo(db.Model):
     permissions = db.Column(db.String(256), nullable=True)
     uploaded = db.Column(db.DateTime, nullable=True)
     updated = db.Column(db.DateTime, nullable=True)
+    height = db.Column(db.Integer, nullable=True)
+    width = db.Column(db.Integer, nullable=True)
 
     def __repr__(self):
         return '<Photo %r>' % self.id
@@ -78,8 +73,6 @@ class Photo(db.Model):
     def save(self):
         if self.uploaded is None:
             self.uploaded = datetime.utcnow()
-        if self.gallery is None:
-            self.gallery = Gallery.query.filter_by(name="Uncategorized Photos").first()
         self.updated = datetime.utcnow()
         #Get EXIF
         exif = get_exif(PHOTO_STORE+"/"+self.image)
@@ -97,31 +90,12 @@ class Crop(db.Model):
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'))
     name = db.Column(db.String(256))
     file = db.Column(db.String(256))
+    height = db.Column(db.Integer, nullable=True)
+    width = db.Column(db.Integer, nullable=True)
 
     def url(self):
         return app.config["CROP_BASE_URL"]+'/'+self.file
 
-class Gallery(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256))
-    date = db.Column(db.Date)
-    photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
-    created = db.Column(db.DateTime, nullable=True)
-    updated = db.Column(db.DateTime, nullable=True)
-
-    def __repr__(self):
-        return '<Gallery %r>' % self.name
-
-    def api_url(self):
-        return url_for('api_gallery', galleryID=self.id)
-
-    def save(self):
-        if not self.date:
-            self.created = datetime.utcnow()
-        self.updated = datetime.utcnow()
-        self.slug = slugify(self.name)
-        db.session.add(self)
-        db.session.commit()
 
 class CropSettings(db.Model):
     """

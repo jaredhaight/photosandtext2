@@ -1,6 +1,6 @@
 Photos and Text: The next generation
 =====================================
 
-Two years later, I've decided to re-write my first real website. I've learned a lot in the last couple of years and I'm hoping that the end result here will be a cleaner and more powerful website.
+A redesign of my website to expand its scope. The original site was designed to handle just select photos. This new version will be designed to handle galleries of images as well as text articles. Originally I was going to write this as a REST API backend feeding to Angular. This was over complicated for my needs and wasn't a whole lot of fun to play with. The plan now is to do the whole thing with Flask.
 
-The idea is to design it as a separate backend and frontend. The backend will be a REST API powered by Flask-Restful while the frontend for the site will be writen in Angular. Eventually I'd like to write a service that will run on my computers and regularly add photos to the site by monitoring folders or something.
+Eventually I'd like to include an API so I can tie in automated photo uploads from my computers and other devices.
