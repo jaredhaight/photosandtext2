@@ -3,7 +3,6 @@ from flask import url_for
 
 from photosandtext2 import db, app
 from photosandtext2.utils.photo import get_exif, make_crop
-from photosandtext2.models.gallery import Gallery
 
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
@@ -149,3 +148,24 @@ class Location(db.Model):
     name = db.Column(db.String(256))
     longitude = db.Column(db.Numeric)
     latitude = db.Column(db.Numeric)
+
+class Gallery(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256))
+    date = db.Column(db.Date)
+    photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
+    created = db.Column(db.DateTime, nullable=True)
+    updated = db.Column(db.DateTime, nullable=True)
+
+    def __repr__(self):
+        return '<Gallery %r>' % self.name
+
+    def api_url(self):
+        return url_for('api_gallery', galleryID=self.id)
+
+    def save(self):
+        if not self.date:
+            self.created = datetime.utcnow()
+        self.updated = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
