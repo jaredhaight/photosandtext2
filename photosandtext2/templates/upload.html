@@ -2,32 +2,35 @@
 {% block title %}Upload{% endblock %}
 
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone/jah-dz.css') }}">
-{% endblock %}
-
-{% block header %}
-<div class="row">
-  <div class="small-12 medium-6 large-4 small-centered text-center columns">
-    <h1>Upload-a-tron 9009</h1>
-  </div>
-</div>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone/jah-dz.css') }}">
 {% endblock %}
 
 {% block content %}
 <div class="row">
-  <div class="small-12 medium-6 large-4 small-centered columns text-center">
+  <div class="small-12 large-9 columns text-center">
+    <h1>Upload-a-tron 9009</h1>
     <p>Imma funky robot, gimme food.</p>
-    <form id="upload" class="dropbox" action="/upload" method=post enctype=multipart/form-data>
+    <form id="upload" class="dropbox" action="/api/v1/photos" method=post enctype=multipart/form-data>
       <div>
         <p>Om nom nom.</p>
       </div>
     </form>
-  </div>
-</div>
-<div class="row">
-  <div id="upload-results" class="small-12 columns text-center dropzone-previews">
+    <div id="upload-results" class="dropzone-previews">
 
+    </div>
   </div>
+  <form action="/api/v1/galleries/{{ gallery.id }}">
+    <div id="upload-sidebar" class="small-12 large-3 columns">
+      <h3>Gallery Details</h3>
+      <label>Name</label>
+      <input type="text">
+      <label>Description</label>
+      <textarea></textarea>
+      <label>Location</label>
+      <input type="text">
+      <button>Save</button>
+    </div>
+  </form>
 </div>
 {% endblock %}
 
@@ -36,7 +39,7 @@
 <script>
 $(document ).ready(function() {
   $("#upload").dropzone({
-    url: "/upload",
+    url: "{{ url_for("gallery_view",gallery_id=gallery.id) }}",
     previewsContainer: "#upload-results",
     thumbnailWidth: 200,
     thumbnailHeight: 200,
