@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block header %}
+<h1>PhotosandText2</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="small-12 large-9 columns text-center">
+    <form action="{{ url_for('login_view') }}" method="post">
+      {{ form.hidden_tag() }}
+      <label>{{ form.username.label }}</label>
+      {{ form.username }}
+      <label>{{ form.password.label }}</label>
+      {{ form.password }}
+      {{ form.submit }}
+    </form>
+  </div>
+</div>
+{% endblock %}
