@@ -1,10 +1,18 @@
 from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify
+from flask.ext.login import login_user
 from werkzeug import secure_filename
-from photosandtext2 import app, manager
+from photosandtext2 import app, manager, login_manager
 from photosandtext2.models.photo import Photo, Crop, Gallery
+from photosandtext2.models.user import User
 from photosandtext2.utils.general import allowed_file
+from photosandtext2.forms import LoginForm
 
 import os
+
+#User loader for Flask-Login
+@login_manager.user_loader
+def load_user(userid):
+    return User.query.get(userid)
 
 #Serve photos from dev
 if app.config['DEBUG']:
@@ -24,8 +32,10 @@ def photo_view(photo_id):
 
 @app.route('/gallery/new')
 def gallery_new_view():
-    gallery = Gallery()
-    gallery.save()
+    gallery = Gallery.query.filter_by(name=None, photos=None).first()
+    if gallery is None:
+        gallery = Gallery()
+        gallery.save()
     return redirect(url_for('gallery_view', gallery_id=gallery.id))
 
 @app.route('/gallery/<int:gallery_id>', methods=['GET', 'POST'])
@@ -46,6 +56,19 @@ def gallery_view(gallery_id):
             return render_template('upload.html', gallery=gallery)
     else:
         return render_template('upload.html', gallery=gallery)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login_view():
+    form = LoginForm()
+    if form.validate_on_submit():
+        username, password = form.username.data, form.password.data
+        user = User.query.filter_by(username=username,password=password).all()
+        if len(user) > 0:
+            login_user(user[0])
+            return redirect(url_for('home_view'))
+        flash('Username and password pair not found')
+        return redirect(request.args.get("next") or url_for("home_view"))
+    return render_template("login.html", form=form)
 
 #API Endpoints
 manager.create_api(Photo, methods=['GET','POST','DELETE','PATCH'], url_prefix='/api/v1', collection_name='photos', results_per_page=20)
