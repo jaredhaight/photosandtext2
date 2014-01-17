@@ -11,11 +11,17 @@ img {
     padding-left: 10px;
 }
 
-.message {
-    width: 100%;
+#message {
+    display: none;
+    width: 25%;
     text-align: center;
     padding-top: 15px;
     background: #F4E790;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+    height: 50px;
 }
 
 /* Galleries */
@@ -81,8 +87,36 @@ img {
 }
 
 #upload-sidebar {
-    background: #f9f9f9;
-    margin-top: 20px;
+    padding-top: 20px;
+    background: #F0F0F0;
+    border-left: #e0e0e0;
+    border-left-style: solid;
+    border-left-width: 1px;
+}
+
+#gallery-info {
+    border-bottom: #e0e0e0;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
+#upload-sidebar-footer {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}
+
+.editable {
+    background: #fff;
+    padding: 8px;
+}
+
+#Description {
+    height: 150px;
+}
+
+#upload-modal-bottom {
+    margin-top: 30px;
 }
 
 /* Medium screens */
@@ -97,7 +131,6 @@ img {
     .photoSidebar {
         position: fixed;
         top: 0;
-        margin-top: 0;
     }
 
     .photoNav {
