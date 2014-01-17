@@ -10,12 +10,12 @@
     <title>{% block title %}{% endblock %}</title>
   </head>
   <body>
-    <div id="header">{% block header %}{% endblock %}</div>
-    <div id="content">{% block content %}{% endblock %}</div>
-    <div id="footer">
+    <section id="header">{% block header %}{% endblock %}</section>
+    <article id="content">{% block content %}{% endblock %}</article>
+    <section id="footer">
       {% block footer %}
       {% endblock %}
-    </div>
+    </section>
   <script src="{{ url_for('static', filename="js/vendor/jquery.js") }}"></script>
   <script src="{{ url_for('static', filename="js/foundation.min.js") }}"></script>
   <script>
