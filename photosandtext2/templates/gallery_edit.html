@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone/jah-dz.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="small-12 large-9 columns text-center">
+    <div id="galleryWrap" class="row">
+      <div id="gallery">
+        {% for photo in gallery.photos %}
+          {% set crop = photo.crops.filter_by(name="home600").first() %}
+          <div class="crop" style="height: {{ crop.height/1.8 }}px; width: {{ crop.width/1.8 }}px; background-image: url('{{ crop.url() }}');"></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div id="upload-sidebar" class="small-12 large-3 columns">
+    <div id="gallery-info">
+      <h3>Gallery</h3>
+      <p id="Name" class="editable" contenteditable="true">{{ gallery.name }}</p>
+      <p id="Description" class="editable" contenteditable="true">{{ gallery.description }}</p>
+    </div>
+    <div id="photo-info">
+      <h3>Photo</h3>
+      <p id="photo-name" class="editable"></p>
+      <p id="photo-desc" class="editable"></p>
+    </div>
+    <div id="upload-sidebar-footer">
+      <a href="#" data-reveal-id="upload-modal"><button>Add Photos</button></a>
+      <div id="message"><p></p></div>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Modal -->
+<div id="upload-modal" class="reveal-modal" data-reveal>
+  <div class="small-12 large-9 columns text-center small-centered">
+    <h1>Upload-a-tron 9009</h1>
+    <p>Imma funky robot, gimme food.</p>
+    <form id="upload" class="dropbox" action="/api/v1/photos" method=post enctype=multipart/form-data>
+      <div>
+        <p>Om nom nom.</p>
+      </div>
+    </form>
+    <div id="upload-results" class="dropzone-previews">
+
+    </div>
+    <div id="upload-modal-bottom">
+      <button id="upload-dismiss">Dismiss</button>
+    </div>
+  </div>
+</div>
+<!-- End Upload Modal -->
+{% endblock %}
+
+{% block javascript %}
+<script src="{{ url_for('static', filename="js/dropzone.min.js") }}"></script>
+<script src="{{ url_for('static', filename="js/jquery.contenteditable.js") }}"></script>
+<script src="{{ url_for('static', filename="js/freewall.js") }}"></script>
+<script>
+$(document ).ready(function() {
+    var wall = new freewall("#gallery");
+    wall.reset({
+      selector: '.crop',
+      animate: false,
+      cellW: 300,
+      cellH: 125,
+      onResize: function() {
+        wall.fitWidth();
+      }
+    });
+    wall.fitWidth();
+
+  function flashMessage(text) {
+    $("#message > p").replaceWith("<p>"+text+"</p>");
+    $("#message").slideDown().delay(1000);
+    $("#message").slideUp();
+  }
+
+  function submitData(element) {
+    var edited_content = element.content;
+    var gallery_attribute = element.id;
+    var data = {};
+    data[gallery_attribute.toLowerCase()] = edited_content;
+
+    $.ajax({
+        headers : {
+          'Accept' : 'application/json',
+          'Content-Type' : 'application/json'
+        },
+        url: "/api/v1/galleries/{{ gallery.id }}",
+        type: "PUT",
+        data: JSON.stringify(data),
+        success: function(data) {
+          flashMessage(gallery_attribute+" updated.");
+        }
+    })
+  }
+
+  $("#upload").dropzone({
+    url: "{{ url_for("gallery_edit_view",gallery_id=gallery.id) }}",
+    previewsContainer: "#upload-results",
+    thumbnailWidth: 200,
+    thumbnailHeight: 200,
+    maxThumbnailFilesize: 20,
+    previewTemplate: '\
+    <div class="dz-preview dz-file-preview"> \
+      <div class="dz-details"> \
+      <div class="dz-size" data-dz-size></div> \
+      <img data-dz-thumbnail /> \
+    </div> \
+    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div> \
+    <div class="dz-error-message"><span data-dz-errormessage></span></div> \
+  </div>'
+  });
+
+  $(".editable").contentEditable({
+	"placeholder" : $(this).attr("id"),
+	"onBlur" : function(element){
+		submitData(element);
+		}
+	});
+
+  $("#upload-dismiss").click(function() {
+    $("#upload-modal").foundation('reveal','close')
+  });
+
+});
+
+</script>
+{% endblock %}
