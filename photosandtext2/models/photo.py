@@ -32,7 +32,7 @@ def create_crops(photo):
 
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    desc = db.Column(db.Text, nullable=True)
+    desc = db.Column(db.UnicodeText, nullable=True)
     exif_iso = db.Column(db.String(10), nullable=True)
     exif_aperture = db.Column(db.String(10), nullable=True)
     exif_shutter = db.Column(db.String(10), nullable=True)
@@ -152,6 +152,7 @@ class Location(db.Model):
 class Gallery(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
+    description = db.Column(db.UnicodeText)
     date = db.Column(db.Date)
     photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
     created = db.Column(db.DateTime, nullable=True)
