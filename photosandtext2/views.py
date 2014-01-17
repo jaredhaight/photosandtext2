@@ -22,8 +22,8 @@ if app.config['DEBUG']:
 
 @app.route('/')
 def home_view():
-    crops = Crop.query.filter_by(name="home600")
-    return render_template('home.html', crops=crops)
+    galleries = Gallery.query.filter(Gallery.photos!=None)
+    return render_template('home.html', galleries=galleries)
 
 @app.route('/photo/<int:photo_id>')
 def photo_view(photo_id):
@@ -36,10 +36,16 @@ def gallery_new_view():
     if gallery is None:
         gallery = Gallery()
         gallery.save()
-    return redirect(url_for('gallery_view', gallery_id=gallery.id))
+    return redirect(url_for('gallery_edit_view', gallery_id=gallery.id))
 
-@app.route('/gallery/<int:gallery_id>', methods=['GET', 'POST'])
+@app.route('/gallery/<int:gallery_id>')
 def gallery_view(gallery_id):
+    print "Got gallery id"
+    gallery = Gallery.query.get_or_404(gallery_id)
+    return render_template('gallery.html', gallery=gallery)
+
+@app.route('/gallery/<int:gallery_id>/edit', methods=['GET', 'POST'])
+def gallery_edit_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
     if request.method == 'POST':
         file = request.files['file']
@@ -53,9 +59,9 @@ def gallery_view(gallery_id):
             return jsonify({"photo":{"id":photo.id, "url":photo.url()}})
         else:
             flash("Something went wrong")
-            return render_template('upload.html', gallery=gallery)
+            return render_template('gallery_edit.html', gallery=gallery)
     else:
-        return render_template('upload.html', gallery=gallery)
+        return render_template('gallery_edit.html', gallery=gallery)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():
@@ -72,4 +78,4 @@ def login_view():
 
 #API Endpoints
 manager.create_api(Photo, methods=['GET','POST','DELETE','PATCH'], url_prefix='/api/v1', collection_name='photos', results_per_page=20)
-manager.create_api(Gallery, methods=['GET','POST','DELETE','PATCH'], url_prefix='/api/v1', collection_name='galleries', results_per_page=20)
+manager.create_api(Gallery, methods=['GET','POST','DELETE','PATCH','PUT'], url_prefix='/api/v1', collection_name='galleries', results_per_page=20)

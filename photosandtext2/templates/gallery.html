@@ -1,52 +1,60 @@
 {% extends "base.html" %}
-{% block title %}Upload{% endblock %}
+{% block title %}{{ gallery.name }}{% endblock %}
 
-{% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone/jah-dz.css') }}">
+{% block header %}
+<h1><a href="/">Photos and Text</a> | {{ gallery.name }}</h1>
 {% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="small-12 large-9 columns text-center">
-    {% for photo in gallery.photos %}
-
-    {% endfor %}
-  </div>
-  <form action="/api/v1/galleries/{{ gallery.id }}">
-    <div id="upload-sidebar" class="small-12 large-3 columns">
-      <h3>Gallery Details</h3>
-      <label>Name</label>
-      <input type="text">
-      <label>Description</label>
-      <textarea></textarea>
-      <label>Location</label>
-      <input type="text">
-      <button>Save</button>
+  <section>
+  <div class="row">
+    <div class="small-12 medium-6 columns medium-centered text-center">
+      <p>{{ gallery.description }}</p>
     </div>
-  </form>
-</div>
+  </div>
+  </section>
+  <section id="galleryWrap">
+    <div class="row">
+      <div id="gallery">
+        {% for photo in gallery.photos %}
+          {% set crop = photo.crops.filter_by(name="home600").first() %}
+          <a href="{{ url_for('photo_view', photo_id=photo.id) }}">
+             <div class="crop" style="height: {{ crop.height/1.8 }}px; width: {{ crop.width/1.8 }}px; background-image: url('{{ crop.url() }}');"></div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 {% endblock %}
 
 {% block javascript %}
-<script src="{{ url_for('static', filename="js/dropzone.min.js") }}"></script>
+<script src="{{ url_for('static', filename="js/freewall.js") }}"></script>
 <script>
-$(document ).ready(function() {
-  $("#upload").dropzone({
-    url: "{{ url_for("gallery_view",gallery_id=gallery.id) }}",
-    previewsContainer: "#upload-results",
-    thumbnailWidth: 200,
-    thumbnailHeight: 200,
-    maxThumbnailFilesize: 20,
-    previewTemplate: '\
-    <div class="dz-preview dz-file-preview"> \
-      <div class="dz-details"> \
-      <div class="dz-size" data-dz-size></div> \
-      <img data-dz-thumbnail /> \
-    </div> \
-    <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div> \
-    <div class="dz-error-message"><span data-dz-errormessage></span></div> \
-  </div>'
+$(window).load(function () {
+  $(document ).ready(function() {
+    var wall = new freewall("#gallery");
+    wall.reset({
+      selector: '.crop',
+      animate: false,
+      cellW: 300,
+      cellH: 125,
+      onResize: function() {
+        wall.fitWidth();
+      }
+    });
+    wall.fitWidth();
   });
 });
+/*
+$(window).load(function () {
+  $( document ).ready(function() {
+   $('.gallery').collagePlus({
+      'targetHeight':200,
+      'allowPartialLastRow': true,
+      'direction':'horizontal'
+    });
+  });
+});
+*/
 </script>
 {% endblock %}

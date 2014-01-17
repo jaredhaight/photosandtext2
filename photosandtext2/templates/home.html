@@ -4,17 +4,19 @@
 <h1>PhotosandText2</h1>
 {% endblock %}
 {% block content %}
-
-  <div id="galleryWrap" class="row">
-    <div id="gallery">
-      {% for crop in crops %}
-        <a href="{{ url_for('photo_view', photo_id=crop.photo.id) }}">
-          <!--<img class="crop" style="height: {{ crop.height }}px; width: {{ crop.width }}px;" src="{{ crop.url() }}"> -->
-           <div class="crop" style="height: {{ crop.height/1.4 }}px; width: {{ crop.width/1.4 }}px; background-image: url('{{ crop.url() }}');"></div>
-        </a>
-      {% endfor %}
+  <section id="galleryWrap">
+    <div id="galleryWrap" class="row">
+      <div id="gallery">
+        {% for gallery in galleries %}
+          {% set photo = gallery.photos.first() %}
+          {% set crop = photo.crops.filter_by(name="home600").first() %}
+          <a href="{{ url_for('gallery_view', gallery_id=gallery.id) }}">
+             <div class="crop" style="height: {{ crop.height/1.4 }}px; width: {{ crop.width/1.4 }}px; background-image: url('{{ crop.url() }}');"></div>
+          </a>
+        {% endfor %}
+      </div>
     </div>
-  </div>
+  </section>
 {% endblock %}
 
 {% block javascript %}
