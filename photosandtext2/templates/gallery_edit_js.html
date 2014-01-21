@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone/jah-dz.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.justifiedgallery.css') }}">
+{% endblock %}
+
+{% block content %}
+<div ng-app="patjs">
+  <div ng-view></div>
+</div>
+{% endblock %}
+{% block javascript %}
+<script src="{{ url_for('static', filename="js/patjs/angular.min.js") }}"></script>
+<script src="{{ url_for('static', filename="js/patjs/angular-resource.min.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/patjs/angular-route.min.js") }}"></script>
+<script src="{{ url_for('static', filename="js/patjs/services.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/patjs/controllers.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/jquery.justifiedgallery.js") }}"></script>
+  <!-- <script src="{{ url_for('static', filename="js/freewall.js") }}"></script> -->
+  <script src="{{ url_for('static', filename="js/patjs/app.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/patjs/directives.js") }}"></script>
+{% endblock %}

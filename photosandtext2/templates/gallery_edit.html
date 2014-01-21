@@ -40,18 +40,7 @@
     </div>
   </section>
 
-  {% block footer %}
-   <div id="message"><p></p></div>
-  <section id="gallery-footer">
-    <div class="row">
-      <div class="small-12">
-        <a href="#" data-reveal-id="upload-modal"><button class="right">Add Photos</button></a>
-      </div>
-    </div>
-  </section>
-  {% endblock %}
-
-<!-- Upload Modal -->
+  <!-- Upload Modal -->
   <section id="upload-modal" class="reveal-modal" data-reveal>
     <div class="small-12 large-9 columns text-center small-centered">
       <h1>Upload-a-tron 9009</h1>
@@ -69,7 +58,19 @@
       </div>
     </div>
   </section>
-<!-- End Upload Modal -->
+  <!-- End Upload Modal -->
+{% endblock %}
+
+
+{% block footer %}
+  <div id="message"><p></p></div>
+  <section id="gallery-footer">
+    <div class="row">
+      <div class="small-12">
+        <a href="#" data-reveal-id="upload-modal"><button class="right">Add Photos</button></a>
+      </div>
+    </div>
+  </section>
 {% endblock %}
 
 {% block javascript %}
