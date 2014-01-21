@@ -40,7 +40,6 @@ def gallery_new_view():
 
 @app.route('/gallery/<int:gallery_id>')
 def gallery_view(gallery_id):
-    print "Got gallery id"
     gallery = Gallery.query.get_or_404(gallery_id)
     return render_template('gallery.html', gallery=gallery)
 
@@ -63,6 +62,10 @@ def gallery_edit_view(gallery_id):
     else:
         return render_template('gallery_edit.html', gallery=gallery)
 
+@app.route('/gallery/edit/')
+def gallery_js_edit_view():
+    return render_template('gallery_edit_js.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():
     form = LoginForm()
@@ -77,5 +80,42 @@ def login_view():
     return render_template("login.html", form=form)
 
 #API Endpoints
-manager.create_api(Photo, methods=['GET','POST','DELETE','PATCH'], url_prefix='/api/v1', collection_name='photos', results_per_page=20)
-manager.create_api(Gallery, methods=['GET','POST','DELETE','PATCH','PUT'], url_prefix='/api/v1', collection_name='galleries', results_per_page=20)
+def include_url(result):
+    photo = Photo.query.get(result["id"])
+    result['url'] = photo.url()
+    return result
+
+def include_crops(result):
+    for photo in result["photos"]:
+        photoObj = Photo.query.get(photo["id"])
+        cropsResult = dict()
+        for crop in photoObj.crops:
+            cropInfo = dict()
+            cropInfo["height"] = crop.height
+            cropInfo["width"] = crop.width
+            cropInfo["url"] = crop.url()
+            cropsResult[crop.name] =cropInfo
+        photo["crops"] = cropsResult
+    return result
+
+manager.create_api(
+    Photo,
+    methods=['GET','POST','DELETE','PATCH'],
+    url_prefix='/api/v1',
+    collection_name='photos',
+    results_per_page=20,
+    postprocessors={
+        'GET_SINGLE':[include_url]
+    }
+)
+
+manager.create_api(
+    Gallery,
+    methods=['GET','POST','DELETE','PATCH','PUT'],
+    url_prefix='/api/v1',
+    collection_name='galleries',
+    results_per_page=20,
+    postprocessors={
+        'GET_SINGLE':[include_crops]
+    }
+)

@@ -15,6 +15,7 @@ img {
 /* Base CSS */
 #header {
     padding-left: 10px;
+    text-align: center;
 }
 
 #message {
@@ -32,6 +33,10 @@ img {
 }
 
 /* Galleries */
+#header-gallery-name {
+    text-align: center;
+}
+
 #galleryWrap {
     padding: 10px;
 }
@@ -119,6 +124,9 @@ img {
 
 /* Medium screens */
 @media only screen and (min-width: 40.063em) {
+    #header {
+        text-align: left;
+    }
 
 }
 
