@@ -12,24 +12,14 @@ img {
     max-width: 100%;
 }
 
+#galleryWrap div {
+    padding: 1px;
+}
+
 /* Base CSS */
 #header {
     padding-left: 10px;
     text-align: center;
-}
-
-#message {
-    display: none;
-    position: fixed;
-    right: 25%;
-    left: 25%;
-    bottom: 10px;
-    width: 50%;
-    height: 50px;
-    text-align: center;
-    padding-top: 15px;
-    background: #F4E790;
-    z-index: 10;
 }
 
 /* Galleries */
@@ -105,6 +95,44 @@ img {
     border-width: 1px;
 }
 
+#photo-edit-sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 80%;
+    background: #f2f2f2;
+}
+
+#photo-edit-sidebar textarea {
+    margin-top: 10px;
+}
+
+.photo-edit-sidebar-wrap {
+    padding: 10px;
+}
+
+#photo-edit-sidebar-footer {
+    margin-top: 10px;
+}
+
+#photo-edit-sidebar-message {
+    position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 70px;
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    padding-top: 15px;
+    background: #F4E790;
+    z-index: 10;
+}
+
+.content80 {
+    width: 80%;
+}
+
 #gallery-footer {
     position: fixed;
     bottom: 0;
@@ -117,9 +145,23 @@ img {
     border-top-width: 1px;
 }
 
+#gallery-footer-message {
+    position: fixed;
+    height: 50px;
+    text-align: center;
+    padding-top: 15px;
+    background: #F4E790;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+}
+
 #upload-modal-bottom {
     margin-top: 30px;
 }
+
 
 
 /* Medium screens */
