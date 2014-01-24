@@ -85,7 +85,7 @@ def include_url(result):
     result['url'] = photo.url()
     return result
 
-def include_crops(result):
+def include_crops(result, **kw):
     for photo in result["photos"]:
         photoObj = Photo.query.get(photo["id"])
         cropsResult = dict()
@@ -97,6 +97,17 @@ def include_crops(result):
             cropsResult[crop.name] =cropInfo
         photo["crops"] = cropsResult
     return result
+
+def remove_crops_api(data, **kw):
+    print data
+    newPhotos = []
+    for photo in data["photos"]:
+        del photo["crops"]
+        newPhotos.append(photo)
+    del data["photos"]
+    data["photos"] = newPhotos
+    pass
+
 
 manager.create_api(
     Photo,
@@ -115,6 +126,9 @@ manager.create_api(
     url_prefix='/api/v1',
     collection_name='galleries',
     results_per_page=20,
+    preprocessors={
+        'PUT_SINGLE':[remove_crops_api]
+    },
     postprocessors={
         'GET_SINGLE':[include_crops]
     }

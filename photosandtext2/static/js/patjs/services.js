@@ -11,6 +11,7 @@ angular.module('patSvc', ['ngResource']).
         }).
     factory('galleryClient', function($resource, $routeParams){
         return $resource('http://127.0.0.1:port/api/v1/galleries/:galleryID/', {port: ':5000', galleryID:'@id'},{
-            common: {withCredentials: true, crossDomain: true}
+            common: {withCredentials: true, crossDomain: true},
+            update: {method:'PUT'}
         });
     });
