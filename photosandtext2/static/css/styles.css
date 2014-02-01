@@ -55,12 +55,20 @@ img {
     max-height: 1280px;
 }
 
-.photoExif {
-    color: #808080;
+.photo-view-sidebar .section {
+    margin-top: 1em;
     margin-bottom: 1em;
+    padding-bottom: 1em;
+    border-bottom: #e2e2e2;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
 }
 
-.photoExif p {
+.photo-view-sidebar-exif {
+    color: #808080;
+}
+
+.photo-view-sidebar-exif p {
     margin-bottom: 0;
 }
 
@@ -100,8 +108,10 @@ img {
     top: 0;
     bottom: 0;
     right: 0;
-    left: 80%;
+    left: 75%;
     background: #f2f2f2;
+    overflow: scroll;
+    padding-bottom: 70px;
 }
 
 #photo-edit-sidebar textarea {
@@ -129,8 +139,8 @@ img {
     z-index: 10;
 }
 
-.content80 {
-    width: 80%;
+.contentSlide {
+    width: 75%;
 }
 
 #gallery-footer {
@@ -176,9 +186,18 @@ img {
 @media only screen and (min-width: 64.063em) {
 
     /* Photos Page on Large Screens */
-    .photoSidebar {
+    .photo {
         position: fixed;
         top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+
+    .photo-view-sidebar {
+        position: fixed;
+        top: 0;
+        width: 23%;
     }
 
     .photoNav {
