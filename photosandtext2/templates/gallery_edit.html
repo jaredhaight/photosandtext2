@@ -3,6 +3,7 @@
 
 {% block head %}
   <link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone/jah-dz.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.justifiedgallery.css') }}">
 {% endblock %}
 
 {% block header %}
@@ -31,9 +32,9 @@
     <div class="row">
       <div id="gallery">
         {% for photo in gallery.photos %}
-          {% set crop = photo.crops.filter_by(name="home600").first() %}
+          {% set crop = photo.crops.filter_by(name="display").first() %}
           <a href="{{ url_for('photo_view', photo_id=photo.id) }}">
-             <div class="crop" style="height: {{ crop.height/1.8 }}px; width: {{ crop.width/1.8 }}px; background-image: url('{{ crop.url() }}');"></div>
+             <img src="{{ crop.url() }}">
           </a>
         {% endfor %}
       </div>
@@ -76,20 +77,15 @@
 {% block javascript %}
 <script src="{{ url_for('static', filename="js/dropzone.min.js") }}"></script>
 <script src="{{ url_for('static', filename="js/jquery.contenteditable.js") }}"></script>
-<script src="{{ url_for('static', filename="js/freewall.js") }}"></script>
+<script src="{{ url_for('static', filename="js/jquery.justifiedgallery.js") }}"></script>
 <script>
-$(document ).ready(function() {
-    var wall = new freewall("#gallery");
-    wall.reset({
-      selector: '.crop',
-      animate: false,
-      cellW: 300,
-      cellH: 125,
-      onResize: function() {
-        wall.fitWidth();
-      }
-    });
-    wall.fitWidth();
+  $(document ).ready(function() {
+
+  $("#gallery").justifiedGallery({
+    rowHeight: 300,
+    justifyLastRow: false,
+    captions: false
+  });
 
   function flashMessage(text) {
     $("#message > p").replaceWith("<p>"+text+"</p>");
