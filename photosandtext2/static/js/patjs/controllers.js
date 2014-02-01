@@ -1,11 +1,11 @@
 'use strict';
 
-function photoListCtrl($scope, galleryClient, photoClient, $route, $routeParams, $rootScope, $http, $location, $timeout) {
+function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, $timeout, $modal, $log) {
     delete $http.defaults.headers.common['X-Requested-With'];
     $scope.gallery = galleryClient.get({galleryID: $routeParams.galleryID});
     $scope.galleryUpdate = function(gallery) {
         galleryClient.update({galleryID:gallery.id}, gallery, function() {
-            $scope.galleryMessage("Saved Gallery!")
+            $scope.message("Saved Gallery!")
         }, function(data){
             console.log("fail?");
         });
@@ -16,31 +16,55 @@ function photoListCtrl($scope, galleryClient, photoClient, $route, $routeParams,
         $scope.photoEdit = true;
     };
 
-    $scope.galleryMessage = function(message) {
-        $scope.galleryMessageStatus = true;
-        $scope.galleryMessageContent = message;
+    $scope.message = function(message) {
+        $scope.messageStatus = true;
+        $scope.messageContent = message;
         $timeout(function(){
-            $scope.galleryMessageStatus = false;
-            $scope.galleryMessageContent = null;
-        },3000);
-    };
-
-    $scope.photoMessage = function(message) {
-        $scope.photoMessageStatus = true;
-        $scope.photoMessageContent = message;
-        $timeout(function(){
-            $scope.photoMessageStatus = false;
-            $scope.photoMessageContent = null;
+            $scope.messageStatus = false;
+            $scope.messageContent = null;
         },3000);
     };
 
     $scope.photoSave = function(photo) {
         photoClient.update({photoID:photo.id}, photo, function(data){
             console.log("success");
-            $scope.photoMessage("Saved Photo")
+            $scope.message("Saved Photo")
         }, function(data){
             console.log("fail?");
         });
     };
 
+    //Open Photo Modal
+    $scope.open = function(selectedPhoto) {
+        var photoModalInstance = $modal.open({
+            templateUrl: '/static/js/patjs/partials/photo_edit.html',
+            windowClass: 'photo-modal',
+            controller: PhotoModalInstanceCtrl,
+            resolve: {
+                photo: function() {
+                    return selectedPhoto;
+                }
+            }
+        })
+
+        photoModalInstance.result.then(function (photo) {
+            $scope.photoSave(photo);
+        }, function () {
+          $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
+    //Photo Modal Instance
+    var PhotoModalInstanceCtrl = function($scope, $modalInstance, photo) {
+        $scope.photo = photo;
+
+        $scope.ok = function () {
+            $modalInstance.close($scope.photo);
+        };
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    }
 }
+
