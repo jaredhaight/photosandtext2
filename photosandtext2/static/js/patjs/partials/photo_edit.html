@@ -1,0 +1,20 @@
+<section>
+  <div class="row">
+    <div class="small-8 columns">
+      <img ng-src="{[{ photo.crops.display_b.url }]}">
+    </div>
+    <div class="small-4 columns">
+      <label>Description</label>
+      <textarea ng-model="photo.desc" placeholder="Photo Description">{[{ photo.desc }]}</textarea>
+      <label>Tags</label>
+      <input type="text">
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-12">
+      <button class="button right alert" ng-click="cancel()">Dismiss</button>
+      <button class="button right" ng-click="ok()">OK</button>
+    </div>
+  </div>
+</section>
+
