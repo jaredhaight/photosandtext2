@@ -7,11 +7,17 @@
     <img src="{{ photo.crops.filter_by(name="display1280").first().url() }}">
   </div>
   <div class="small-12 large-3 columns">
-    <div class="photoSidebar">
+    <div class="photo-view-sidebar">
       {% if photo.desc %}
-        <p>{{ photo.desc }}</p>
+        <div class="section">
+          <p>{{ photo.desc }}</p>
+        </div>
       {% endif %}
-      <div class="photoExif">
+      <div class="section">
+        <h4>Gallery</h4>
+        <a href="{{ url_for('gallery_view', gallery_id=photo.gallery.id) }}">{{ photo.gallery.name }}</a>
+      </div>
+      <div class="photo-view-sidebar-exif section">
         <h4>EXIF Info</h4>
         <p>Taken {{ photo.exif_date_taken }}</p>
         <p>Focal Length: {{ photo.exif_focal }}</p>
