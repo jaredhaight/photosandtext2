@@ -44,10 +44,14 @@
 {% block javascript %}
 <script src="{{ url_for('static', filename="js/jquery.justifiedgallery.js") }}"></script>
 <script>
-$("#gallery").justifiedGallery({
-  rowHeight: 300,
-  justifyLastRow: false,
-  captions: false
+$(window).load(function () {
+  $(document ).ready(function() {
+   $("#gallery").justifiedGallery({
+      rowHeight: 300,
+      justifyLastRow: false,
+      captions: false
+    });
+  });
 });
 </script>
 <!--
