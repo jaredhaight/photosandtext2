@@ -49,10 +49,13 @@ img {
     background: #000;
     padding: 0;
     text-align: center;
+    overflow: hidden;
 }
 
 .photo img {
     max-height: 1280px;
+    max-width: 130%;
+    margin-left: -15%;
 }
 
 .photo-view-sidebar .section {
@@ -86,13 +89,17 @@ img {
 
 /* Upload Page */
 
-#upload {
-    width: 80%;
+#upload-box {
+    text-align: center;
     height: 100px;
     background: #8293e3;
     color: #f2f2f2;
     padding-top: 35px;
     margin: 0 auto;
+}
+
+.upload-box-hover {
+    background: #2B46BF;
 }
 
 .editable {
@@ -136,11 +143,6 @@ img {
 }
 
 
-#upload-modal-bottom {
-    margin-top: 30px;
-}
-
-
 
 /* Medium screens */
 @media only screen and (min-width: 40.063em) {
@@ -150,6 +152,12 @@ img {
 
     .download-button {
         width: 49%;
+    }
+
+    /* Photo View Page */
+    .photo img {
+        max-width: 110%;
+        margin-left: -5%;
     }
 
 }
@@ -166,6 +174,11 @@ img {
         left: 0;
         right: 0;
         overflow: scroll;
+    }
+
+    .photo img {
+        max-width: 100%;
+        margin-left: 0;
     }
 
     .photo-view-sidebar {
