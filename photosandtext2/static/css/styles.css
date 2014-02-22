@@ -47,7 +47,7 @@ img {
 /* Photo View */
 .photo {
     background: #000;
-    padding: 10px;
+    padding: 0;
     text-align: center;
 }
 
@@ -72,22 +72,20 @@ img {
     margin-bottom: 0;
 }
 
+.download-button {
+    width: 100%;
+}
+
 .photoNav {
     margin-top: 30px;
 }
 
 .photoNav button {
-    width: 33%;
-}
-.photoNav .prev {
-    float: left;
-}
-
-.photoNav .next {
-    float: right;
+    width: 49%;
 }
 
 /* Upload Page */
+
 #upload {
     width: 80%;
     height: 100px;
@@ -104,37 +102,39 @@ img {
 }
 
 .photo-modal {
-    top: 25px;
+    top: 35px;
+    left: 5%;
+    right: 10px;
+    margin: 0 auto;
+    margin-right: 0;
+    margin-left: 0;
+    width: 90%;
 }
 
-.contentSlide {
-    width: 75%;
+.message {
+    position: absolute;
+    height: 50px;
+    text-align: center;
+    padding-top: 15px;
+    background: #F4E790;
+    z-index: 10;
+    left: 25%;
+    right: 0;
+    bottom: 25px;
+    width: 50%;
+    border: #b7b07f;
+    border-width: 1px;
+    border-style: solid;
 }
+
 
 #gallery-footer {
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
-    background: #fff;
-    padding: 10px;
-    border-top: #e0e0e0;
-    border-top-style: solid;
-    border-top-width: 1px;
 }
 
-#gallery-footer-message {
-    position: fixed;
-    height: 50px;
-    text-align: center;
-    padding-top: 15px;
-    background: #F4E790;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-}
 
 #upload-modal-bottom {
     margin-top: 30px;
@@ -148,6 +148,10 @@ img {
         text-align: left;
     }
 
+    .download-button {
+        width: 49%;
+    }
+
 }
 
 /* Large screens */
@@ -155,28 +159,27 @@ img {
 
     /* Photos Page on Large Screens */
     .photo {
+        width: 78%;
         position: fixed;
         top: 0;
         bottom: 0;
         left: 0;
         right: 0;
+        overflow: scroll;
     }
 
     .photo-view-sidebar {
         position: fixed;
         top: 0;
-        width: 23%;
+        right: 1%;
+        width: 20%;
     }
 
     .photoNav {
         position: fixed;
         bottom: 10px;
-        left: 76%;
-        width: 23%;
-    }
-
-    .photoNav button {
-        width: 49%;
+        left: 79%;
+        width: 20%;
     }
 
     /* Uploads page on Large Screens */
