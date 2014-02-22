@@ -3,15 +3,11 @@
     {[{ messageContent }]}
   </div>
   <div class="row">
-    <div class="small-12 large-6 columns">
+    <div class="small-12 large-7 columns">
       <h3>Full Image</h3>
       <img ng-src="{[{ photo.crops.display_z.url }]}">
     </div>
-    <div class="small-12 large-2 columns">
-      <h3>Crop</h3>
-      <img ng-src="{[{ photo.crops.thumb200.url }]}">
-    </div>
-    <div class="small-12 large-4 columns">
+    <div class="small-12 large-5 columns">
       <h3>Details</h3>
       <label>Description</label>
       <textarea ng-model="photo.desc" ng-blur="photoSave(photo)" placeholder="Photo Description">{[{ photo.desc }]}</textarea>

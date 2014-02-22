@@ -20,34 +20,21 @@
           <p id="Description" class="editable" ng-model="gallery.description" contenteditable="true" ng-blur="galleryUpdate(gallery)">{[{ gallery.description }]}</p>
         </div>
       </div>
+      <div class="row">
+        <div class="small-12 columns">
+          <div id="upload-box" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="upload-box-hover">
+            <p>Drop files here..</p>
+          </div>
+        </div>
+      </div>
     </section>
     <section id="galleryWrap">
       <div class="row">
-        <div class="small-12 medium-4 large-3 columns" ng-repeat="photo in gallery.photos" ng-click="open(photo)">
+        <div class="small-12 medium-2 columns" ng-repeat="photo in gallery.photos" ng-click="open(photo)">
             <img ng-src="{[{ photo.crops.thumb400.url }]}">
         </div>
       </div>
     </section>
-
-    <!-- Upload Modal -->
-    <section id="upload-modal" class="reveal-modal" data-reveal>
-      <div class="small-12 large-9 columns text-center small-centered">
-        <h1>Upload-a-tron 9009</h1>
-        <p>Imma funky robot, gimme food.</p>
-        <form id="upload" class="dropbox" action="/api/v1/photos" method=post enctype=multipart/form-data>
-          <div>
-            <p>Om nom nom.</p>
-          </div>
-        </form>
-        <div id="upload-results" class="dropzone-previews">
-
-        </div>
-        <div id="upload-modal-bottom">
-          <button id="upload-dismiss">Dismiss</button>
-        </div>
-      </div>
-    </section>
-    <!-- End Upload Modal -->
   </article>
   <div id="message"><p></p></div>
   <section id="gallery-footer">

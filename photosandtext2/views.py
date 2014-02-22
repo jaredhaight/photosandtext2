@@ -36,31 +36,12 @@ def gallery_new_view():
     if gallery is None:
         gallery = Gallery()
         gallery.save()
-    return redirect(url_for('gallery_edit_view', gallery_id=gallery.id))
+    return redirect('/gallery/edit/#/'+str(gallery.id))
 
 @app.route('/gallery/<int:gallery_id>')
 def gallery_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
     return render_template('gallery.html', gallery=gallery)
-
-@app.route('/gallery/<int:gallery_id>/edit', methods=['GET', 'POST'])
-def gallery_edit_view(gallery_id):
-    gallery = Gallery.query.get_or_404(gallery_id)
-    if request.method == 'POST':
-        file = request.files['file']
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['PHOTO_STORE'], filename))
-            photo = Photo(image=filename)
-            photo.gallery = gallery
-            photo.save()
-            flash("Photo Uploaded")
-            return jsonify({"photo":{"id":photo.id, "url":photo.url()}})
-        else:
-            flash("Something went wrong")
-            return render_template('gallery_edit.html', gallery=gallery)
-    else:
-        return render_template('gallery_edit.html', gallery=gallery)
 
 @app.route('/gallery/edit/')
 def gallery_js_edit_view():
@@ -122,6 +103,29 @@ def remove_crops_for_gallery_api(data, **kw):
     del data["photos"]
     data["photos"] = newPhotos
     pass
+
+#Dont know if this counts as cheating or not.. kind of brute forcing file uploads into the API
+@app.route('/api/v1/galleries/<int:gallery_id>/photos', methods=['POST'])
+def gallery_upload_view(gallery_id):
+    gallery = Gallery.query.get_or_404(gallery_id)
+    resp = dict()
+    items = list()
+    for f in request.files.listvalues():
+        file = f[0]
+        print file
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['PHOTO_STORE'], filename))
+            photo = Photo(image=filename)
+            photo.gallery = gallery
+            photo.save()
+            photo_json = dict()
+            photo_json['id'] = photo.id
+            items.append(photo_json)
+    resp['status'] = 'success'
+    resp['files'] = items
+    return jsonify(resp)
+
 
 manager.create_api(
     Photo,
