@@ -25,10 +25,10 @@
         <p>ISO: {{ photo.exif_iso }}</p>
         <p>Shutter {{ photo.exif_shutter }}</p>
       </div>
-      <a href="{{ photo.url() }}"><button>Download</button></a>
+      <a href="{{ photo.url() }}"><button class="download-button">Download</button></a>
       <div class="photoNav">
-          <button class="button prev">Previous</button>
-          <button class="button next">Next</button>
+          <button class="button prev left">Previous</button>
+          <button class="button next right">Next</button>
       </div>
     </div>
   </div>
