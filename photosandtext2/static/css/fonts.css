@@ -1,10 +1,10 @@
 @font-face {
 	font-family: 'pat_icons';
-	src:url('/static/fonts/pat_icons.eot?xw4zyv');
-	src:url('/static/fonts/pat_icons.eot?#iefixxw4zyv') format('embedded-opentype'),
-		url('/static/fonts/pat_icons.woff?xw4zyv') format('woff'),
-		url('/static/fonts/pat_icons.ttf?xw4zyv') format('truetype'),
-		url('/static/fonts/pat_icons.svg?xw4zyv#pat_icons') format('svg');
+	src:url('/static/fonts/pat_icons.eot?mrrc0');
+	src:url('/static/fonts/pat_icons.eot?#iefixmrrc0') format('embedded-opentype'),
+		url('/static/fonts/pat_icons.woff?mrrc0') format('woff'),
+		url('/static/fonts/pat_icons.ttf?mrrc0') format('truetype'),
+		url('/static/fonts/pat_icons.svg?mrrc0#pat_icons') format('svg');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -31,4 +31,10 @@
 }
 .icon-cloud-download:before {
 	content: "\e600";
+}
+.icon-calendar:before {
+	content: "\e601";
+}
+.icon-location:before {
+	content: "\e604";
 }

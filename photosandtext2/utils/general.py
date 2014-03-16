@@ -32,3 +32,12 @@ def init_env():
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+
+#Returns a string of a friendly date range
+def date_format(date1, date2):
+    if (date1.strftime("%B %d %Y") == date2.strftime("%B %d %Y")):
+        return (date1.strftime("%B %d, %Y"))
+    if (date1.strftime("%B") == date2.strftime("%B")):
+        return (date1.strftime("%B %d")+" and "+date2.strftime("%d %Y"))
+    else:
+        return (date1.strftime("%B %d")+" and "+date2.strftime("%B %d %Y"))

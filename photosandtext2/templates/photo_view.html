@@ -9,22 +9,26 @@
   <div class="small-12 large-3 columns">
     <div class="photo-view-sidebar">
       {% if photo.desc %}
-        <div class="section">
-          <p>{{ photo.desc }}</p>
-        </div>
+      <section>
+        <p class="photo-desc">{{ photo.desc }}</p>
+      </section>
       {% endif %}
-      <div class="section">
+      <section>
+        <h4>Location</h4>
+        <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ photo.gallery.location }}&zoom=13&size=300x150&maptype=roadmap&sensor=false&markers=color:blue|{{ photo.gallery.location }}">
+      </section>
+      <section>
         <h4>Gallery</h4>
         <a href="{{ url_for('gallery_view', gallery_id=photo.gallery.id) }}">{{ photo.gallery.name }}</a>
-      </div>
-      <div class="photo-view-sidebar-exif section">
+      </section>
+      <section class="photo-view-sidebar-exif">
         <h4>EXIF Info</h4>
         <p>Taken {{ photo.exif_date_taken }}</p>
         <p>Focal Length: {{ photo.exif_focal }}</p>
         <p>Aperture: {{ photo.exif_aperture }}</p>
         <p>ISO: {{ photo.exif_iso }}</p>
         <p>Shutter {{ photo.exif_shutter }}</p>
-      </div>
+      </section>
       <button><icon class="icon-cloud-download small-centered"></icon> Download</button>
       <div class="photoNav">
           <icon class="icon-arrow-left left"></icon>

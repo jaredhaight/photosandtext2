@@ -1,11 +1,11 @@
 from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify
 from flask.ext.login import login_user
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from werkzeug import secure_filename
 from photosandtext2 import app, manager, login_manager
 from photosandtext2.models.photo import Photo, Crop, Gallery
 from photosandtext2.models.user import User
-from photosandtext2.utils.general import allowed_file
+from photosandtext2.utils.general import allowed_file, date_format
 from photosandtext2.forms import LoginForm
 
 import os
@@ -43,7 +43,9 @@ def gallery_new_view():
 @app.route('/gallery/<int:gallery_id>')
 def gallery_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
-    return render_template('gallery.html', gallery=gallery)
+    photos = gallery.photos.order_by(Photo.exif_date_taken)
+    dates = date_format(photos[0].exif_date_taken, photos[-1].exif_date_taken)
+    return render_template('gallery.html', gallery=gallery, photos=photos, dates=dates)
 
 @app.route('/gallery/edit/')
 def gallery_js_edit_view():

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.justifiedgallery.css') }}">
 {% endblock %}
 
 {% block title %}Home{% endblock %}
@@ -40,29 +39,5 @@
 {% endblock %}
 
 {% block javascript %}
-<!--
-<script src="{{ url_for('static', filename="js/jquery.justifiedgallery.js") }}"></script>
-<script>
-$(window).load(function () {
-  $(document ).ready(function() {
-   $("#gallery").justifiedGallery({
-      rowHeight: 300,
-      justifyLastRow: false,
-      captions: false
-    });
-  });
-});
-/*
-$(window).load(function () {
-  $( document ).ready(function() {
-   $('.gallery').collagePlus({
-      'targetHeight':200,
-      'allowPartialLastRow': true,
-      'direction':'horizontal'
-    });
-  });
-});
-*/
-</script>
--->
+
 {% endblock %}

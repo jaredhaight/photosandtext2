@@ -50,6 +50,7 @@ class Photo(db.Model):
     height = db.Column(db.Integer, nullable=True)
     width = db.Column(db.Integer, nullable=True)
     favorite = db.Column(db.Boolean, nullable=True)
+    location = db.Column(db.UnicodeText, nullable=True)
 
     def __repr__(self):
         return '<Photo %r>' % self.id
@@ -148,12 +149,6 @@ class Tag(db.Model):
         db.session.delete(self)
         db.session.commit()
 
-class Location(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(256))
-    longitude = db.Column(db.Numeric)
-    latitude = db.Column(db.Numeric)
-
 class Gallery(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
@@ -162,6 +157,7 @@ class Gallery(db.Model):
     photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
     created = db.Column(db.DateTime, nullable=True)
     updated = db.Column(db.DateTime, nullable=True)
+    location = db.Column(db.UnicodeText, nullable=True)
 
     def __repr__(self):
         return '<Gallery %r>' % self.name
