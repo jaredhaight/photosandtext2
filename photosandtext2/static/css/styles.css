@@ -18,8 +18,51 @@ h1 {
 
 /* Base CSS */
 #header {
-    padding-left: 10px;
     text-align: center;
+}
+
+.header-wrap {
+    position: relative;
+    overflow: hidden;
+    height: 700px;
+    padding: 20px;
+}
+
+.curtain {
+    background: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 800px;
+    z-index: 1;
+    opacity: .15;
+}
+#header .background {
+    position: absolute;
+    top: -10%;
+    left: -10px;
+    right: -10px;
+    bottom: 0;
+    -webkit-filter: blur(5px);
+}
+
+#header .background img {
+    max-width: 150%;
+    width: 100%;
+}
+
+.header-text {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 2;
+}
+
+.header-text h1 {
+    color: #f2f2f2;
 }
 
 /* Galleries */

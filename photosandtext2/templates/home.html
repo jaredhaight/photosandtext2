@@ -7,7 +7,17 @@
 {% block title %}Home{% endblock %}
 
 {% block header %}
-<h1>PhotosandText2</h1>
+  <div class="header-wrap">
+    <div class="curtain">
+    </div>
+    <div class="background">
+      {% set header = header_background.crops.filter_by(name="display1600").first() %}
+      <img src="{{ header.url() }}">
+    </div>
+    <div class="header-text">
+      <h1>Photos and Text</h1>
+    </div>
+  </div>
 {% endblock %}
 
 {% block content %}

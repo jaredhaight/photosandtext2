@@ -1,5 +1,6 @@
 from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify
 from flask.ext.login import login_user
+from sqlalchemy import func
 from werkzeug import secure_filename
 from photosandtext2 import app, manager, login_manager
 from photosandtext2.models.photo import Photo, Crop, Gallery
@@ -22,8 +23,9 @@ if app.config['DEBUG']:
 
 @app.route('/')
 def home_view():
+    header_background = Photo.query.filter_by(favorite=True).order_by(func.random()).first()
     galleries = Gallery.query.filter(Gallery.photos!=None)
-    return render_template('home.html', galleries=galleries)
+    return render_template('home.html', galleries=galleries, header_background=header_background)
 
 @app.route('/photo/<int:photo_id>')
 def photo_view(photo_id):
