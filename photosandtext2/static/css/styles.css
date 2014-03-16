@@ -12,6 +12,10 @@ img {
     max-width: 100%;
 }
 
+h1 {
+    font-family: "rooney-web",sans-serif;;
+}
+
 /* Base CSS */
 #header {
     padding-left: 10px;
@@ -23,8 +27,10 @@ img {
     text-align: center;
 }
 
-#galleryWrap {
+#gallery-wrap {
+    text-align: center;
     padding: 10px;
+    margin-bottom: 100px
 }
 
 #gallery img {
@@ -71,21 +77,20 @@ img {
     margin-bottom: 0;
 }
 
-.download-button {
-    width: 100%;
-}
-
 .photoNav {
     margin-top: 30px;
 }
 
-.photoNav button {
-    width: 49%;
+.photo-view-sidebar button {
+    width: 98%;
 }
 
+.photoNav icon {
+    font-size: 3em;
+}
 /* Upload Page */
 
-#upload-box {
+.upload-box {
     text-align: center;
     height: 100px;
     background: #8293e3;
@@ -130,6 +135,10 @@ img {
     border-style: solid;
 }
 
+.gallery-thumbnail {
+    display: inline-block;
+    padding: 1px;
+}
 
 #gallery-footer {
     position: fixed;
