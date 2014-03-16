@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import url_for
 
 from photosandtext2 import db, app
-from photosandtext2.utils.photo import get_exif, make_crop
+from photosandtext2.utils.photo import get_image_info, make_crop
 
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
@@ -49,6 +49,7 @@ class Photo(db.Model):
     updated = db.Column(db.DateTime, nullable=True)
     height = db.Column(db.Integer, nullable=True)
     width = db.Column(db.Integer, nullable=True)
+    favorite = db.Column(db.Boolean, nullable=True)
 
     def __repr__(self):
         return '<Photo %r>' % self.id
@@ -74,12 +75,16 @@ class Photo(db.Model):
             self.uploaded = datetime.utcnow()
         self.updated = datetime.utcnow()
         #Get EXIF
-        exif = get_exif(PHOTO_STORE+"/"+self.image)
+        exif = get_image_info(PHOTO_STORE+"/"+self.image)
         self.exif_aperture = exif['aperture']
         self.exif_date_taken = exif['date_taken']
         self.exif_focal = exif['focal']
         self.exif_iso = exif['iso']
         self.exif_shutter = exif['shutter']
+        self.desc = exif['caption']
+        self.width = exif['width']
+        self.height = exif['height']
+        self.orientation = exif['orientation']
         db.session.add(self)
         db.session.commit()
         create_crops(self)

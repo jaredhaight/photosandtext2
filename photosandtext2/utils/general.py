@@ -9,7 +9,7 @@ ALLOWED_EXTENSIONS = app.config["ALLOWED_EXTENSIONS"]
 
 def init_env():
     """
-    Used to initialize the environment.
+    Used to initialize the environment. (Need to import photo models and run db.create_all() first.)
     """
     crop1 = CropSettings(name="thumb200",height=200,width=200)
     crop2 = CropSettings(name="thumb400",height=400,width=400)
@@ -17,6 +17,7 @@ def init_env():
     crop4 = CropSettings(name="home600",height=0,width=600)
     crop5 = CropSettings(name="home800",height=0,width=800)
     crop6 = CropSettings(name="display1280",height=0,width=1280)
+    crop7 = CropSettings(name="display1600",height=0,width=1600)
     crop8 = CropSettings(name="display_t",height=0,width=100)
     crop9 = CropSettings(name="display_m",height=0,width=240)
     crop10 = CropSettings(name="display_n",height=0,width=320)

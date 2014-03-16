@@ -62,7 +62,7 @@ def make_crop(image, cropName, height, width):
     return {'filename':filename,'height':saved_height,'width':saved_width}
 
 #Get exif from image, return dict of results
-def get_exif(image):
+def get_image_info(image):
     ret = {}
     i = Image.open(image)
     info = i._getexif()
@@ -96,5 +96,20 @@ def get_exif(image):
         date_taken = date_taken_seed.strftime("%Y-%m-%d %H:%M:%S")
     except:
         date_taken = None
-    d = dict(iso=iso, aperture="f/"+str(aperture), shutter=shutter, focal=str(focal)+"mm", date_taken=date_taken)
+    try:
+        caption = ret['ImageDescription']
+    except:
+        caption = None
+    try:
+        width, height = i.size
+    except:
+        width, height = None
+    try:
+        if width > height:
+            orientation = 'landscape'
+        else:
+            orientation = 'portrait'
+    except:
+        orientation = None
+    d = dict(iso=iso, aperture="f/"+str(aperture), shutter=shutter, focal=str(focal)+"mm", date_taken=date_taken, caption=caption, width=width, height=height, orientation=orientation)
     return d
