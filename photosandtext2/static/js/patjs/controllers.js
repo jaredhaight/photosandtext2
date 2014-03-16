@@ -117,7 +117,8 @@ function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, 
             });
         };
 
-        $scope.ok = function () {
+        $scope.ok = function (photo) {
+            $scope.photoSave(photo);
             $modalInstance.close($scope.photo);
         };
 

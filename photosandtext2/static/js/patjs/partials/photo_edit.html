@@ -15,14 +15,13 @@
       <input type="text">
       <label>Location</label>
       <input type="text">
-      <label>Favorite</label>
-      <input ng-model="photo.favorite" type="checkbox">
+      <input id="favorite-checkbox" ng-model="photo.favorite" type="checkbox"><label for="favorite-checkbox">Favorite</label>
       {[{ photoTest }]}
     </div>
   </div>
   <div class="row">
     <div class="small-12">
-      <button class="button right" ng-click="ok()">Done</button>
+      <button class="button right" ng-click="ok(photo)">Done</button>
     </div>
   </div>
 </section>
