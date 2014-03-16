@@ -109,21 +109,15 @@ def remove_crops_for_gallery_api(data, **kw):
 def gallery_upload_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
     resp = dict()
-    items = list()
-    for f in request.files.listvalues():
-        file = f[0]
-        print file
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['PHOTO_STORE'], filename))
-            photo = Photo(image=filename)
-            photo.gallery = gallery
-            photo.save()
-            photo_json = dict()
-            photo_json['id'] = photo.id
-            items.append(photo_json)
+    file = request.files['file']
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['PHOTO_STORE'], filename))
+        photo = Photo(image=filename)
+        photo.gallery = gallery
+        photo.save()
     resp['status'] = 'success'
-    resp['files'] = items
+    resp['id'] = photo.id
     return jsonify(resp)
 
 

@@ -20,26 +20,26 @@
           <p id="Description" class="editable" ng-model="gallery.description" contenteditable="true" ng-blur="galleryUpdate(gallery)">{[{ gallery.description }]}</p>
         </div>
       </div>
-      <div class="row">
-        <div class="small-12 columns">
-          <div id="upload-box" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="upload-box-hover">
-            <p>Drop files here..</p>
-          </div>
-        </div>
-      </div>
     </section>
-    <section id="galleryWrap">
+    <section id="gallery-wrap">
       <div class="row">
-        <div class="small-12 medium-2 columns" ng-repeat="photo in gallery.photos" ng-click="open(photo)">
-            <img ng-src="{[{ photo.crops.thumb400.url }]}">
+        <div class="gallery-thumbnail" ng-repeat="photo in gallery.photos" ng-click="open(photo)">
+          <img ng-src="{[{ photo.crops.thumb200.url }]}">
         </div>
       </div>
     </section>
   </article>
   <div id="message"><p></p></div>
   <section id="gallery-footer">
-      <div class="small-centered message" ng-show="messageStatus">
-        {[{ messageContent }]}
+    <!-- jquery file upload code
+    <form id="fileupload" class="upload-box" data-file-upload="options" method="POST" enctype="multipart/form-data" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
+    </form>
+    -->
+    <div class="upload-box" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="upload-box-hover">
+      <p>Drop files here..</p>
+    </div>
+    <div class="small-centered message" ng-show="messageStatus">
+      {[{ messageContent }]}
       </div>
   </section>
 </div>

@@ -12,15 +12,25 @@
 </div>
 {% endblock %}
 {% block javascript %}
+  <!-- jquery file upload js files
+  <script src="{{ url_for('static', filename="js/patjs/jquery-2.1.0.min.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/patjs/jquery-ui-1.10.4.custom.min.js") }}"></script>
+  -->
   <script src="{{ url_for('static', filename="js/patjs/angular-file-upload-html5-shim.min.js") }}"></script>
+
   <script src="{{ url_for('static', filename="js/patjs/angular.min.js") }}"></script>
   <script src="{{ url_for('static', filename="js/patjs/angular-resource.min.js") }}"></script>
   <script src="{{ url_for('static', filename="js/patjs/angular-route.min.js") }}"></script>
-  <script src="{{ url_for('static', filename="js/patjs/angular-file-upload.min.js") }}"></script>
   <script src="{{ url_for('static', filename="js/patjs/services.js") }}"></script>
   <script src="{{ url_for('static', filename="js/patjs/controllers.js") }}"></script>
   <script src="{{ url_for('static', filename="js/patjs/mm-foundation-tpls-0.0.0.min.js") }}"></script>
-  <!-- <script src="{{ url_for('static', filename="js/freewall.js") }}"></script> -->
   <script src="{{ url_for('static', filename="js/patjs/app.js") }}"></script>
   <script src="{{ url_for('static', filename="js/patjs/directives.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/patjs/angular-file-upload.min.js") }}"></script>
+  <!-- jquery file upload files
+  <script src="{{ url_for('static', filename="js/patjs/jquery.fileupload.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/patjs/jquery.fileupload-angular.js") }}"></script>
+  <script src="{{ url_for('static', filename="js/patjs/jquery.fileupload-process.js") }}"></script>
+  -->
+
 {% endblock %}
