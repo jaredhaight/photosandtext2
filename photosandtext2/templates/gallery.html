@@ -15,17 +15,19 @@
 
 {% block content %}
   <section>
+  {% if gallery.desc %}
   <div class="row">
     <div class="small-12 medium-6 columns medium-centered text-center">
       <p>{{ gallery.description }}</p>
     </div>
   </div>
+  {% endif %}
   <div class="row">
-    <div class="small-12 medium-6 columns">
-      <p class="gallery-meta text-right"><icon class="icon-calendar"></icon> {{ dates }}</p>
-    </div>
-    <div class="small-12 medium-6 columns">
-      <p class="gallery-meta text-left"><icon class="icon-location"></icon> {{ gallery.location }}</p>
+    <div class="small-12 columns gallery-meta">
+      <p><icon class="icon-calendar"></icon> {{ dates }}</p>
+      {% if gallery.location %}
+          <p><icon class="icon-location"></icon> {{ gallery.location }}</p>
+      {% endif %}
     </div>
   </div>
   </section>

@@ -104,7 +104,11 @@ h2 {
 .gallery-meta {
     text-align: center;
     color: #888888;
+}
+
+.gallery-meta p {
     font-weight: 100;
+    margin-bottom: .5em;
 }
 /* Photo View */
 .photo {
@@ -221,6 +225,12 @@ h2 {
 
     #header .background {
         top: -35%;
+    }
+
+    /* Gallery View Page on Medium Screens */
+    .gallery-meta p {
+        display: inline-block;
+        margin-bottom: 1em;
     }
     /* Photo View Page */
     .photo img {

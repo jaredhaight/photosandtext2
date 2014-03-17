@@ -38,6 +38,6 @@ def date_format(date1, date2):
     if (date1.strftime("%B %d %Y") == date2.strftime("%B %d %Y")):
         return (date1.strftime("%B %d, %Y"))
     if (date1.strftime("%B") == date2.strftime("%B")):
-        return (date1.strftime("%B %d")+" and "+date2.strftime("%d %Y"))
+        return (date1.strftime("%B %d")+" to "+date2.strftime("%d, %Y"))
     else:
-        return (date1.strftime("%B %d")+" and "+date2.strftime("%B %d %Y"))
+        return (date1.strftime("%B %d")+" to "+date2.strftime("%B %d, %Y"))
