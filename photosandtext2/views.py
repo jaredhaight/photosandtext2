@@ -47,6 +47,12 @@ def gallery_view(gallery_id):
     dates = date_format(photos[0].exif_date_taken, photos[-1].exif_date_taken)
     return render_template('gallery.html', gallery=gallery, photos=photos, dates=dates)
 
+@app.route('/gallery/<int:gallery_id>/photo/<int:gallery_pos>')
+def gallery_photo_view(gallery_id, gallery_pos):
+    gallery = Gallery.query.get_or_404(gallery_id)
+    photos = gallery.photos.order_by(Photo.gallery_pos).paginate(gallery_pos,1,False)
+    return render_template('photo_view.html', photos=photos, photo=photos.items[0])
+
 @app.route('/gallery/edit/')
 def gallery_js_edit_view():
     return render_template('gallery_edit_js.html')

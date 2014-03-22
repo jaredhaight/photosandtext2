@@ -44,6 +44,7 @@ class Photo(db.Model):
     tags = db.relationship('Tag', secondary=association_table, backref=db.backref('photos', lazy='dynamic'))
     crops = db.relationship('Crop', backref=db.backref('photo'), lazy='dynamic')
     gallery_id = db.Column(db.Integer, db.ForeignKey('gallery.id'))
+    gallery_pos = db.Column(db.Integer, nullable=True)
     permissions = db.Column(db.String(256), nullable=True)
     uploaded = db.Column(db.DateTime, nullable=True)
     updated = db.Column(db.DateTime, nullable=True)
@@ -86,6 +87,13 @@ class Photo(db.Model):
         self.width = exif['width']
         self.height = exif['height']
         self.orientation = exif['orientation']
+        db.session.add(self)
+        db.session.commit()
+        try:
+            paged = self.gallery.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
+            self.gallery_pos = paged.items.index(self)+1
+        except:
+            self.gallery_pos = None
         db.session.add(self)
         db.session.commit()
         create_crops(self)

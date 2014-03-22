@@ -36,7 +36,7 @@
       <div id="gallery">
         {% for photo in photos %}
           {% set crop = photo.crops.filter_by(name="display").first() %}
-          <a href="{{ url_for('photo_view', photo_id=photo.id) }}">
+          <a href="{{ url_for('gallery_photo_view', gallery_id=photo.gallery.id, gallery_pos=photo.gallery_pos) }}">
              <img src="{{ crop.url() }}">
           </a>
         {% endfor %}
