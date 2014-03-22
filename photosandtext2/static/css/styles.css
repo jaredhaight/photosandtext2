@@ -32,7 +32,7 @@ h2 {
 .header-wrap {
     position: relative;
     overflow: hidden;
-    height: 400px;
+    height: 80vh;
     padding: 20px;
 }
 
@@ -48,7 +48,7 @@ h2 {
 }
 #header .background {
     position: absolute;
-    top: -40%;
+    top: -20%;
     left: -100%;
     right: -10px;
     bottom: -10px;
@@ -98,7 +98,8 @@ h2 {
 #gallery-wrap {
     text-align: center;
     padding: 10px;
-    margin-bottom: 100px
+    margin-bottom: 100px;
+    width: 100%;
 }
 
 .gallery-meta {
@@ -120,8 +121,8 @@ h2 {
 
 .photo img {
     max-height: 1280px;
-    max-width: 130%;
-    margin-left: -15%;
+    max-width: 145%;
+    margin-left: -22.5%;
 }
 .photo-desc {
     margin-bottom: 0;
@@ -202,6 +203,10 @@ h2 {
     border-style: solid;
 }
 
+#gallery img {
+    display: none;
+}
+
 .gallery-thumbnail {
     display: inline-block;
     padding: 1px;
@@ -220,13 +225,8 @@ h2 {
 @media only screen and (min-width: 40.063em) {
     /* Home page on Medium Screens */
     .header-wrap {
-        height: 500px;
+        height: 95vh;
     }
-
-    #header .background {
-        top: -35%;
-    }
-
     /* Gallery View Page on Medium Screens */
     .gallery-meta p {
         display: inline-block;
@@ -247,13 +247,7 @@ h2 {
 /* Large screens */
 @media only screen and (min-width: 64.063em) {
     /* Home page on Large Screens */
-    .header-wrap {
-        height: 700px;
-    }
 
-    #header .background {
-        top: -20%;
-    }
 
     /* Photos Page on Large Screens */
     .photo {
@@ -267,6 +261,7 @@ h2 {
     }
 
     .photo img {
+        max-height: 940px;
         max-width: 100%;
         margin-left: 0;
     }
