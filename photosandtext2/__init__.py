@@ -8,5 +8,6 @@ app.config.from_object('photosandtext2.settings.DevConfig')
 
 db = SQLAlchemy(app)
 login_manager = LoginManager()
+login_manager.login_view = "login_view"
 manager = APIManager(app, flask_sqlalchemy_db=db)
 login_manager.init_app(app)

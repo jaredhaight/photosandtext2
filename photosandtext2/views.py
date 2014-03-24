@@ -1,5 +1,5 @@
 from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify
-from flask.ext.login import login_user
+from flask.ext.login import login_user, login_required, logout_user
 from sqlalchemy import func, desc
 from werkzeug import secure_filename
 from photosandtext2 import app, manager, login_manager
@@ -54,6 +54,7 @@ def gallery_photo_view(gallery_id, gallery_pos):
     return render_template('photo_view.html', photos=photos, photo=photos.items[0])
 
 @app.route('/gallery/edit/')
+@login_required
 def gallery_js_edit_view():
     return render_template('gallery_edit_js.html')
 
@@ -62,13 +63,18 @@ def login_view():
     form = LoginForm()
     if form.validate_on_submit():
         username, password = form.username.data, form.password.data
-        user = User.query.filter_by(username=username,password=password).all()
-        if len(user) > 0:
-            login_user(user[0])
+        user = User.query.filter_by(username=username).first()
+        if user.check_password(password):
+            login_user(user)
             return redirect(url_for('home_view'))
         flash('Username and password pair not found')
-        return redirect(request.args.get("next") or url_for("home_view"))
+        return redirect(request.args.get("next") or url_for("login_view"))
     return render_template("login.html", form=form)
+
+@app.route('/logout')
+def logout_view():
+    logout_user()
+    return redirect(url_for("home_view"))
 
 #API Endpoints
 def include_url(result):
