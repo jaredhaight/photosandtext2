@@ -1,5 +1,6 @@
 from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify
-from flask.ext.login import login_user, login_required, logout_user
+from flask.ext.login import login_user, login_required, logout_user, current_user
+from flask.ext.restless import ProcessingException
 from sqlalchemy import func, desc
 from werkzeug import secure_filename
 from photosandtext2 import app, manager, login_manager
@@ -25,12 +26,7 @@ if app.config['DEBUG']:
 def home_view():
     header_background = Photo.query.filter_by(favorite=True).order_by(func.random()).first()
     galleries = Gallery.query.filter(Gallery.photos!=None)
-    return render_template('home.html', galleries=galleries, header_background=header_background)
-
-@app.route('/photo/<int:photo_id>')
-def photo_view(photo_id):
-    photo = Photo.query.get_or_404(photo_id)
-    return render_template('photo_view.html', photo=photo)
+    return render_template('home.html', galleries=galleries, header_background=header_background, user=current_user)
 
 @app.route('/gallery/new')
 def gallery_new_view():
@@ -45,13 +41,13 @@ def gallery_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
     photos = gallery.photos.order_by(Photo.exif_date_taken)
     dates = date_format(photos[0].exif_date_taken, photos[-1].exif_date_taken)
-    return render_template('gallery.html', gallery=gallery, photos=photos, dates=dates)
+    return render_template('gallery.html', gallery=gallery, photos=photos, dates=dates, user=current_user)
 
 @app.route('/gallery/<int:gallery_id>/photo/<int:gallery_pos>')
 def gallery_photo_view(gallery_id, gallery_pos):
     gallery = Gallery.query.get_or_404(gallery_id)
     photos = gallery.photos.order_by(Photo.gallery_pos).paginate(gallery_pos,1,False)
-    return render_template('photo_view.html', photos=photos, photo=photos.items[0])
+    return render_template('photo_view.html', photos=photos, photo=photos.items[0], user=current_user)
 
 @app.route('/gallery/edit/')
 @login_required
@@ -76,7 +72,7 @@ def logout_view():
     logout_user()
     return redirect(url_for("home_view"))
 
-#API Endpoints
+#API Functions
 def include_url(result):
     photo = Photo.query.get(result["id"])
     result['url'] = photo.url()
@@ -120,8 +116,13 @@ def remove_crops_for_gallery_api(data, **kw):
     data["photos"] = newPhotos
     pass
 
+def auth_func(**kw):
+    if not current_user.is_authenticated():
+        raise ProcessingException(description='Not Authorized', code=401)
+
 #Dont know if this counts as cheating or not.. kind of brute forcing file uploads into the API
 @app.route('/api/v1/galleries/<int:gallery_id>/photos', methods=['POST'])
+@login_required
 def gallery_upload_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
     resp = dict()
@@ -144,7 +145,7 @@ manager.create_api(
     collection_name='photos',
     results_per_page=20,
     preprocessors={
-        'PUT_SINGLE':[remove_crops_for_photo_api]
+        'PUT_SINGLE':[remove_crops_for_photo_api, auth_func]
     },
     postprocessors={
         'GET_SINGLE':[include_url,edit_crops_for_photo_api]
@@ -158,7 +159,7 @@ manager.create_api(
     collection_name='galleries',
     results_per_page=20,
     preprocessors={
-        'PUT_SINGLE':[remove_crops_for_gallery_api]
+        'PUT_SINGLE':[remove_crops_for_gallery_api, auth_func]
     },
     postprocessors={
         'GET_SINGLE':[include_crops_for_gallery_api]
