@@ -44,6 +44,11 @@
     </div>
   </section>
 {% endblock %}
+{% block footer %}
+  {% if user.is_authenticated() %}
+  <p>Logged in as {{ user.username }}</p>
+  {% endif %}
+{% endblock %}
 
 {% block javascript %}
 <script src="{{ url_for('static', filename="js/jquery.justifiedgallery.js") }}"></script>
