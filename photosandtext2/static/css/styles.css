@@ -28,6 +28,14 @@ h2 {
     visibility: visible;
 }
 
+/* Base CSS */
+#messages {
+    background: #F3FF7E;
+    text-align: center;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
 /* Homepage CSS */
 .header-wrap {
     position: relative;
@@ -120,7 +128,7 @@ h2 {
 }
 
 .photo img {
-    max-height: 1280px;
+    max-height: 600px;
     max-width: 145%;
     margin-left: -22.5%;
 }
@@ -128,16 +136,29 @@ h2 {
     margin-bottom: 0;
 }
 
-.photo-view-sidebar section{
+.photo-view-sidebar-section {
     margin-top: 1em;
     margin-bottom: 1em;
     padding-bottom: 1em;
+    text-align: center;
     border-bottom: #e2e2e2;
     border-bottom-style: solid;
     border-bottom-width: 1px;
 }
 
+.photo-view-sidebar-icons {
+    font-size: 1.75em;
+    text-align: center;
+    border: none;
+}
+
+.photo-view-sidebar-icons icon {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
 .photo-view-sidebar-exif {
+    display: none;
     color: #808080;
 }
 
@@ -219,7 +240,9 @@ h2 {
     width: 100%;
 }
 
-
+.photo-edit-modal img {
+    max-height: 450px;
+}
 
 /* Medium screens */
 @media only screen and (min-width: 40.063em) {
@@ -234,14 +257,10 @@ h2 {
     }
     /* Photo View Page */
     .photo img {
+        max-height: 800px;
         max-width: 110%;
         margin-left: -5%;
     }
-
-    .download-button {
-        width: 49%;
-    }
-
 }
 
 /* Large screens */
@@ -272,6 +291,11 @@ h2 {
         right: 1%;
         width: 20%;
     }
+
+    .photo-view-sidebar-section {
+        text-align: left;
+    }
+
 
     .photoNav {
         position: fixed;

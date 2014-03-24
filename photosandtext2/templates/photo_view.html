@@ -4,22 +4,30 @@
 {% block content %}
 <div class="row">
   <div class="small-12 large-9 columns photo">
-    <img src="{{ photo.crops.filter_by(name="display1280").first().url() }}">
+    <img
+      {% if photo.orientation == 'portrait' %} style="margin: 0 auto;" {% endif %}
+      src="{{ photo.crops.filter_by(name="display1280").first().url() }}"
+    >
   </div>
   <div class="small-12 large-3 columns">
     <div class="photo-view-sidebar">
       {% if photo.desc %}
-      <section>
+      <section class="photo-view-sidebar-section">
         <p class="photo-desc">{{ photo.desc }}</p>
       </section>
       {% endif %}
-      <section>
+      <section class="photo-view-sidebar-section">
         <h4>Location</h4>
         <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ photo.gallery.location }}&zoom=13&size=300x150&maptype=roadmap&sensor=false&markers=color:blue|{{ photo.gallery.location }}">
       </section>
-      <section>
+      <section class="photo-view-sidebar-section">
         <h4>Gallery</h4>
         <a href="{{ url_for('gallery_view', gallery_id=photo.gallery.id) }}">{{ photo.gallery.name }}</a>
+      </section>
+      <section class="photo-view-sidebar-icons">
+        <icon class="icon-home"></icon>
+        <icon class="icon-info"></icon>
+        <icon class="icon-cloud-download small-centered"></icon>
       </section>
       <section class="photo-view-sidebar-exif">
         <h4>EXIF Info</h4>
@@ -29,7 +37,6 @@
         <p>ISO: {{ photo.exif_iso }}</p>
         <p>Shutter {{ photo.exif_shutter }}</p>
       </section>
-      <button><icon class="icon-cloud-download small-centered"></icon> Download</button>
       <div class="photoNav">
           {% if photos.has_prev %}
           <a href="{{ url_for('gallery_photo_view',gallery_id=photos.prev().items[0].gallery.id, gallery_pos=photos.prev().items[0].gallery_pos) }}"><icon class="icon-arrow-left left"></icon></a>
@@ -41,4 +48,15 @@
     </div>
   </div>
 </div>
+{% endblock %}
+{% block javascript %}
+<script>
+$(window).load(function () {
+  $(document ).ready(function() {
+    $(".icon-info").click(function() {
+      $(".photo-view-sidebar-exif").toggle()
+    });
+  });
+});
+</script>
 {% endblock %}
