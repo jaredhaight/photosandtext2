@@ -179,3 +179,7 @@ class Gallery(db.Model):
         self.updated = datetime.utcnow()
         db.session.add(self)
         db.session.commit()
+        for photo in self.photos:
+            if photo.location == None:
+                photo.location = self.location
+                photo.save()
