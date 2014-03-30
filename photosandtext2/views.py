@@ -28,14 +28,6 @@ def home_view():
     galleries = Gallery.query.filter(Gallery.photos!=None)
     return render_template('home.html', galleries=galleries, header_background=header_background, user=current_user)
 
-@app.route('/gallery/new')
-def gallery_new_view():
-    gallery = Gallery.query.filter_by(name=None, photos=None).first()
-    if gallery is None:
-        gallery = Gallery()
-        gallery.save()
-    return redirect('/gallery/edit/#/'+str(gallery.id))
-
 @app.route('/gallery/<int:gallery_id>')
 def gallery_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
@@ -49,28 +41,40 @@ def gallery_photo_view(gallery_id, gallery_pos):
     photos = gallery.photos.order_by(Photo.gallery_pos).paginate(gallery_pos,1,False)
     return render_template('photo_view.html', photos=photos, photo=photos.items[0], user=current_user)
 
-@app.route('/gallery/edit/')
-@login_required
-def gallery_js_edit_view():
-    return render_template('gallery_edit_js.html')
-
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():
     form = LoginForm()
+    print request.args.get("next")
     if form.validate_on_submit():
         username, password = form.username.data, form.password.data
         user = User.query.filter_by(username=username).first()
         if user.check_password(password):
             login_user(user)
-            return redirect(url_for('home_view'))
+            print request.args.get("next")
+            return redirect(request.args.get("next") or url_for('home_view'))
         flash('Username and password pair not found')
-        return redirect(request.args.get("next") or url_for("login_view"))
+        return redirect(url_for("login_view"))
     return render_template("login.html", form=form)
 
 @app.route('/logout')
 def logout_view():
     logout_user()
     return redirect(url_for("home_view"))
+
+#Gallery edit views
+@login_required
+@app.route('/gallery/new')
+def gallery_new_view():
+    gallery = Gallery.query.filter_by(name=None, photos=None).first()
+    if gallery is None:
+        gallery = Gallery()
+        gallery.save()
+    return redirect('/gallery/edit/#/'+str(gallery.id))
+
+@app.route('/gallery/edit/')
+@login_required
+def gallery_js_edit_view():
+    return render_template('gallery_edit_js.html')
 
 #API Functions
 def include_url(result):

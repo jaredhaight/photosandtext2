@@ -20,10 +20,20 @@ img {
 
 h1 {
     font-family: "rooney-web",sans-serif;
+    -moz-font-feature-settings:"liga=1, dlig=1";
+    -ms-font-feature-settings:"liga", "dlig";
+    -o-font-feature-settings:"liga", "dlig";
+    -webkit-font-feature-settings:"liga", "dlig";
+    font-feature-settings:"liga", "dlig";
 }
 
 h2 {
     font-family: "rooney-web",sans-serif;
+    -moz-font-feature-settings:"liga=1, dlig=1";
+    -ms-font-feature-settings:"liga", "dlig";
+    -o-font-feature-settings:"liga", "dlig";
+    -webkit-font-feature-settings:"liga", "dlig";
+    font-feature-settings:"liga", "dlig";
 }
 
 /* Typkit CSS */
@@ -185,6 +195,15 @@ h2 {
 .photoNav icon {
     font-size: 3em;
 }
+
+/* Login Page */
+.login-box {
+    position: fixed;
+    top: 25%;
+    padding-top: 30px;
+    padding-bottom: 10px;
+    background: #f8f8f8;
+}
 /* Upload Page */
 .upload-sidebar {
     position: fixed;
@@ -224,10 +243,13 @@ h2 {
     background: #f2f2f2;
 }
 
-.editable {
-    border: #e0e0e0;
-    border-style: solid;
-    border-width: 1px;
+.upload-progress-bar {
+    height: 10px;
+    width: 0;
+    background: yellowgreen;
+    position: absolute;
+    bottom: 0;
+    left: 0;
 }
 
 .photo-modal-landscape {

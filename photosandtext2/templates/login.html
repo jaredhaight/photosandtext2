@@ -12,7 +12,7 @@
   </div>
 </div>
 {% endif %}
-<div class="row">
+<div class="row login-box">
   <div class="small-12 large-4 columns small-centered">
     <form action="{{ url_for('login_view') }}" method="post">
       {{ form.hidden_tag() }}
@@ -20,7 +20,7 @@
       {{ form.username }}
       <label>{{ form.password.label }}</label>
       {{ form.password }}
-      {{ form.submit }}
+      {{ form.submit(class_="button expand")}}
     </form>
   </div>
 </div>

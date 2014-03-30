@@ -4,8 +4,8 @@ from wtforms.validators import ValidationError
 
 
 class LoginForm(Form):
-    username = TextField('username')
-    password = PasswordField('password')
+    username = TextField('Username')
+    password = PasswordField('Password')
     submit = SubmitField('Login')
 
     def validate_login(self, field):
