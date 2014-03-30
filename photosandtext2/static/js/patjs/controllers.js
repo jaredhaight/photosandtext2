@@ -63,12 +63,15 @@ function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, 
             /* customize how data is added to formData. See #40#issuecomment-28612000 for example */
             //formDataAppender: function(formData, key, val){} //#40#issuecomment-28612000
             }).progress(function(evt) {
+                console.log(evt);
+                $scope.uploadPercent = parseInt(100.0 * evt.loaded / evt.total);
                 console.log('percent: ' + parseInt(100.0 * evt.loaded / evt.total));
             }).success(function(data, status, headers, config) {
                 // file is uploaded successfully
                 console.log(data);
                 var photo = photoClient.get({photoID:data.id});
                 $scope.gallery.photos.push(photo);
+                $scope.uploadPercent = null;
             });
             //.error(...)
             //.then(success, error, progress);
