@@ -1,28 +1,27 @@
 <div ng-controller="photoListCtrl"  ng-class="{contentSlide: photoEdit}">
   <article>
       <div class="row">
-        <div class="small-12 medium-4 large-3 columns">
+        <div class="small-12 medium-4 large-3 columns upload-sidebar">
           <div class="row">
             <div class="small-12 columns">
               <h3>Gallery Name</h3>
-              <h2 id="Name" ng-model="gallery.name" class="editable" contenteditable="true" ng-blur="galleryUpdate(gallery)">
-              {[{ gallery.name }]}</h2>
+              <input id="name" ng-model="gallery.name" ng-blur="galleryUpdate(gallery)"></input>
             </div>
           </div>
           <div class="row">
             <div class="small-12 columns">
               <h3>Description</h3>
-              <p id="Description" class="editable" ng-model="gallery.description" contenteditable="true" ng-blur="galleryUpdate(gallery)">{[{ gallery.description }]}</p>
+              <textarea id="description" ng-model="gallery.description" ng-blur="galleryUpdate(gallery)">{[{ gallery.description }]}</textarea>
             </div>
           </div>
           <div class="row">
             <div class="small-12 columns">
               <h3>Location</h3>
-              <p id="Location" class="editable" ng-model="gallery.location" contenteditable="true" ng-blur="galleryUpdate(gallery)">{[{ gallery.location }]}</p>
+              <input id="location" ng-model="gallery.location" ng-blur="galleryUpdate(gallery)">{[{ gallery.location }]}</input>
             </div>
           </div>
         </div>
-        <div class="small-12 medium-8 large-9 columns">
+        <div class="small-12 medium-8 large-9 columns upload-box" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="upload-box-hover">
           <div class="gallery-thumbnail" ng-repeat="photo in gallery.photos" ng-click="open(photo)">
             <img ng-src="{[{ photo.crops.thumb200.url }]}">
           </div>
@@ -35,10 +34,11 @@
     <!-- jquery file upload code
     <form id="fileupload" class="upload-box" data-file-upload="options" method="POST" enctype="multipart/form-data" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
     </form>
-    -->
+
     <div class="upload-box" ng-file-drop="onFileSelect($files)" ng-file-drag-over-class="upload-box-hover">
       <p>Drop files here..</p>
     </div>
+    -->
     <div class="small-centered message" ng-show="messageStatus">
       {[{ messageContent }]}
       </div>

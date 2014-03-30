@@ -3,24 +3,19 @@
     {[{ messageContent }]}
   </div>
   <div class="row">
-    <div class="small-12 large-7 columns">
-      <h3>Full Image</h3>
-      <img ng-src="{[{ photo.crops.display_z.url }]}">
+    <div class="photo-modal-photo">
+      <img ng-src="{[{ photo.crops.display_c.url }]}">
     </div>
-    <div class="small-12 large-5 columns">
+    <div class="photo-modal-meta">
       <h3>Details</h3>
       <label>Description</label>
       <textarea ng-model="photo.desc" ng-blur="photoSave(photo)" placeholder="Photo Description">{[{ photo.desc }]}</textarea>
       <label>Tags</label>
       <input type="text">
       <label>Location</label>
-      <input type="text">
+      <input type="text" ng-model="photo.location">
       <input id="favorite-checkbox" ng-model="photo.favorite" type="checkbox"><label for="favorite-checkbox">Favorite</label>
       {[{ photoTest }]}
-    </div>
-  </div>
-  <div class="row">
-    <div class="small-12">
       <button class="button right" ng-click="ok(photo)">Done</button>
     </div>
   </div>

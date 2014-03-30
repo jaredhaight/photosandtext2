@@ -1,7 +1,13 @@
 /* Foundation Overides */
 body {
+    font-family: "soleil",'helvetica neue', 'helvetica', sans-serif;
     max-width: 1680px;
     margin: 0 auto;
+}
+
+p {
+    font-size: 1.1em;
+    line-height: 1.3em;
 }
 
 img {
@@ -19,8 +25,9 @@ h1 {
 h2 {
     font-family: "rooney-web",sans-serif;
 }
+
 /* Typkit CSS */
-.wf-loading h1, .wf-loading h2 {
+.wf-loading h1, .wf-loading h2, .wf-loading p {
     visibility: hidden;
   }
 
@@ -116,6 +123,7 @@ h2 {
 }
 
 .gallery-meta p {
+    font-size: 1em;
     font-weight: 100;
     margin-bottom: .5em;
 }
@@ -178,18 +186,42 @@ h2 {
     font-size: 3em;
 }
 /* Upload Page */
+.upload-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-right: #ccc;
+    border-right-style: solid;
+    border-right-width: 1px;
+}
+
+.upload-sidebar input {
+    width: 100%;
+    padding: 4px;
+    border: 1px;
+    border-style: solid;
+    border-color: #ccc;
+}
+
+.upload-sidebar textarea {
+    font-size: 1em;
+    margin: 0;
+    padding: 4px;
+    height: 150px;
+}
+
+.upload-sidebar .row {
+    margin-bottom: 1em;
+}
 
 .upload-box {
-    text-align: center;
-    height: 100px;
-    background: #8293e3;
-    color: #f2f2f2;
-    padding-top: 35px;
-    margin: 0 auto;
+    min-height: 100vh;
+    padding: 10px;
 }
 
 .upload-box-hover {
-    background: #2B46BF;
+    background: #f2f2f2;
 }
 
 .editable {
@@ -198,16 +230,56 @@ h2 {
     border-width: 1px;
 }
 
-.photo-modal {
-    top: 35px;
+.photo-modal-landscape {
+    top: 5%;
     left: 5%;
-    right: 10px;
+    right: 5%;
+    bottom: 5%;
     margin: 0 auto;
     margin-right: 0;
     margin-left: 0;
     width: 90%;
 }
 
+.photo-modal-landscape .photo-modal-photo {
+    width: 65%;
+    display: inline-block;
+    padding: 5px;
+}
+
+.photo-modal-landscape .photo-modal-meta {
+    width: 33%;
+    padding: 5px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.photo-modal-portrait {
+    top: 5%;
+    left: 17%;
+    bottom: 5%;
+    margin: 0 auto;
+    margin-right: 0;
+    margin-left: 0;
+    width: 65%;
+}
+
+.photo-modal-portrait .photo-modal-photo {
+    width: 55%;
+    display: inline-block;
+    padding: 5px;
+}
+
+.photo-modal-portrait .photo-modal-meta {
+    width: 44%;
+    padding: 5px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.photo-edit-modal img {
+    max-height: 590px;
+}
 .message {
     position: absolute;
     height: 50px;
@@ -215,10 +287,10 @@ h2 {
     padding-top: 15px;
     background: #F4E790;
     z-index: 10;
-    left: 25%;
+    left: 0;
     right: 0;
-    bottom: 25px;
-    width: 50%;
+    bottom: 0;
+    width: 100%;
     border: #b7b07f;
     border-width: 1px;
     border-style: solid;
@@ -240,15 +312,11 @@ h2 {
     width: 100%;
 }
 
-.photo-edit-modal img {
-    max-height: 450px;
-}
-
 /* Medium screens */
 @media only screen and (min-width: 40.063em) {
     /* Home page on Medium Screens */
     .header-wrap {
-        height: 95vh;
+        height: 100vh;
     }
     /* Gallery View Page on Medium Screens */
     .gallery-meta p {
@@ -303,13 +371,4 @@ h2 {
         left: 79%;
         width: 20%;
     }
-
-    /* Uploads page on Large Screens */
-    #upload-sidebar {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        top: 0;
-    }
-
 }

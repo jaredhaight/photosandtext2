@@ -77,9 +77,14 @@ function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, 
 
     //Open Photo Modal
     $scope.open = function(selectedPhoto) {
+        if (selectedPhoto.orientation == 'landscape') {
+            var windowClass = 'photo-modal-landscape';
+        } else {
+            var windowClass = 'photo-modal-portrait'
+        }
         var photoModalInstance = $modal.open({
             templateUrl: '/static/js/patjs/partials/photo_edit.html',
-            windowClass: 'photo-modal',
+            windowClass: windowClass,
             controller: PhotoModalInstanceCtrl,
             resolve: {
                 photo: function() {
