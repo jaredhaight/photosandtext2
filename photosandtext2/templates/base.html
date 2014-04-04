@@ -12,6 +12,15 @@
   </head>
   <body>
     <section id="header">{% block header %}{% endblock %}</section>
+    {% if g.user.is_authenticated() %}
+    <div class="user-menu" data-dropdown="user-menu-content">
+    <icon class="icon-user"></icon>
+    <div id="user-menu-content" class="f-dropdown" data-dropdown-content>
+      <p>Hi {{ g.user.username }}!</p>
+      <li><a href="/gallery/new">Upload Photo</a></li>
+    </div>
+    </div>
+    {% endif %}
     {% with messages = get_flashed_messages() %}
       {% if messages %}
       <section id="messages">

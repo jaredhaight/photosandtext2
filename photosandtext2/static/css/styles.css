@@ -53,6 +53,32 @@ h2 {
     margin-bottom: 10px;
 }
 
+.user-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    background: #323232;
+    color: #f2f2f2;
+    z-index: 100;
+}
+
+.user-menu icon {
+    font-size: 2em;
+}
+
+#user-menu-content {
+    width: 175px;
+}
+
+#user-menu-content p {
+    text-align: center;
+    padding-top: .5em;
+    padding-bottom: .5em;
+    margin-bottom: 0;
+    color: #888;
+}
+
 /* Homepage CSS */
 .header-wrap {
     position: relative;
@@ -178,6 +204,11 @@ h2 {
 .photo-view-sidebar-exif {
     display: none;
     color: #808080;
+    border-top: #e2e2e2;
+    border-top-style: solid;
+    border-top-width: 1px;
+    margin-top: 1em;
+    padding-top: 1em;
 }
 
 .photo-view-sidebar-exif p {
@@ -252,6 +283,14 @@ h2 {
     left: 0;
 }
 
+.upload-progress-count {
+    text-align: center;
+    font-weight: 100;
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+}
 .photo-modal-landscape {
     top: 5%;
     left: 5%;

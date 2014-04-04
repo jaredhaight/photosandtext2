@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify
+from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify, g
 from flask.ext.login import login_user, login_required, logout_user, current_user
 from flask.ext.restless import ProcessingException
 from sqlalchemy import func
@@ -21,6 +21,10 @@ if app.config['DEBUG']:
     @app.route('/media/<path:filename>')
     def send_file(filename):
         return send_from_directory('/Users/jared/Documents/PycharmProjects/photosandtext2/media', filename)
+
+@app.before_request
+def before_request():
+    g.user = current_user
 
 @app.route('/')
 def home_view():

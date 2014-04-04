@@ -49,7 +49,11 @@ function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, 
     //$files: an array of files selected, each file has name, size, and type.
     for (var i in $files) {
         var file = $files[i];
-
+        $scope.uploadInProgress = true;
+        $scope.uploadCountTotal = $files.length;
+        $scope.uploadCountProgress = 1;
+        console.log("UploadCountTotal: " + $scope.uploadCountTotal.toString());
+        console.log("UploadCountProgress: " + $scope.uploadCountProgress.toString());
         $scope.upload = $upload.upload({
             url: '/api/v1/galleries/'+$routeParams.galleryID+'/photos',
             // method: POST or PUT,
@@ -72,6 +76,11 @@ function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, 
                 var photo = photoClient.get({photoID:data.id});
                 $scope.gallery.photos.push(photo);
                 $scope.uploadPercent = null;
+                $scope.uploadCountProgress++;
+                if ($scope.uploadCountProgress > $scope.uploadCountTotal) {
+                    $scope.uploadInProgress = false;
+                }
+                console.log("UploadCountProgress: " + $scope.uploadCountProgress.toString());
             });
             //.error(...)
             //.then(success, error, progress);

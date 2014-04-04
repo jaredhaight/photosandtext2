@@ -45,9 +45,6 @@
   </section>
 {% endblock %}
 {% block footer %}
-  {% if user.is_authenticated() %}
-  <p>Logged in as {{ user.username }}</p>
-  {% endif %}
 {% endblock %}
 
 {% block javascript %}
