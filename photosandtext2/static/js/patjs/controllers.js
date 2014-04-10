@@ -23,27 +23,20 @@ function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, 
         },3000);
     };
 
-    /*
-    $scope.options = {
-        autoUpload: true,
-        url: '/api/v1/galleries/'+$routeParams.galleryID+"/photos"
-    };
-
-    $scope.$on('fileuploadadd', function(event, files){
-        $.each(files, function (index, file) {
-            $scope.gallery.photos.push(file);
+     $scope.getLocation = function(val) {
+    return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {
+        params: {
+            address: val,
+            sensor: false
+        }
+        }).then(function(res){
+            var addresses = [];
+            angular.forEach(res.data.results, function(item){
+            addresses.push(item.formatted_address);
         });
-    });
-
-    $scope.$on('fileuploaddone', function(event, files){
-        console.log(files.result.files);
-        $.each(files.result.files, function (index, file) {
-            console.log(file);
-            var photoObj = photoClient.get({photoID:file.id});
-            $scope.gallery.photos.push(photoObj);
-        })
-    });
-    */
+            return addresses;
+        });
+    };
 
     $scope.onFileSelect = function($files) {
     //$files: an array of files selected, each file has name, size, and type.
