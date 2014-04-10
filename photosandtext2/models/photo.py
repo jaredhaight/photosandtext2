@@ -89,13 +89,6 @@ class Photo(db.Model):
         self.orientation = exif['orientation']
         db.session.add(self)
         db.session.commit()
-        try:
-            paged = self.gallery.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
-            self.gallery_pos = paged.items.index(self)+1
-        except:
-            self.gallery_pos = None
-        db.session.add(self)
-        db.session.commit()
         create_crops(self)
 
 class Crop(db.Model):
@@ -173,13 +166,22 @@ class Gallery(db.Model):
     def api_url(self):
         return url_for('api_gallery', galleryID=self.id)
 
+    def update_photos_location(self):
+        for photo in self.photos:
+            if photo.location == None:
+                photo.location = self.location
+                photo.save()
+
+    def update_photos_pos(self):
+        paged = self.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
+        for photo in self.photos:
+            for photo in paged.items:
+                photo.gallery_pos = paged.items.index(photo)+1
+            photo.save()
+
     def save(self):
         if not self.date:
             self.created = datetime.utcnow()
         self.updated = datetime.utcnow()
         db.session.add(self)
         db.session.commit()
-        for photo in self.photos:
-            if photo.location == None:
-                photo.location = self.location
-                photo.save()

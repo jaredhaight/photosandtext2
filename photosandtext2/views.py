@@ -35,7 +35,7 @@ def home_view():
 @app.route('/gallery/<int:gallery_id>')
 def gallery_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
-    photos = gallery.photos.order_by(Photo.exif_date_taken)
+    photos = gallery.photos.order_by(Photo.gallery_pos)
     dates = date_format(photos[0].exif_date_taken, photos[-1].exif_date_taken)
     return render_template('gallery.html', gallery=gallery, photos=photos, dates=dates, user=current_user)
 
@@ -146,7 +146,8 @@ def gallery_upload_view(gallery_id):
         file.save(os.path.join(app.config['PHOTO_STORE'], filename))
         photo = Photo(image=filename)
         photo.gallery = gallery
-        photo.save()
+        gallery.update_photos_location()
+        gallery.update_photos_pos()
     resp['status'] = 'success'
     resp['id'] = photo.id
     return jsonify(resp)
