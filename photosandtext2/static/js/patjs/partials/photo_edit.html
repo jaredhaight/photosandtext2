@@ -6,7 +6,7 @@
     <div class="photo-modal-photo">
       <img ng-src="{[{ photo.crops.display_c.url }]}">
     </div>
-    <div class="photo-modal-meta">
+    <div class="photo-modal-sidebar">
       <h3>Details</h3>
       <label>Description</label>
       <textarea ng-model="photo.desc" ng-blur="photoSave(photo)" placeholder="Photo Description">{[{ photo.desc }]}</textarea>
@@ -15,8 +15,12 @@
       <label>Location</label>
       <input type="text" ng-model="photo.location">
       <input id="favorite-checkbox" ng-model="photo.favorite" type="checkbox"><label for="favorite-checkbox">Favorite</label>
-      {[{ photoTest }]}
       <button class="button right" ng-click="ok(photo)">Done</button>
+      <div class="photo-modal-meta">
+        <h4>Metadata</h4>
+        <p>Photo ID: <strong>{[{ photo.id }]}</strong></p>
+        <p>Gallery Position: <strong>{[{ photo.gallery_pos }]}</strong></p>
+      </div>
     </div>
   </div>
 </section>

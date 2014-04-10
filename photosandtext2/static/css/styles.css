@@ -54,6 +54,7 @@ h2 {
 }
 
 .user-menu {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -308,7 +309,7 @@ h2 {
     padding: 5px;
 }
 
-.photo-modal-landscape .photo-modal-meta {
+.photo-modal-landscape .photo-modal-sidebar {
     width: 33%;
     padding: 5px;
     display: inline-block;
@@ -331,16 +332,31 @@ h2 {
     padding: 5px;
 }
 
-.photo-modal-portrait .photo-modal-meta {
+.photo-modal-portrait .photo-modal-sidebar {
     width: 44%;
     padding: 5px;
     display: inline-block;
     vertical-align: top;
 }
 
+.photo-modal-meta {
+    margin-top: 2em;
+    padding: 10px;
+    border: #888;
+    border-width: 1px;
+    border-style: solid;
+    background: #e8e8e8;
+}
+
+.photo-modal-meta p {
+    font-size: 1em;
+    margin-bottom: 0;
+}
+
 .photo-edit-modal img {
     max-height: 590px;
 }
+
 .message {
     position: absolute;
     height: 50px;
