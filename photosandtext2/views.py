@@ -146,10 +146,14 @@ def gallery_upload_view(gallery_id):
         file.save(os.path.join(app.config['PHOTO_STORE'], filename))
         photo = Photo(image=filename)
         photo.gallery = gallery
+        photo.save()
         gallery.update_photos_location()
         gallery.update_photos_pos()
-    resp['status'] = 'success'
-    resp['id'] = photo.id
+        resp['status'] = 'success'
+        resp['id'] = photo.id
+        return jsonify(resp)
+    resp['status'] = 'failed'
+    resp['message'] = 'There was a problem uploading the file'
     return jsonify(resp)
 
 
