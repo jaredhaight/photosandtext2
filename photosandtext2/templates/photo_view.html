@@ -6,7 +6,7 @@
   <div class="small-12 large-9 columns photo">
     <img
       {% if photo.orientation == 'portrait' %} style="margin: 0 auto;" {% endif %}
-      src="{{ photo.crops.filter_by(name="display1280").first().url() }}"
+      src="{{ photo.crops.filter_by(name="display1280").first().url }}"
     >
   </div>
   <div class="small-12 large-3 columns">
@@ -16,10 +16,13 @@
         <p class="photo-desc">{{ photo.desc }}</p>
       </section>
       {% endif %}
+      {% if photo.location %}
       <section class="photo-view-sidebar-section">
         <h4>Location</h4>
-        <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ photo.gallery.location }}&zoom=13&size=300x150&maptype=roadmap&sensor=false&markers=color:blue|{{ photo.gallery.location }}">
+        <p>{{ photo.location }}</p>
+        <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ photo.location }}&zoom=13&size=300x150&maptype=roadmap&sensor=false&markers=color:blue|{{ photo.gallery.location }}">
       </section>
+      {% endif %}
       <section class="photo-view-sidebar-section">
         <h4>Gallery</h4>
         <a href="{{ url_for('gallery_view', gallery_id=photo.gallery.id) }}">{{ photo.gallery.name }}</a>

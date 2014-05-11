@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask import url_for
+import os
 
 from photosandtext2 import db, app
 from photosandtext2.utils.photo import get_image_info, make_crop
@@ -15,6 +16,7 @@ association_table = db.Table('photo_tag_association',
 
 
 
+
 def create_crops(photo):
     """
     Used when a Photo object is saved. Any crops in the Crops Settings table
@@ -26,6 +28,7 @@ def create_crops(photo):
         if search is None:
             thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
             crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
+            crop.save()
             photo.crops.append(crop)
     db.session.add(photo)
     db.session.commit()
@@ -73,8 +76,13 @@ class Photo(db.Model):
         return crop.url()
 
     def save(self):
+        print "Photo.save() called: "+str(self.id)
         if self.uploaded is None:
             self.uploaded = datetime.utcnow()
+        if self.location is None:
+            print "Photo location is None: "+str(self.id)
+            self.location = self.gallery.location
+            print "Photo location set to: "+self.gallery.location
         self.updated = datetime.utcnow()
         #Get EXIF
         exif = get_image_info(PHOTO_STORE+"/"+self.image)
@@ -91,17 +99,26 @@ class Photo(db.Model):
         db.session.commit()
         create_crops(self)
 
+    def delete(self):
+        if os.path.isfile(PHOTO_STORE+"/"+self.image):
+            os.remove(PHOTO_STORE+"/"+self.image)
+        db.session.delete(self)
+        db.session.commit()
+
 class Crop(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     photo_id = db.Column(db.Integer, db.ForeignKey('photo.id'))
+    gallery_id = db.Column(db.Integer, db.ForeignKey('gallery.id'))
     name = db.Column(db.String(256))
     file = db.Column(db.String(256))
     height = db.Column(db.Integer, nullable=True)
     width = db.Column(db.Integer, nullable=True)
+    url = db.Column(db.String, nullable=True)
 
-    def url(self):
-        return app.config["CROP_BASE_URL"]+'/'+self.file
-
+    def save(self):
+        self.url = app.config["CROP_BASE_URL"]+'/'+self.file
+        db.session.add(self)
+        db.session.commit()
 
 class CropSettings(db.Model):
     """
@@ -159,6 +176,7 @@ class Gallery(db.Model):
     created = db.Column(db.DateTime, nullable=True)
     updated = db.Column(db.DateTime, nullable=True)
     location = db.Column(db.UnicodeText, nullable=True)
+    thumbnails = db.relationship('Crop', backref=db.backref('gallery'), lazy='dynamic')
 
     def __repr__(self):
         return '<Gallery %r>' % self.name
@@ -166,22 +184,31 @@ class Gallery(db.Model):
     def api_url(self):
         return url_for('api_gallery', galleryID=self.id)
 
-    def update_photos_location(self):
-        for photo in self.photos:
-            if photo.location == None:
-                photo.location = self.location
-                photo.save()
-
-    def update_photos_pos(self):
+    def update_photos(self):
+        print "Gallery.update_photos() called"
         paged = self.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
-        for photo in self.photos:
-            for photo in paged.items:
-                photo.gallery_pos = paged.items.index(photo)+1
+        for photo in paged.items:
+            print "Photo being arranged: "+str(photo.id)
+            photo.gallery_pos = paged.items.index(photo)+1
             photo.save()
 
     def save(self):
+        print "Gallery save called"
         if not self.date:
             self.created = datetime.utcnow()
         self.updated = datetime.utcnow()
+        if self.photos.first():
+            print "Setting Thumbnails"
+            thumbnail = self.photos.filter_by(favorite=True).first()
+            if thumbnail is None:
+                thumbnail = self.photos.first()
+            self.thumbnails = thumbnail.crops
+            self.update_photos()
         db.session.add(self)
+        db.session.commit()
+
+    def delete(self):
+        for photo in self.photos:
+            photo.delete()
+        db.session.delete(self)
         db.session.commit()
