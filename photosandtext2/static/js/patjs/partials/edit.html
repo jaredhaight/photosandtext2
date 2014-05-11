@@ -19,6 +19,7 @@
               <h3>Location</h3>
               <input type="text" ng-model="gallery.location" typeahead="address for address in getLocation($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" class="form-control" ng-blur="galleryUpdate(gallery)">
               <a href="/gallery/{[{ gallery.id }]}"><button class="button expand">Go to Gallery</button></a>
+              <button class="button alert expand" ng-click="delete(gallery)">Delete Gallery</button>
             </div>
           </div>
           <div class="upload-progress-count" ng-show="uploadInProgress">

@@ -1,10 +1,14 @@
 'use strict';
 
+function galleryListCtrl($scope, galleryClient, $http, $log) {
+    delete $http.defaults.headers.common['X-Requested-With'];
+    $scope.galleries = galleryClient.get();
+
+}
+
 function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, $timeout, $modal, $log, $upload) {
     delete $http.defaults.headers.common['X-Requested-With'];
     $scope.gallery = galleryClient.get({galleryID: $routeParams.galleryID});
-
-
 
     $scope.galleryUpdate = function(gallery) {
         galleryClient.update({galleryID:gallery.id}, gallery, function() {
@@ -23,7 +27,7 @@ function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, 
         },3000);
     };
 
-     $scope.getLocation = function(val) {
+    $scope.getLocation = function(val) {
     return $http.get('http://maps.googleapis.com/maps/api/geocode/json', {
         params: {
             address: val,
@@ -135,6 +139,43 @@ function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
-    }
-}
+    };
 
+    //Open Delete Gallery Modal
+    $scope.delete = function(selectedGallery) {
+        var galleryModalInstance = $modal.open({
+            templateUrl: '/static/js/patjs/partials/gallery_delete.html',
+            controller: DeleteGalleryModalInstanceCtrl,
+            windowClass: "gallery-modal-window",
+            resolve: {
+                gallery: function() {
+                    return selectedGallery;
+                }
+            }
+        });
+
+        galleryModalInstance.result.then(function (gallery) {
+            $log.info('This is the first result after closing the delete gallery modal');
+        }, function () {
+          $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
+   //Delete Gallery Modal Instance
+    var DeleteGalleryModalInstanceCtrl = function($scope, $modalInstance, galleryClient, gallery) {
+        $scope.gallery = gallery;
+
+        $scope.galleryDelete = function(gallery) {
+            galleryClient.delete({galleryID: gallery.id})
+        };
+
+        $scope.galleryDeleteConfirm = function (gallery) {
+            $scope.galleryDelete(gallery);
+            $modalInstance.close($scope.gallery);
+        };
+
+        $scope.galleryDeleteDismiss = function () {
+            $modalInstance.dismiss('cancel');
+        };
+    };
+}
