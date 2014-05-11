@@ -11,7 +11,7 @@
     </div>
     <div class="background">
       {% set header = header_background.crops.filter_by(name="display1600").first() %}
-      <img src="{{ header.url() }}">
+      <img src="{{ header.url }}">
     </div>
     <div class="header-text">
       <h1>Photos and Text</h1>
@@ -25,10 +25,9 @@
       <div>
         {% for gallery in galleries %}
           <div class="small-12 medium-6 large-3 columns galleries">
-          {% set photo = gallery.photos.first() %}
-          {% set crop = photo.crops.filter_by(name="thumb400").first() %}
+          {% set crop = gallery.thumbnails.filter_by(name="thumb400").first() %}
           <a href="{{ url_for('gallery_view', gallery_id=gallery.id) }}">
-             <img src="{{ crop.url() }}">
+             <img src="{{ crop.url }}">
           </a>
           <h3>{{ gallery.name }}</h3>
         </div>
