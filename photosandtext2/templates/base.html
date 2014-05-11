@@ -12,16 +12,18 @@
   </head>
   <body>
     <section id="header">{% block header %}{% endblock %}</section>
+    {% block usermenu %}
     {% if g.user.is_authenticated() %}
     <div class="user-menu" data-dropdown="user-menu-content">
-    <icon class="icon-user"></icon>
-    <div id="user-menu-content" class="f-dropdown" data-dropdown-content>
-      <p>Hi {{ g.user.username }}!</p>
-      <li><a href="/gallery/new">Upload Photo</a></li>
-      <li><a href="/logout">Logout</a></li>
-    </div>
+      <icon class="icon-user"></icon>
+      <div id="user-menu-content" class="f-dropdown" data-dropdown-content>
+        <p>Hi {{ g.user.username }}!</p>
+        <li><a href="/gallery/new">Upload Photo</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </div>
     </div>
     {% endif %}
+    {% endblock %}
     {% with messages = get_flashed_messages() %}
       {% if messages %}
       <section id="messages">
