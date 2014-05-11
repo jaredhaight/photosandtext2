@@ -27,6 +27,8 @@ def init_env():
     crop14 = CropSettings(name="display_b",height=0,width=1024)
     for crop in (crop1, crop2, crop3, crop4, crop5, crop6, crop7, crop8, crop9, crop10, crop11, crop12, crop13, crop14):
         db.session.add(crop)
+    user = User(username="jared", password="password")
+    db.session.add(user)
     db.session.commit()
 
 def allowed_file(filename):

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.justifiedgallery.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/justifiedGallery-31.min.css') }}">
 {% endblock %}
 {% block title %}{{ gallery.name }}{% endblock %}
 
@@ -36,8 +36,8 @@
       <div id="gallery">
         {% for photo in photos %}
           {% set crop = photo.crops.filter_by(name="display").first() %}
-          <a href="{{ url_for('gallery_photo_view', gallery_id=photo.gallery.id, gallery_pos=photo.gallery_pos) }}">
-             <img src="{{ crop.url() }}">
+          <a id="{{ photo.id }}"href="{{ url_for('gallery_photo_view', gallery_id=photo.gallery.id, gallery_pos=photo.gallery_pos) }}">
+             <img src="{{ crop.url }}">
           </a>
         {% endfor %}
       </div>
@@ -48,12 +48,13 @@
 {% endblock %}
 
 {% block javascript %}
-<script src="{{ url_for('static', filename="js/jquery.justifiedgallery.js") }}"></script>
+<script src="{{ url_for('static', filename="js/jquery.justifiedGallery-31.min.js") }}"></script>
 <script>
 $(window).load(function () {
   $(document ).ready(function() {
    $("#gallery").justifiedGallery({
       rowHeight: 300,
+      spinner: true,
       justifyLastRow: false,
       captions: false
     });

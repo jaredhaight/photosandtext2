@@ -98,6 +98,8 @@ def get_image_info(image):
         date_taken = None
     try:
         caption = ret['ImageDescription']
+        if caption == 'OLYMPUS DIGITAL CAMERA':
+            caption = None
     except:
         caption = None
     try:

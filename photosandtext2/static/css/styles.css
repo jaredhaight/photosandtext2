@@ -54,14 +54,13 @@ h2 {
 }
 
 .user-menu {
-    display: none;
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     padding: 10px;
     background: #323232;
     color: #f2f2f2;
-    z-index: 100;
+    z-index: 75;
 }
 
 .user-menu icon {
@@ -373,7 +372,12 @@ h2 {
     border-style: solid;
 }
 
-#gallery img {
+.gallery-modal-window {
+    left: 70%;
+    width: 40%;
+}
+
+#gallery a {
     display: none;
 }
 
