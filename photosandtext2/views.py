@@ -86,26 +86,38 @@ def include_url(result):
     result['url'] = photo.url()
     return result
 
-def edit_crops_for_photo_api(result, **kw):
+def edit_crops_for_photo_api_request(result, **kw):
     photoObj = Photo.query.get(result["id"])
     cropsResult = dict()
     for crop in photoObj.crops:
         cropInfo = dict()
         cropInfo["height"] = crop.height
         cropInfo["width"] = crop.width
-        cropInfo["url"] = crop.url()
+        cropInfo["url"] = crop.url
         cropsResult[crop.name] =cropInfo
     result["crops"] = cropsResult
     return result
 
-def remove_crops_for_photo_api(data, **kw):
+def edit_thumbnails_for_gallery_api_request(result, **kw):
+    galleryObj = Gallery.query.get(result["id"])
+    thumbResult = dict()
+    for thumbnail in galleryObj.thumbnails:
+        thumbInfo = dict()
+        thumbInfo["height"] = thumbnail.height
+        thumbInfo["width"] = thumbnail.width
+        thumbInfo["url"] = thumbnail.url
+        thumbResult[thumbnail.name] =thumbInfo
+    result["thumbnails"] = thumbResult
+    return result
+
+def remove_crops_for_photo_api_update(data, **kw):
     try:
         del data["crops"]
     except:
         pass
     pass
 
-def include_crops_for_gallery_api(result, **kw):
+def include_crops_for_single_gallery_api_request(result, **kw):
     for photo in result["photos"]:
         photoObj = Photo.query.get(photo["id"])
         cropsResult = dict()
@@ -113,12 +125,18 @@ def include_crops_for_gallery_api(result, **kw):
             cropInfo = dict()
             cropInfo["height"] = crop.height
             cropInfo["width"] = crop.width
-            cropInfo["url"] = crop.url()
+            cropInfo["url"] = crop.url
             cropsResult[crop.name] =cropInfo
         photo["crops"] = cropsResult
     return result
 
-def remove_crops_for_gallery_api(data, **kw):
+def save_single_gallery_on_update(instance_id, **kw):
+    print "Got instance: "+str(instance_id)
+    gallery = Gallery.query.get(instance_id)
+    gallery.save()
+    pass
+
+def remove_crops_for_single_gallery_api_update(data, **kw):
     newPhotos = []
     try:
         for photo in data["photos"]:
@@ -128,6 +146,14 @@ def remove_crops_for_gallery_api(data, **kw):
         data["photos"] = newPhotos
     except:
         pass
+    pass
+
+def delete_gallery_api(instance_id, **kw):
+    print "Got Instance: "+str(instance_id)
+    gallery = Gallery.query.get(instance_id)
+    print "Instance Name: "+str(gallery.name)
+    gallery.delete()
+    print "Instance deleted: "+str(instance_id)
     pass
 
 def auth_func(**kw):
@@ -164,14 +190,14 @@ manager.create_api(
     collection_name='photos',
     results_per_page=20,
     preprocessors={
-        'PUT_SINGLE':[remove_crops_for_photo_api, auth_func],
+        'PUT_SINGLE':[remove_crops_for_photo_api_update, auth_func],
         'POST':[auth_func],
         'PUT':[auth_func],
         'DELETE':[auth_func],
         'PATCH':[auth_func]
     },
     postprocessors={
-        'GET_SINGLE':[include_url,edit_crops_for_photo_api]
+        'GET_SINGLE':[include_url,edit_crops_for_photo_api_request]
     }
 )
 
@@ -182,13 +208,14 @@ manager.create_api(
     collection_name='galleries',
     results_per_page=20,
     preprocessors={
-        'PUT_SINGLE':[remove_crops_for_gallery_api, auth_func],
+        'PUT_SINGLE':[remove_crops_for_single_gallery_api_update, save_single_gallery_on_update, auth_func],
         'POST':[auth_func],
         'PUT':[auth_func],
-        'DELETE':[auth_func],
+        'DELETE':[auth_func, delete_gallery_api],
         'PATCH':[auth_func]
     },
     postprocessors={
-        'GET_SINGLE':[include_crops_for_gallery_api]
+        'GET_MANY': [],
+        'GET_SINGLE':[include_crops_for_single_gallery_api_request]
     }
 )
