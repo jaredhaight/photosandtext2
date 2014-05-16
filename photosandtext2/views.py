@@ -1,6 +1,7 @@
 from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify, g
 from flask.ext.login import login_user, login_required, logout_user, current_user
 from flask.ext.restless import ProcessingException
+from flask.ext.sqlalchemy import Pagination
 from sqlalchemy import func
 from werkzeug import secure_filename
 from photosandtext2 import app, manager, login_manager
@@ -27,9 +28,10 @@ def before_request():
     g.user = current_user
 
 @app.route('/')
-def home_view():
+@app.route('/page/<int:page>')
+def home_view(page = 1):
     header_background = Photo.query.filter_by(favorite=True).order_by(func.random()).first()
-    galleries = Gallery.query.filter(Gallery.photos!=None)
+    galleries = Gallery.query.filter(Gallery.thumbnails!=None).paginate(page, 8)
     return render_template('home.html', galleries=galleries, header_background=header_background, user=current_user)
 
 @app.route('/gallery/<int:gallery_id>')
@@ -172,9 +174,9 @@ def gallery_upload_view(gallery_id):
         file.save(os.path.join(app.config['PHOTO_STORE'], filename))
         photo = Photo(image=filename)
         photo.gallery = gallery
+        #TODO: Rethink how this works. Update_photos ends up re-saving the photos a bunch of times. Very wasteful.
         photo.save()
-        gallery.update_photos_location()
-        gallery.update_photos_pos()
+        gallery.update_photos()
         resp['status'] = 'success'
         resp['id'] = photo.id
         return jsonify(resp)
