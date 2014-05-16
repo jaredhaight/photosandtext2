@@ -36,6 +36,9 @@ h2 {
     font-feature-settings:"liga", "dlig";
 }
 
+.right-align {
+    text-align: right;
+}
 /* Typkit CSS */
 .wf-loading h1, .wf-loading h2, .wf-loading p {
     visibility: hidden;
@@ -88,14 +91,14 @@ h2 {
 }
 
 .curtain {
-    background: #000;
+    background: #fff;
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 800px;
     z-index: 1;
-    opacity: .15;
+    opacity: .0;
 }
 #header .background {
     position: absolute;
@@ -139,6 +142,10 @@ h2 {
     border-color: #000;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+.pagination icon {
+    font-size: 3em;
 }
 
 /* Galleries */

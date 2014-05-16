@@ -23,7 +23,7 @@
   <section id="gallery-wrap">
     <div id="gallery-wrap" class="row">
       <div>
-        {% for gallery in galleries %}
+        {% for gallery in galleries.items %}
           <div class="small-12 medium-6 large-3 columns galleries">
           {% set crop = gallery.thumbnails.filter_by(name="thumb400").first() %}
           <a href="{{ url_for('gallery_view', gallery_id=gallery.id) }}">
@@ -37,6 +37,18 @@
   </section>
 {% endblock %}
 {% block footer %}
+<div class="row pagination">
+  {% if galleries.has_prev %}
+  <div class="small-6 collumns left left-align">
+    <a href="/page/{{ galleries.prev_num }}"><icon class="icon-arrow-left"></icon></a>
+  </div>
+  {% endif %}
+  {% if galleries.has_next %}
+  <div class="small-6 collumns right right-align">
+    <a href="/page/{{ galleries.next_num}}"><icon class="icon-arrow-right"></icon></a>
+  </div>
+  {% endif %}
+</div>
 {% endblock %}
 {% block javascript %}
 
