@@ -31,8 +31,11 @@ def before_request():
 @app.route('/page/<int:page>')
 def home_view(page = 1):
     header_background = Photo.query.filter_by(favorite=True).order_by(func.random()).first()
+    small_header = header_background.crops.filter_by(name="home800").first()
+    medium_header = header_background.crops.filter_by(name="display1280").first()
+    large_header = header_background.crops.filter_by(name="display1600").first()
     galleries = Gallery.query.filter(Gallery.thumbnails!=None).paginate(page, 8)
-    return render_template('home.html', galleries=galleries, header_background=header_background, user=current_user)
+    return render_template('home.html', galleries=galleries, small_header=small_header, medium_header=medium_header, large_header=large_header, user=current_user)
 
 @app.route('/gallery/<int:gallery_id>')
 def gallery_view(gallery_id):
@@ -45,7 +48,11 @@ def gallery_view(gallery_id):
 def gallery_photo_view(gallery_id, gallery_pos):
     gallery = Gallery.query.get_or_404(gallery_id)
     photos = gallery.photos.order_by(Photo.gallery_pos).paginate(gallery_pos,1,False)
-    return render_template('photo_view.html', photos=photos, photo=photos.items[0], user=current_user)
+    photo=photos.items[0]
+    small_photo = photo.crops.filter_by(name="home800").first()
+    medium_photo = photo.crops.filter_by(name="display1280").first()
+    large_photo = photo.crops.filter_by(name="display1600").first()
+    return render_template('photo_view.html', photos=photos, photo=photo, small_photo=small_photo, medium_photo=medium_photo, large_photo=large_photo, user=current_user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():

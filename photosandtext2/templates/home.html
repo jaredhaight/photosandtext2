@@ -10,8 +10,8 @@
     <div class="curtain">
     </div>
     <div class="background">
-      {% set header = header_background.crops.filter_by(name="display1600").first() %}
-      <img src="{{ header.url }}">
+      <img data-interchange="[{{ small_header.url }}, (default)], [{{ medium_header.url }}, (medium)],[{{ large_header.url }}, (large)]">
+      <noscript><img src="{{ large_header.url }}"></noscript>
     </div>
     <div class="header-text">
       <h1>Photos and Text</h1>
