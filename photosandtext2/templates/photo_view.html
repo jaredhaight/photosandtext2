@@ -29,9 +29,7 @@
         <a href="{{ url_for('gallery_view', gallery_id=photo.gallery.id) }}">{{ photo.gallery.name }}</a>
       </section>
       <section class="photo-view-sidebar-icons">
-        <icon class="icon-home"></icon>
-        <icon class="icon-info"></icon>
-        <icon class="icon-cloud-download small-centered"></icon>
+
       </section>
       <section class="photo-view-sidebar-exif">
         <h4>EXIF Info</h4>
@@ -41,14 +39,46 @@
         <p>ISO: {{ photo.exif_iso }}</p>
         <p>Shutter {{ photo.exif_shutter }}</p>
       </section>
-      <div class="photoNav">
-          {% if photos.has_prev %}
-          <a href="{{ url_for('gallery_photo_view',gallery_id=photos.prev().items[0].gallery.id, gallery_pos=photos.prev().items[0].gallery_pos) }}"><icon class="icon-arrow-left left"></icon></a>
-          {% endif %}
-          {% if photos.has_next %}
-          <a href="{{ url_for('gallery_photo_view',gallery_id=photos.next().items[0].gallery.id, gallery_pos=photos.next().items[0].gallery_pos) }}"><icon class="icon-arrow-right right"></icon></a>
-          {% endif %}
-      </div>
+      <section class="photoNav">
+        {% if photos.has_prev %}
+        <a href="{{ url_for('gallery_photo_view',gallery_id=photos.prev().items[0].gallery.id, gallery_pos=photos.prev().items[0].gallery_pos) }}">
+          <button class="photo-nav-button">
+          <icon class="icon-arrow-left"></icon>
+          </button>
+        </a>
+        {% else %}
+          <button class="photo-nav-button disabled">
+            <icon class="icon-arrow-left"></icon>
+          </button>
+        {% endif %}
+        <a href="/">
+          <button class="photo-nav-button">
+            <icon class="icon-home"></icon>
+          </button>
+        </a>
+        <a href="#">
+          <button class="photo-nav-button">
+            <icon class="icon-info"></icon>
+          </button>
+        </a>
+        <a href="download">
+          <button class="photo-nav-button">
+            <icon class="icon-cloud-download small-centered"></icon>
+          </button>
+        </a>
+        </button>
+        {% if photos.has_next %}
+        <a href="{{ url_for('gallery_photo_view',gallery_id=photos.next().items[0].gallery.id, gallery_pos=photos.next().items[0].gallery_pos) }}">
+          <button class="photo-nav-button">
+            <icon class="icon-arrow-right"></icon>
+          </button>
+        </a>
+        {% else %}
+          <button class="photo-nav-button disabled">
+            <icon class="icon-arrow-right"></icon>
+          </button>
+        {% endif %}
+      </section>
     </div>
   </div>
 </div>

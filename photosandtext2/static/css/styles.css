@@ -211,11 +211,6 @@ h2 {
 .photo-view-sidebar-exif {
     display: none;
     color: #808080;
-    border-top: #e2e2e2;
-    border-top-style: solid;
-    border-top-width: 1px;
-    margin-top: 1em;
-    padding-top: 1em;
 }
 
 .photo-view-sidebar-exif p {
@@ -223,15 +218,20 @@ h2 {
 }
 
 .photoNav {
+    font-size: 0;
+    position: absolute;
     margin-top: 30px;
+    left: 0;
+    right: 0
 }
 
-.photo-view-sidebar button {
-    width: 98%;
-}
-
-.photoNav icon {
-    font-size: 3em;
+.photo-nav-button {
+    width: 20%;
+    text-align: center;
+    display: inline-block;
+    font-size: 32px;
+    padding: 10px;
+    margin: 0;
 }
 
 /* Login Page */
@@ -457,8 +457,9 @@ h2 {
 
     .photoNav {
         position: fixed;
-        bottom: 10px;
-        left: 79%;
-        width: 20%;
+        bottom: 0;
+        left: inherit;
+        right: 0;
+        width: 22%;
     }
 }
