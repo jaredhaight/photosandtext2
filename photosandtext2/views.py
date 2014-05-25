@@ -173,21 +173,25 @@ def auth_func(**kw):
 @login_required
 def gallery_upload_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
+    upload_results = list()
+    uploads = request.files.items()
+    for upload in uploads:
+        if upload[1] and allowed_file(upload[1].filename):
+            result = dict()
+            filename = secure_filename(upload[1].filename)
+            upload[1].save(os.path.join(app.config['PHOTO_STORE'], filename))
+            photo = Photo(image=filename)
+            photo.gallery = gallery
+            #TODO: Rethink how this works. Update_photos ends up re-saving the photos a bunch of times. Very wasteful.
+            photo.save()
+            result['status'] = 'success'
+            result['id'] = photo.id
+            upload_results.append(result)
     resp = dict()
-    file = request.files['file']
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['PHOTO_STORE'], filename))
-        photo = Photo(image=filename)
-        photo.gallery = gallery
-        #TODO: Rethink how this works. Update_photos ends up re-saving the photos a bunch of times. Very wasteful.
-        photo.save()
-        #gallery.update_photos()
-        resp['status'] = 'success'
-        resp['id'] = photo.id
-        return jsonify(resp)
-    resp['status'] = 'failed'
-    resp['message'] = 'There was a problem uploading the file'
+    resp['status'] = 'success'
+    resp['objects'] = upload_results
+    print resp
+    gallery.save()
     return jsonify(resp)
 
 

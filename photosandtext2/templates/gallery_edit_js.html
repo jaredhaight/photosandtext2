@@ -2,7 +2,6 @@
 {% block title %}Edit Gallery{% endblock %}
 
 {% block head %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/dropzone/jah-dz.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery.justifiedgallery.css') }}">
 {% endblock %}
 {% block usermenu %}{% endblock %}
@@ -13,10 +12,7 @@
 </div>
 {% endblock %}
 {% block javascript %}
-  <!-- jquery file upload js files
-  <script src="{{ url_for('static', filename="js/patjs/jquery-2.1.0.min.js") }}"></script>
-  <script src="{{ url_for('static', filename="js/patjs/jquery-ui-1.10.4.custom.min.js") }}"></script>
-  -->
+
   <script src="{{ url_for('static', filename="js/patjs/angular-file-upload-html5-shim.min.js") }}"></script>
 
   <script src="{{ url_for('static', filename="js/patjs/angular.min.js") }}"></script>
