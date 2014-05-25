@@ -139,7 +139,53 @@ function photoListCtrl($scope, galleryClient, photoClient, $routeParams, $http, 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel');
         };
+
+        //Open Photo Delete Modal
+        $scope.photoDeleteModal = function(selectedPhoto) {
+            var deletePhotoModalInstance = $modal.open({
+                templateUrl: '/static/js/patjs/partials/photo_delete.html',
+                controller: confirmDeletePhotoModalInstanceCtrl,
+                windowClass: "photo-delete-modal-window",
+                resolve: {
+                    photo: function() {
+                        return selectedPhoto;
+                    }
+                }
+            });
+
+            deletePhotoModalInstance.result.then(function (photoDeleted) {
+                $log.info('This is the first result after closing the delete photo modal');
+                if (photoDeleted == true) {
+                    $modalInstance.dismiss('deleted');
+                }
+            }, function () {
+              $log.info('Modal dismissed at: ' + new Date());
+              if (photoDeleted == true) {
+                  $modalInstance.dismiss('deleted');
+              }
+            });
+        };
+
+       //Delete Photo Modal Instance
+        var confirmDeletePhotoModalInstanceCtrl = function($scope, $modalInstance, photoClient, photo) {
+            $scope.photo = photo;
+
+            $scope.photoDelete = function(photo) {
+                photoClient.delete({photoID: photo.id})
+            };
+
+            $scope.photoDeleteConfirm = function (photo) {
+                $scope.photoDelete(photo);
+                $scope.photoDeleted = true;
+                $modalInstance.close($scope.photoDeleted);
+            };
+
+            $scope.photoDeleteDismiss = function () {
+                $modalInstance.dismiss('cancel');
+            };
+        };
     };
+
 
     //Open Delete Gallery Modal
     $scope.delete = function(selectedGallery) {

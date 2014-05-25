@@ -15,7 +15,10 @@
       <label>Location</label>
       <input type="text" ng-model="photo.location">
       <input id="favorite-checkbox" ng-model="photo.favorite" type="checkbox"><label for="favorite-checkbox">Favorite</label>
+      <p>
+      <button class="button alert" ng-click="photoDeleteModal(photo)">Delete</button>
       <button class="button right" ng-click="ok(photo)">Done</button>
+      </p>
       <div class="photo-modal-meta">
         <h4>Metadata</h4>
         <p>Filename: <strong>{[{ photo.image }]}</strong></p>

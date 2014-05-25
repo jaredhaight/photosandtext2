@@ -359,6 +359,11 @@ h2 {
     margin-bottom: 0;
 }
 
+.photo-delete-modal-window {
+    width: 40%;
+    left: 70%;
+}
+
 .photo-edit-modal img {
     max-height: 590px;
 }
