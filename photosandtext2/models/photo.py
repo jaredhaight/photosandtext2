@@ -85,19 +85,21 @@ class Photo(db.Model):
             print "Photo location set to: "+self.gallery.location
         self.updated = datetime.utcnow()
         #Get EXIF
-        exif = get_image_info(PHOTO_STORE+"/"+self.image)
-        self.exif_aperture = exif['aperture']
-        self.exif_date_taken = exif['date_taken']
-        self.exif_focal = exif['focal']
-        self.exif_iso = exif['iso']
-        self.exif_shutter = exif['shutter']
-        self.desc = exif['caption']
-        self.width = exif['width']
-        self.height = exif['height']
-        self.orientation = exif['orientation']
+        if self.exif_width == None:
+            exif = get_image_info(PHOTO_STORE+"/"+self.image)
+            self.exif_aperture = exif['aperture']
+            self.exif_date_taken = exif['date_taken']
+            self.exif_focal = exif['focal']
+            self.exif_iso = exif['iso']
+            self.exif_shutter = exif['shutter']
+            self.desc = exif['caption']
+            self.width = exif['width']
+            self.height = exif['height']
+            self.orientation = exif['orientation']
         db.session.add(self)
         db.session.commit()
-        create_crops(self)
+        if self.crops == None:
+            create_crops(self)
 
     def delete(self):
         if os.path.isfile(PHOTO_STORE+"/"+self.image):
