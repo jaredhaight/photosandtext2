@@ -194,18 +194,22 @@ class Gallery(db.Model):
             photo.gallery_pos = paged.items.index(photo)+1
             photo.save()
 
+    def update_thumbnails(self):
+        print "Setting Thumbnails"
+        thumbnail = self.photos.filter_by(favorite=True).first()
+        if thumbnail is None:
+            thumbnail = self.photos.first()
+        self.thumbnails = thumbnail.crops
+
     def save(self):
         print "Gallery save called"
         if not self.date:
             self.created = datetime.utcnow()
         self.updated = datetime.utcnow()
-        if self.photos.first() and self.thumbnails is None:
-            print "Setting Thumbnails"
-            thumbnail = self.photos.filter_by(favorite=True).first()
-            if thumbnail is None:
-                thumbnail = self.photos.first()
-            self.thumbnails = thumbnail.crops
-        self.update_photos()
+        if self.photos.first():
+            self.update_photos()
+        if self.thumbnails is None:
+            self.update_thumbnails()
         db.session.add(self)
         db.session.commit()
 
