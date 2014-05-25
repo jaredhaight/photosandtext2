@@ -439,7 +439,9 @@ h2 {
         bottom: 0;
         left: 0;
         right: 0;
+        word-wrap:break-word;
         overflow: scroll;
+        -ms-overflow-style: none;
     }
 
     .photo img {

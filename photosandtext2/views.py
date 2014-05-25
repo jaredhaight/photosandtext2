@@ -57,7 +57,6 @@ def gallery_photo_view(gallery_id, gallery_pos):
 @app.route('/login', methods=['GET', 'POST'])
 def login_view():
     form = LoginForm()
-    print request.args.get("next")
     if form.validate_on_submit():
         username, password = form.username.data, form.password.data
         user = User.query.filter_by(username=username).first()
