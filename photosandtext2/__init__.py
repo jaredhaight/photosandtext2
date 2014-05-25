@@ -6,7 +6,6 @@ from flask.ext.login import LoginManager
 
 pat2_env = os.environ.get('PAT2_ENV')
 app = Flask(__name__)
-print pat2_env
 if pat2_env == 'DEV':
     app.config.from_object('photosandtext2.settings.dev.DevConfig')
 if pat2_env == 'PROD':
