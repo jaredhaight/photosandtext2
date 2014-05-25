@@ -86,8 +86,7 @@ h2 {
 .header-wrap {
     position: relative;
     overflow: hidden;
-    height: 60vh;
-    max-height: 500px;
+    height: 400px;
     padding: 20px;
 }
 
@@ -410,7 +409,7 @@ h2 {
 @media only screen and (min-width: 40.063em) {
     /* Home page on Medium Screens */
     .header-wrap {
-        height: 80vh;
+        height: 580px;
     }
     /* Gallery View Page on Medium Screens */
     .gallery-meta p {
@@ -429,7 +428,7 @@ h2 {
 @media only screen and (min-width: 64.063em) {
     /* Home page on Large Screens */
     .header-wrap {
-        height: 95vh;
+        height: 680px;
     }
 
     /* Photos Page on Large Screens */
