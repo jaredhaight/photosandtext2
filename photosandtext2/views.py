@@ -183,7 +183,7 @@ def gallery_upload_view(gallery_id):
         photo.gallery = gallery
         #TODO: Rethink how this works. Update_photos ends up re-saving the photos a bunch of times. Very wasteful.
         photo.save()
-        gallery.update_photos()
+        #gallery.update_photos()
         resp['status'] = 'success'
         resp['id'] = photo.id
         return jsonify(resp)
@@ -217,7 +217,7 @@ manager.create_api(
     collection_name='galleries',
     results_per_page=20,
     preprocessors={
-        'PUT_SINGLE':[remove_crops_for_single_gallery_api_update, save_single_gallery_on_update, auth_func],
+        'PUT_SINGLE':[remove_crops_for_single_gallery_api_update, auth_func],
         'POST':[auth_func],
         'PUT':[auth_func],
         'DELETE':[auth_func, delete_gallery_api],
