@@ -5,4 +5,5 @@ print os.getcwd()
 from photosandtext2 import app
 from photosandtext2 import views
 
-app.run()
+if __name__ == "__main__":
+    app.run()
