@@ -1,7 +1,7 @@
 /* Foundation Overides */
 body {
     font-family: "soleil",'helvetica neue', 'helvetica', sans-serif;
-    max-width: 1680px;
+    max-width: 1600px;
     margin: 0 auto;
 }
 
@@ -87,6 +87,7 @@ h2 {
     position: relative;
     overflow: hidden;
     height: 60vh;
+    max-height: 500px;
     padding: 20px;
 }
 
