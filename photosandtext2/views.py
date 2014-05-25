@@ -1,3 +1,4 @@
+import random, string
 from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify, g
 from flask.ext.login import login_user, login_required, logout_user, current_user
 from flask.ext.restless import ProcessingException
@@ -178,7 +179,8 @@ def gallery_upload_view(gallery_id):
     for upload in uploads:
         if upload[1] and allowed_file(upload[1].filename):
             result = dict()
-            filename = secure_filename(upload[1].filename)
+            prepend = ''.join(random.sample(string.letters, 6))
+            filename = secure_filename(prepend+"_"+upload[1].filename)
             upload[1].save(os.path.join(app.config['PHOTO_STORE'], filename))
             photo = Photo(image=filename)
             photo.gallery = gallery

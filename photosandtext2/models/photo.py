@@ -81,8 +81,9 @@ class Photo(db.Model):
             self.uploaded = datetime.utcnow()
         if self.location is None:
             print "Photo location is None: "+str(self.id)
-            self.location = self.gallery.location
-            print "Photo location set to: "+self.gallery.location
+            if self.gallery.location:
+                self.location = self.gallery.location
+            print "Photo location set to: "+str(self.gallery.location)
         self.updated = datetime.utcnow()
         #Get EXIF
         if not hasattr(self, 'exif_width'):
@@ -208,7 +209,7 @@ class Gallery(db.Model):
         self.updated = datetime.utcnow()
         if self.photos.first():
             self.update_photos()
-        if self.thumbnails is None:
+        if not self.thumbnails.first():
             self.update_thumbnails()
         db.session.add(self)
         db.session.commit()
