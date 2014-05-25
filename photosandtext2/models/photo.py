@@ -85,7 +85,7 @@ class Photo(db.Model):
             print "Photo location set to: "+self.gallery.location
         self.updated = datetime.utcnow()
         #Get EXIF
-        if self.exif_width == None:
+        if not hasattr(self, 'exif_width'):
             exif = get_image_info(PHOTO_STORE+"/"+self.image)
             self.exif_aperture = exif['aperture']
             self.exif_date_taken = exif['date_taken']
@@ -98,7 +98,7 @@ class Photo(db.Model):
             self.orientation = exif['orientation']
         db.session.add(self)
         db.session.commit()
-        if self.crops == None:
+        if self.crops.first() is None:
             create_crops(self)
 
     def delete(self):
@@ -199,13 +199,13 @@ class Gallery(db.Model):
         if not self.date:
             self.created = datetime.utcnow()
         self.updated = datetime.utcnow()
-        if self.photos.first():
+        if self.photos.first() and self.thumbnails is None:
             print "Setting Thumbnails"
             thumbnail = self.photos.filter_by(favorite=True).first()
             if thumbnail is None:
                 thumbnail = self.photos.first()
             self.thumbnails = thumbnail.crops
-            self.update_photos()
+        self.update_photos()
         db.session.add(self)
         db.session.commit()
 
