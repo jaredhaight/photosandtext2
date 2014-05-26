@@ -4,6 +4,7 @@ import os
 
 from photosandtext2 import db, app
 from photosandtext2.utils.photo import get_image_info, make_crop
+from photosandtext2.queue import q
 
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
@@ -15,7 +16,20 @@ association_table = db.Table('photo_tag_association',
 )
 
 
-
+def create_crops_list(photos):
+    """
+    Used when a Photo object is saved. Any crops in the Crops Settings table
+    that don't exist will be created.
+    """
+    cropTypes = CropSettings.query.all()
+    for photo in photos:
+        for cropType in cropTypes:
+            thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
+            crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
+            crop.save()
+            photo.crops.append(crop)
+        db.session.add(photo)
+        db.session.commit()
 
 def create_crops(photo):
     """
@@ -24,12 +38,25 @@ def create_crops(photo):
     """
     cropTypes = CropSettings.query.all()
     for cropType in cropTypes:
-        search = photo.crops.filter_by(name=cropType.name).first()
-        if search is None:
-            thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
-            crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
-            crop.save()
-            photo.crops.append(crop)
+    #    search = photo.crops.filter_by(name=cropType.name).first()
+    #    if search is None:
+        thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
+        crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
+        crop.save()
+        photo.crops.append(crop)
+    db.session.add(photo)
+    db.session.commit()
+
+def create_initial_crops(photo):
+    crop1 = CropSettings.query.filter_by(name="thumb200").first()
+    crop2 = CropSettings.query.filter_by(name="display_c").first()
+    cropTypes = (crop1,crop2)
+
+    for cropType in cropTypes:
+        thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
+        crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
+        crop.save()
+        photo.crops.append(crop)
     db.session.add(photo)
     db.session.commit()
 
@@ -100,7 +127,8 @@ class Photo(db.Model):
         db.session.add(self)
         db.session.commit()
         if self.crops.first() is None:
-            create_crops(self)
+            create_initial_crops(self)
+            q.enqueue(create_crops, self)
 
     def delete(self):
         if os.path.isfile(PHOTO_STORE+"/"+self.image):
@@ -209,7 +237,7 @@ class Gallery(db.Model):
         self.updated = datetime.utcnow()
         if self.photos.first():
             self.update_photos()
-        if not self.thumbnails.first():
+        if self.photos.first() and not self.thumbnails.first():
             self.update_thumbnails()
         db.session.add(self)
         db.session.commit()

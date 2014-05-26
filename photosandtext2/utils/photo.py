@@ -6,8 +6,10 @@ from PIL.ExifTags import TAGS
 
 from photosandtext2 import app
 
-PHOTO_STORE = app.config["PHOTO_STORE"]
-CROP_STORE = app.config["CROP_STORE"]
+config = app.config
+
+PHOTO_STORE = config["PHOTO_STORE"]
+CROP_STORE = config["CROP_STORE"]
 
 def get_orientation(image):
         width = image.width
