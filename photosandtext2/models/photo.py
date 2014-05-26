@@ -17,21 +17,6 @@ association_table = db.Table('photo_tag_association',
 )
 
 
-def create_crops_list(photos):
-    """
-    Used when a Photo object is saved. Any crops in the Crops Settings table
-    that don't exist will be created.
-    """
-    cropTypes = CropSettings.query.all()
-    for photo in photos:
-        for cropType in cropTypes:
-            thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
-            crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
-            crop.save()
-            photo.crops.append(crop)
-        db.session.add(photo)
-        db.session.commit()
-
 def create_crops(photo):
     """
     Used when a Photo object is saved. Any crops in the Crops Settings table
@@ -39,12 +24,13 @@ def create_crops(photo):
     """
     cropTypes = CropSettings.query.all()
     for cropType in cropTypes:
-        search = photo.crops.filter_by(name=cropType.name).first()
-        if not search:
-            thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
-            crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
-            crop.save()
-            photo.crops.append(crop)
+        #TODO - Make this smarter
+        #search = photo.crops.filter_by(name=cropType.name).first()
+        #if search is None:
+        thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
+        crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
+        crop.save()
+        photo.crops.append(crop)
     db.session.add(photo)
     db.session.commit()
 
