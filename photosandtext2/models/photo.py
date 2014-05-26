@@ -37,7 +37,9 @@ def create_crops(photo):
 def create_initial_crops(photo):
     crop1 = CropSettings.query.filter_by(name="thumb200").first()
     crop2 = CropSettings.query.filter_by(name="display_c").first()
-    cropTypes = (crop1,crop2)
+    #TODO - This is a hack to make gallery thumbnails work.
+    crop3 = CropSettings.query.filter_by(name="thumb400").first()
+    cropTypes = (crop1,crop2,crop3)
 
     for cropType in cropTypes:
         thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
