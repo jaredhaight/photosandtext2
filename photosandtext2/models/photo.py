@@ -1,6 +1,7 @@
 from datetime import datetime
 from flask import url_for
 import os
+from datetime import datetime
 
 from photosandtext2 import db, app
 from photosandtext2.utils.photo import get_image_info, make_crop
@@ -38,12 +39,12 @@ def create_crops(photo):
     """
     cropTypes = CropSettings.query.all()
     for cropType in cropTypes:
-    #    search = photo.crops.filter_by(name=cropType.name).first()
-    #    if search is None:
-        thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
-        crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
-        crop.save()
-        photo.crops.append(crop)
+        search = photo.crops.filter_by(name=cropType.name).first()
+        if search is None:
+            thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
+            crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
+            crop.save()
+            photo.crops.append(crop)
     db.session.add(photo)
     db.session.commit()
 
@@ -103,17 +104,18 @@ class Photo(db.Model):
         return crop.url()
 
     def save(self):
-        print "Photo.save() called: "+str(self.id)
+        print str(datetime.now())+" Photo: "+str(self.id)+": Photo.save() called"
         if self.uploaded is None:
             self.uploaded = datetime.utcnow()
         if self.location is None:
-            print "Photo location is None: "+str(self.id)
+            print str(datetime.now())+" Photo "+str(self.id)+": Photo location is None"
             if self.gallery.location:
                 self.location = self.gallery.location
-            print "Photo location set to: "+str(self.gallery.location)
+            print str(datetime.now())+" Photo "+str(self.id)+": Photo location set to: "+str(self.gallery.location)
         self.updated = datetime.utcnow()
         #Get EXIF
         if not hasattr(self, 'exif_width'):
+            print str(datetime.now())+" Photo "+str(self.id)+": Updating EXIF"
             exif = get_image_info(PHOTO_STORE+"/"+self.image)
             self.exif_aperture = exif['aperture']
             self.exif_date_taken = exif['date_taken']
@@ -124,10 +126,13 @@ class Photo(db.Model):
             self.width = exif['width']
             self.height = exif['height']
             self.orientation = exif['orientation']
+        print str(datetime.now())+" Photo "+str(self.id)+": Commiting to DB"
         db.session.add(self)
         db.session.commit()
         if self.crops.first() is None:
+            print str(datetime.now())+" Photo "+str(self.id)+": Creating Initial Crops"
             create_initial_crops(self)
+            print str(datetime.now())+" Photo "+str(self.id)+": Creating Rest of Crops"
             q.enqueue(create_crops, self)
 
     def delete(self):
@@ -228,6 +233,7 @@ class Gallery(db.Model):
         thumbnail = self.photos.filter_by(favorite=True).first()
         if thumbnail is None:
             thumbnail = self.photos.first()
+        print "Thumbnail set as: "+str(thumbnail)
         self.thumbnails = thumbnail.crops
 
     def save(self):
