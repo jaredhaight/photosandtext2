@@ -231,7 +231,7 @@ class Gallery(db.Model):
     def update_thumbnails(self):
         print "Setting Thumbnails"
         thumbnail = self.photos.filter_by(favorite=True).first()
-        if thumbnail is None:
+        if not thumbnail:
             thumbnail = self.photos.first()
         print "Thumbnail set as: "+str(thumbnail)
         self.thumbnails = thumbnail.crops
