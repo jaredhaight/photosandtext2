@@ -40,7 +40,7 @@ def create_crops(photo):
     cropTypes = CropSettings.query.all()
     for cropType in cropTypes:
         search = photo.crops.filter_by(name=cropType.name).first()
-        if search is None:
+        if not search:
             thumbnail = make_crop(photo.image, cropType.name, cropType.height, cropType.width)
             crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
             crop.save()
