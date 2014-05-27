@@ -178,10 +178,21 @@ h2 {
     overflow: hidden;
 }
 
-.photo img {
+.photo.portrait img {
+    margin: 0 auto;
+    max-height: 600px;
+}
+
+.photo.landscape img {
     max-height: 600px;
     max-width: 145%;
     margin-left: -22.5%;
+}
+
+
+.photo img {
+    max-height: 600px;
+
 }
 .photo-desc {
     margin-bottom: 0;
@@ -417,10 +428,15 @@ h2 {
         margin-bottom: 1em;
     }
     /* Photo View Page */
-    .photo img {
+    .photo.portrait img {
+        margin: 0 auto;
         max-height: 800px;
-        max-width: 110%;
-        margin-left: -5%;
+    }
+
+    .photo.landscape img {
+        max-height: 800px;
+        max-width: 100%;
+        margin-left: 0;
     }
 }
 
@@ -442,10 +458,18 @@ h2 {
         word-wrap:break-word;
         overflow: scroll;
         overflow-style: none;
+        -webkit-overflow-style: none;
+        -moz-overflow-style: none;
+        -ie-overflow-style: none;
     }
 
-    .photo img {
-        max-height: 940px;
+    .photo.portrait img {
+        margin: 0 auto;
+        max-height: 960px;
+    }
+
+    .photo.landscape img {
+        max-height: 1600px;
         max-width: 100%;
         margin-left: 0;
     }
