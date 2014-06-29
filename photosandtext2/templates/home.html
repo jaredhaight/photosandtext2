@@ -13,9 +13,13 @@
       <img data-interchange="[{{ small_header.url }}, (default)], [{{ medium_header.url }}, (medium)],[{{ large_header.url }}, (large)]">
       <noscript><img src="{{ large_header.url }}"></noscript>
     </div>
-    <div class="header-text">
-      <h1>Photos and Text</h1>
-    </div>
+  </div>
+  <div class="sticky">
+    <nav class="header-bar" data-topbar>
+      <div class="header-text">
+        <h1>Photos and Text</h1>
+      </div>
+    </nav>
   </div>
 {% endblock %}
 
@@ -27,9 +31,12 @@
           <div class="small-12 medium-6 large-3 columns galleries">
           {% set crop = gallery.thumbnails.filter_by(name="thumb400").first() %}
           <a href="{{ url_for('gallery_view', gallery_id=gallery.id) }}">
-             <img src="{{ crop.url }}">
+            <img src="{{ crop.url }}">
+            <div class="gallery-title-bg"></div>
+            <div class="gallery-title">
+              <h3>{{ gallery.name }}</h3>
+            </div>
           </a>
-          <h3>{{ gallery.name }}</h3>
         </div>
         {% endfor %}
       </div>

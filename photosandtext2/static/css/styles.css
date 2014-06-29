@@ -36,15 +36,25 @@ h2 {
     font-feature-settings:"liga", "dlig";
 }
 
+h3 {
+    font-family: "soleil",'helvetica neue', 'helvetica', sans-serif;
+    -moz-font-feature-settings:"liga=1, dlig=1";
+    -ms-font-feature-settings:"liga", "dlig";
+    -o-font-feature-settings:"liga", "dlig";
+    -webkit-font-feature-settings:"liga", "dlig";
+    font-feature-settings:"liga", "dlig";
+    font-weight: 100;
+}
+
 .right-align {
     text-align: right;
 }
 /* Typkit CSS */
-.wf-loading h1, .wf-loading h2, .wf-loading p {
+.wf-loading h1, .wf-loading h2, .wf-loading h3, .wf-loading p {
     visibility: hidden;
   }
 
-.wf-active h1, h2 {
+.wf-active h1, h2, h3, p {
     visibility: visible;
 }
 
@@ -119,21 +129,50 @@ h2 {
     margin: 0 auto;
 }
 
+.header-bar {
+    width: 100%;
+    height: 60px;
+    background: #fff;
+    box-shadow: 0px 1px 4px #999;
+    border-bottom: #000;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
 .header-text {
-    position: absolute;
-    top: 25%;
-    left: 0;
-    right: 0;
     text-align: center;
-    z-index: 2;
 }
 
 .header-text h1 {
-    color: #f2f2f2;
+    color: #222;
+    margin: 0;
 }
 
 .galleries {
     padding: 5px;
+}
+
+.gallery-title-bg {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    background: #000;
+    opacity: .3;
+    padding: 5px;
+}
+
+.gallery-title {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.gallery-title h3 {
+    color: #ffffff;
 }
 
 .crop {
@@ -444,7 +483,11 @@ h2 {
 @media only screen and (min-width: 64.063em) {
     /* Home page on Large Screens */
     .header-wrap {
-        height: 680px;
+        height: 90vh;
+    }
+
+    .header-bar {
+        height: 10vh;
     }
 
     /* Photos Page on Large Screens */
