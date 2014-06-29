@@ -238,6 +238,8 @@ class Gallery(db.Model):
             photoItem.save()
 
     def status(self):
+        if self.photos.first() is None:
+            return "No Photos"
         for photo in self.photos:
             if photo.crops.filter_by(name="thumb200").first() is None:
                 return "Initial crops being created"
