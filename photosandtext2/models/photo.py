@@ -68,6 +68,7 @@ def add_photo_to_gallery(gallery, photoId):
         photo.gallery = gallery
         if photo.location is None:
             photo.location = gallery.location
+        photo.save()
         paged = gallery.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
         gallery.update_positions()
         gallery.save()
