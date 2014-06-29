@@ -5,7 +5,7 @@ from datetime import datetime
 
 from photosandtext2 import db, app
 from photosandtext2.utils.photo import get_image_info, make_crop
-from photosandtext2.queue import q
+from photosandtext2.queue import low_queue, high_queue
 
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
@@ -31,8 +31,8 @@ def create_crops(photo):
         crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
         crop.save()
         photo.crops.append(crop)
-    db.session.add(photo)
-    db.session.commit()
+    photo.save()
+
 
 def create_initial_crops(photo):
     crop1 = CropSettings.query.filter_by(name="thumb200").first()
@@ -46,8 +46,34 @@ def create_initial_crops(photo):
         crop = Crop(name=cropType.name, file=thumbnail['filename'], height=thumbnail['height'], width=thumbnail['width'])
         crop.save()
         photo.crops.append(crop)
-    db.session.add(photo)
-    db.session.commit()
+    photo.save()
+
+def update_exif(photo):
+    print str(datetime.now())+" Photo "+str(photo.id)+": Updating EXIF"
+    exif = get_image_info(PHOTO_STORE+"/"+photo.image)
+    photo.exif_aperture = exif['aperture']
+    photo.exif_date_taken = exif['date_taken']
+    photo.exif_focal = exif['focal']
+    photo.exif_iso = exif['iso']
+    photo.exif_shutter = exif['shutter']
+    photo.desc = exif['caption']
+    photo.width = exif['width']
+    photo.height = exif['height']
+    photo.orientation = exif['orientation']
+    photo.save()
+
+def add_photo_to_gallery(gallery, photoId):
+        photo = Photo.query.get(photoId)
+        print str(datetime.now())+" Gallery "+str(gallery.id)+": Adding photo "+str(photo.id)
+        photo.gallery = gallery
+        if photo.location is None:
+            photo.location = gallery.location
+        paged = gallery.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
+        for photoItem in paged.items:
+            print "Photo being arranged: "+str(photoItem.id)
+            photoItem.gallery_pos = paged.items.index(photoItem)+1
+            photoItem.save()
+        gallery.save()
 
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -91,37 +117,24 @@ class Photo(db.Model):
         crop = Crop.query.filter_by(photo_id=self.id, name=thumbnailName).first()
         return crop.url()
 
+    def prepare_photo(self):
+        if self.crops.first() is None:
+            print str(datetime.now())+" Photo "+str(self.id)+": Creating Initial Crops"
+            high_queue.enqueue(create_initial_crops, self)
+            print str(datetime.now())+" Photo "+str(self.id)+": Creating Rest of Crops"
+            low_queue.enqueue(create_crops, self)
+        if self.exif_date_taken is None:
+            low_queue.enqueue(update_exif, self)
+
     def save(self):
         print str(datetime.now())+" Photo: "+str(self.id)+": Photo.save() called"
+        self.updated = datetime.utcnow()
         if self.uploaded is None:
             self.uploaded = datetime.utcnow()
-        if self.location is None:
-            print str(datetime.now())+" Photo "+str(self.id)+": Photo location is None"
-            if self.gallery.location:
-                self.location = self.gallery.location
-            print str(datetime.now())+" Photo "+str(self.id)+": Photo location set to: "+str(self.gallery.location)
         self.updated = datetime.utcnow()
-        #Get EXIF
-        if not hasattr(self, 'exif_width'):
-            print str(datetime.now())+" Photo "+str(self.id)+": Updating EXIF"
-            exif = get_image_info(PHOTO_STORE+"/"+self.image)
-            self.exif_aperture = exif['aperture']
-            self.exif_date_taken = exif['date_taken']
-            self.exif_focal = exif['focal']
-            self.exif_iso = exif['iso']
-            self.exif_shutter = exif['shutter']
-            self.desc = exif['caption']
-            self.width = exif['width']
-            self.height = exif['height']
-            self.orientation = exif['orientation']
         print str(datetime.now())+" Photo "+str(self.id)+": Commiting to DB"
         db.session.add(self)
         db.session.commit()
-        if self.crops.first() is None:
-            print str(datetime.now())+" Photo "+str(self.id)+": Creating Initial Crops"
-            create_initial_crops(self)
-            print str(datetime.now())+" Photo "+str(self.id)+": Creating Rest of Crops"
-            q.enqueue(create_crops, self)
 
     def delete(self):
         if os.path.isfile(PHOTO_STORE+"/"+self.image):
@@ -208,13 +221,8 @@ class Gallery(db.Model):
     def api_url(self):
         return url_for('api_gallery', galleryID=self.id)
 
-    def update_photos(self):
-        print "Gallery.update_photos() called"
-        paged = self.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
-        for photo in paged.items:
-            print "Photo being arranged: "+str(photo.id)
-            photo.gallery_pos = paged.items.index(photo)+1
-            photo.save()
+    def add_photo(self, photo):
+        high_queue.enqueue(add_photo_to_gallery, self, photo.id)
 
     def update_thumbnails(self):
         print "Setting Thumbnails"
@@ -229,8 +237,6 @@ class Gallery(db.Model):
         if not self.date:
             self.created = datetime.utcnow()
         self.updated = datetime.utcnow()
-        if self.photos.first():
-            self.update_photos()
         if self.photos.first() and not self.thumbnails.first():
             self.update_thumbnails()
         db.session.add(self)

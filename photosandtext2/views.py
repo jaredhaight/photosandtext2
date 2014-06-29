@@ -35,7 +35,7 @@ def home_view(page = 1):
     small_header = header_background.crops.filter_by(name="home800").first()
     medium_header = header_background.crops.filter_by(name="display1280").first()
     large_header = header_background.crops.filter_by(name="display1600").first()
-    galleries = Gallery.query.filter(Gallery.thumbnails!=None).order_by(Gallery.updated.desc()).paginate(page, 8)
+    galleries = Gallery.query.filter(Gallery.thumbnails!=None).order_by(Gallery.updated.desc()).paginate(page, 12)
     return render_template('home.html', galleries=galleries, small_header=small_header, medium_header=medium_header, large_header=large_header, user=current_user)
 
 @app.route('/gallery/<int:gallery_id>')
@@ -183,9 +183,10 @@ def gallery_upload_view(gallery_id):
             filename = secure_filename(prepend+"_"+upload[1].filename)
             upload[1].save(os.path.join(app.config['PHOTO_STORE'], filename))
             photo = Photo(image=filename)
-            photo.gallery = gallery
             #TODO: Rethink how this works. Update_photos ends up re-saving the photos a bunch of times. Very wasteful.
             photo.save()
+            photo.prepare_photo()
+            gallery.add_photo(photo)
             result['status'] = 'success'
             result['id'] = photo.id
             upload_results.append(result)
