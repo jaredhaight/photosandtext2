@@ -69,10 +69,7 @@ def add_photo_to_gallery(gallery, photoId):
         if photo.location is None:
             photo.location = gallery.location
         paged = gallery.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
-        for photoItem in paged.items:
-            print "Photo being arranged: "+str(photoItem.id)
-            photoItem.gallery_pos = paged.items.index(photoItem)+1
-            photoItem.save()
+        gallery.update_positions()
         gallery.save()
 
 class Photo(db.Model):
@@ -231,6 +228,13 @@ class Gallery(db.Model):
             thumbnail = self.photos.first()
         print "Thumbnail set as: "+str(thumbnail)
         self.thumbnails = thumbnail.crops
+
+    def update_positions(self):
+        paged = self.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
+        for photoItem in paged.items:
+            print "Photo being arranged: "+str(photoItem.id)
+            photoItem.gallery_pos = paged.items.index(photoItem)+1
+            photoItem.save()
 
     def save(self):
         print "Gallery save called"
