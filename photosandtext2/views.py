@@ -197,6 +197,13 @@ def gallery_upload_view(gallery_id):
     gallery.save()
     return jsonify(resp)
 
+@app.route('/api/v1/galleries/<int:gallery_id>/status')
+def gallery_status_view(gallery_id):
+    gallery = Gallery.query.get(gallery_id)
+    resp = dict()
+    resp['gallery_status'] = gallery.status()
+    resp['id'] = gallery.id
+    return jsonify(resp)
 
 manager.create_api(
     Photo,

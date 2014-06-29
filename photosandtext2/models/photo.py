@@ -237,6 +237,14 @@ class Gallery(db.Model):
             photoItem.gallery_pos = paged.items.index(photoItem)+1
             photoItem.save()
 
+    def status(self):
+        for photo in self.photos:
+            if photo.crops.filter_by(name="thumb200").first() is None:
+                return "Initial crops being created"
+            if photo.crops.filter_by(name="display1280").first() is None:
+                return "Other crops being created"
+        return "Ready"
+
     def save(self):
         print "Gallery save called"
         if not self.date:
