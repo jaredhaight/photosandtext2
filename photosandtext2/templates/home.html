@@ -70,8 +70,10 @@
 {% endblock %}
 {% block javascript %}
 <script>
-$(document).ready(
-  $(".gallery-link").hover(
+$(document).ready(function() {
+  var isMobile = window.matchMedia("only screen and (max-width: 760px)");
+  if (isMobile.matches == false){
+    $(".gallery-link").hover(
       function(){
         var description = $(this).attr("data-description");
         $(this).find(".gallery-title").html("<p>"+description+"</p>");
@@ -81,8 +83,8 @@ $(document).ready(
         var name = $(this).attr("data-name");
         $(this).children(".gallery-title").html("<h3>"+name+"</h3>");
         $(this).find(".gallery-title-bg").removeClass("gallery-title-bg-hover");
-      }
-  )
-);
+      })
+    }
+  });
 </script>
 {% endblock %}
