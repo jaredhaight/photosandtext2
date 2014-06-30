@@ -74,7 +74,7 @@ $(document).ready(
   $(".gallery-link").hover(
       function(){
         var description = $(this).attr("data-description");
-        $(this).find(".gallery-title").html("<h4>"+description+"</h4>");
+        $(this).find(".gallery-title").html("<p>"+description+"</p>");
         $(this).find(".gallery-title-bg").addClass("gallery-title-bg-hover");
       },
       function(){

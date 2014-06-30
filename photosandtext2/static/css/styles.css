@@ -46,6 +46,17 @@ h3 {
     font-weight: 100;
 }
 
+
+h4 {
+    font-family: "soleil",'helvetica neue', 'helvetica', sans-serif;
+    -moz-font-feature-settings:"liga=1, dlig=1";
+    -ms-font-feature-settings:"liga", "dlig";
+    -o-font-feature-settings:"liga", "dlig";
+    -webkit-font-feature-settings:"liga", "dlig";
+    font-feature-settings:"liga", "dlig";
+    font-weight: 100;
+}
+
 .right-align {
     text-align: right;
 }
@@ -179,6 +190,13 @@ h3 {
 }
 
 .gallery-title h4 {
+    font-weight: 100;
+}
+
+.gallery-title p {
+    color: #ffffff;
+    font-size: 1.2em;
+    line-height: 1.5em;
     font-weight: 100;
 }
 
