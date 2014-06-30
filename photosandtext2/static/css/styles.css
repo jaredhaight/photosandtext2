@@ -162,6 +162,10 @@ h3 {
     padding: 5px;
 }
 
+.gallery-title-bg-hover {
+    opacity: .6;
+}
+
 .gallery-title {
     position: absolute;
     top: 20%;
