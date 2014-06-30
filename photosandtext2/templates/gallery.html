@@ -14,6 +14,13 @@
         </a>
       </div>
       <h2>{{ gallery.name }}</h2>
+      {% if gallery.permissions == 'private' %}
+      <a href="/gallery/edit/#/{{ gallery.id }}">
+        <div class="gallery-private-msg">
+          This gallery is set to private.
+        </div>
+      </a>
+      {% endif %}
     </div>
   </nav>
 </div>

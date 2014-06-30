@@ -18,11 +18,19 @@
             <div class="small-12 columns">
               <h3>Location</h3>
               <input type="text" ng-model="gallery.location" typeahead="address for address in getLocation($viewValue) | filter:$viewValue" typeahead-loading="loadingLocations" class="form-control" ng-blur="galleryUpdate(gallery)">
+            </div>
+          </div>
+          <div class="row">
+            <div class="small-12 columns">
+              <select ng-model="gallery.permissions">
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+              </select>
               <a href="/gallery/{[{ gallery.id }]}"><button class="button expand">Go to Gallery</button></a>
               <button class="button alert expand" ng-click="delete(gallery)">Delete Gallery</button>
             </div>
           </div>
-          <div class="upload-progress-count" ng-show="uploadInProgress">
+         <div class="upload-progress-count" ng-show="uploadInProgress">
             Uploading {[{ uploadCountTotal }]} photos.
           </div>
           <div class="upload-progress-bar" style="width:{[{ uploadPercent }]}%;"></div>
@@ -33,7 +41,6 @@
           </div>
         </div>
       </div>
-    </section>
   </article>
   <div id="message"><p></p></div>
   <section id="gallery-footer">

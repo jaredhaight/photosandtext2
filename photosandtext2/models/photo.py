@@ -212,6 +212,7 @@ class Gallery(db.Model):
     updated = db.Column(db.DateTime, nullable=True)
     location = db.Column(db.UnicodeText, nullable=True)
     thumbnails = db.relationship('Crop', backref=db.backref('gallery'), lazy='dynamic')
+    permissions = db.Column(db.UnicodeText)
 
     def __repr__(self):
         return '<Gallery %r>' % self.name
@@ -241,9 +242,9 @@ class Gallery(db.Model):
         if self.photos.first() is None:
             return "No Photos"
         for photo in self.photos:
-            if photo.crops.filter_by(name="thumb200").first() is None:
+            if photo.crops.count() < 3:
                 return "Initial crops being created"
-            if photo.crops.filter_by(name="display1280").first() is None:
+            if photo.crops.count() <= 17:
                 return "Other crops being created"
         return "Ready"
 
@@ -252,6 +253,8 @@ class Gallery(db.Model):
         if not self.date:
             self.created = datetime.utcnow()
         self.updated = datetime.utcnow()
+        if not self.permissions:
+            self.permissions = "private"
         if self.photos.first() and not self.thumbnails.first():
             self.update_thumbnails()
         db.session.add(self)

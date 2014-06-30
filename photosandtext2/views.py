@@ -1,5 +1,5 @@
 import random, string
-from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify, g
+from flask import request, redirect, url_for, render_template, send_from_directory, flash, jsonify, g, abort
 from flask.ext.login import login_user, login_required, logout_user, current_user
 from flask.ext.restless import ProcessingException
 from flask.ext.sqlalchemy import Pagination
@@ -35,12 +35,19 @@ def home_view(page = 1):
     small_header = header_background.crops.filter_by(name="home800").first()
     medium_header = header_background.crops.filter_by(name="display1280").first()
     large_header = header_background.crops.filter_by(name="display1600").first()
-    galleries = Gallery.query.filter(Gallery.thumbnails!=None).order_by(Gallery.updated.desc()).paginate(page, 12)
+    auth = current_user.is_authenticated()
+    if auth:
+        print "User is authenticated"
+        galleries = Gallery.query.filter(Gallery.thumbnails!=None).order_by(Gallery.updated.desc()).paginate(page, 12)
+    else:
+        galleries = Gallery.query.filter(Gallery.thumbnails!=None).filter(Gallery.permissions=='public').order_by(Gallery.updated.desc()).paginate(page, 12)
     return render_template('home.html', galleries=galleries, small_header=small_header, medium_header=medium_header, large_header=large_header, user=current_user)
 
 @app.route('/gallery/<int:gallery_id>')
 def gallery_view(gallery_id):
     gallery = Gallery.query.get_or_404(gallery_id)
+    if ((gallery.permissions == 'private') and (current_user.is_authenticated() == False)):
+        abort(401)
     photos = gallery.photos.order_by(Photo.gallery_pos)
     dates = date_format(photos[0].exif_date_taken, photos[-1].exif_date_taken)
     return render_template('gallery.html', gallery=gallery, photos=photos, dates=dates, user=current_user)
@@ -48,6 +55,8 @@ def gallery_view(gallery_id):
 @app.route('/gallery/<int:gallery_id>/photo/<int:gallery_pos>')
 def gallery_photo_view(gallery_id, gallery_pos):
     gallery = Gallery.query.get_or_404(gallery_id)
+    if ((gallery.permissions == 'private') and (current_user.is_authenticated() == False)):
+        abort(401)
     photos = gallery.photos.order_by(Photo.gallery_pos).paginate(gallery_pos,1,False)
     photo=photos.items[0]
     small_photo = photo.crops.filter_by(name="home800").first()

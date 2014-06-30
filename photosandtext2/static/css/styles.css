@@ -204,6 +204,16 @@ h4 {
     font-weight: 100;
 }
 
+.gallery-private-msg {
+    position: absolute;
+    right: 0;
+    background: red;
+    height: 56px;
+    top: 0;
+    padding: 20px;
+    color: black;
+}
+
 .crop {
     border-style: solid;
     border-width: 1px;
