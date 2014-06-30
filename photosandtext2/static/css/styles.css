@@ -171,6 +171,8 @@ h4 {
     background: #000;
     opacity: .3;
     padding: 5px;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .gallery-title-bg-hover {
@@ -183,6 +185,8 @@ h4 {
     left: 15px;
     right: 15px;
     bottom: 0;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 .gallery-title h3, .gallery-title h4 {
@@ -210,6 +214,8 @@ h4 {
 
 .pagination icon {
     font-size: 3em;
+    padding: 10px;
+    margin-bottom: 20px;
 }
 
 /* Galleries */
@@ -238,7 +244,6 @@ h4 {
 #gallery-wrap {
     text-align: center;
     padding: 10px;
-    margin-bottom: 100px;
     width: 100%;
 }
 
