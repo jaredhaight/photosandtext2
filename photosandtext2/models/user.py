@@ -1,7 +1,8 @@
-from flask.ext.login import UserMixin
+from flask.ext.login import UserMixin, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from photosandtext2 import db
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
