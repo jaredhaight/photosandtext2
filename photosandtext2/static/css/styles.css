@@ -165,14 +165,18 @@ h3 {
 
 .gallery-title {
     position: absolute;
-    top: 25%;
-    left: 0;
-    right: 0;
+    top: 20%;
+    left: 15px;
+    right: 15px;
     bottom: 0;
 }
 
-.gallery-title h3 {
+.gallery-title h3, h4 {
     color: #ffffff;
+}
+
+.gallery-title h4 {
+    font-weight: 100;
 }
 
 .crop {

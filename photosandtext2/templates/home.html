@@ -15,7 +15,18 @@
     </div>
   </div>
   <div class="sticky">
-    <nav class="header-bar" data-topbar>
+    <!-- TODO: Make this less hacky -->
+    <nav class="header-bar show-for-large" data-topbar data-options="sticky_on: large">
+      <div class="header-text">
+        <h1>Photos and Text</h1>
+      </div>
+    </nav>
+    <nav class="header-bar show-for-medium" data-topbar data-options="sticky_on: medium">
+      <div class="header-text">
+        <h1>Photos and Text</h1>
+      </div>
+    </nav>
+    <nav class="header-bar show-for-small">
       <div class="header-text">
         <h1>Photos and Text</h1>
       </div>
@@ -30,8 +41,8 @@
         {% for gallery in galleries.items %}
           <div class="small-12 medium-6 large-3 columns galleries">
           {% set crop = gallery.thumbnails.filter_by(name="thumb400").first() %}
-          <a href="{{ url_for('gallery_view', gallery_id=gallery.id) }}">
-            <img src="{{ crop.url }}">
+          <a class="gallery-link" href="{{ url_for('gallery_view', gallery_id=gallery.id) }}" data-name="{{ gallery.name }}" data-description="{{ gallery.description }}">
+            <img src="{{ crop.url }}" alt="{{ gallery.description }}">
             <div class="gallery-title-bg"></div>
             <div class="gallery-title">
               <h3>{{ gallery.name }}</h3>
@@ -58,5 +69,18 @@
 </div>
 {% endblock %}
 {% block javascript %}
-
+<script>
+$(document).ready(
+  $(".gallery-link").hover(
+      function(){
+        var description = $(this).attr("data-description");
+        $(this).find(".gallery-title").html("<h4>"+description+"</h4>");
+      },
+      function(){
+        var name = $(this).attr("data-name");
+        $(this).children(".gallery-title").html("<h3>"+name+"</h3>");
+      }
+  )
+);
+</script>
 {% endblock %}

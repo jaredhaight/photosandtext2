@@ -40,7 +40,7 @@
         {% if photos.has_prev %}
         <a href="{{ url_for('gallery_photo_view',gallery_id=photos.prev().items[0].gallery.id, gallery_pos=photos.prev().items[0].gallery_pos) }}">
           <button class="photo-nav-button">
-          <icon class="icon-arrow-left"></icon>
+            <icon class="icon-arrow-left"></icon>
           </button>
         </a>
         {% else %}
@@ -63,7 +63,6 @@
             <icon class="icon-cloud-download small-centered"></icon>
           </button>
         </a>
-        </button>
         {% if photos.has_next %}
         <a href="{{ url_for('gallery_photo_view',gallery_id=photos.next().items[0].gallery.id, gallery_pos=photos.next().items[0].gallery_pos) }}">
           <button class="photo-nav-button">
