@@ -151,7 +151,7 @@ def include_crops_for_single_gallery_api_request(result, **kw):
 def save_single_gallery_on_update(instance_id, **kw):
     print "Got instance: "+str(instance_id)
     gallery = Gallery.query.get(instance_id)
-    gallery.save()
+    gallery.update()
     pass
 
 def remove_crops_for_single_gallery_api_update(data, **kw):
@@ -192,18 +192,17 @@ def gallery_upload_view(gallery_id):
             filename = secure_filename(prepend+"_"+upload[1].filename)
             upload[1].save(os.path.join(app.config['PHOTO_STORE'], filename))
             photo = Photo(image=filename)
-            #TODO: Rethink how this works. Update_photos ends up re-saving the photos a bunch of times. Very wasteful.
             photo.save()
             photo.prepare_photo()
             gallery.add_photo(photo)
             result['status'] = 'success'
             result['id'] = photo.id
             upload_results.append(result)
+    gallery.update()
     resp = dict()
     resp['status'] = 'success'
     resp['objects'] = upload_results
     print resp
-    gallery.save()
     return jsonify(resp)
 
 @app.route('/api/v1/galleries/<int:gallery_id>/status')

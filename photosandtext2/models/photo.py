@@ -5,7 +5,7 @@ from datetime import datetime
 
 from photosandtext2 import db, app
 from photosandtext2.utils.photo import get_image_info, make_crop
-from photosandtext2.queue import low_queue, high_queue
+from photosandtext2.queue import low_queue, medium_queue, high_queue
 
 
 PHOTO_STORE = app.config["PHOTO_STORE"]
@@ -61,6 +61,7 @@ def update_exif(photo):
     photo.height = exif['height']
     photo.orientation = exif['orientation']
     photo.save()
+    photo.gallery.update_positions()
 
 def add_photo_to_gallery(gallery, photoId):
         photo = Photo.query.get(photoId)
@@ -69,9 +70,7 @@ def add_photo_to_gallery(gallery, photoId):
         if photo.location is None:
             photo.location = gallery.location
         photo.save()
-        paged = gallery.photos.order_by(Photo.exif_date_taken).paginate(1,1000,False)
-        gallery.update_positions()
-        gallery.save()
+        gallery.update()
 
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -248,6 +247,16 @@ class Gallery(db.Model):
                 return "Other crops being created"
         return "Ready"
 
+    def update(self):
+        print "Gallery update called"
+        if not self.date:
+            self.created = datetime.utcnow()
+        if not self.permissions:
+            self.permissions = "private"
+        self.updated = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
+
     def save(self):
         print "Gallery save called"
         if not self.date:
@@ -255,8 +264,9 @@ class Gallery(db.Model):
         self.updated = datetime.utcnow()
         if not self.permissions:
             self.permissions = "private"
-        if self.photos.first() and not self.thumbnails.first():
+        if self.photos.first():
             self.update_thumbnails()
+            self.update_positions()
         db.session.add(self)
         db.session.commit()
 
