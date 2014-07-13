@@ -29,16 +29,16 @@
 
       </section>
       <section class="photo-view-sidebar-exif">
-        <h4>EXIF Info</h4>
-        <p>Taken {{ photo.exif_date_taken }}</p>
-        <p>Focal Length: {{ photo.exif_focal }}</p>
+        <p>Model: {{ photo.exif_model }}</p>
+        <p>Taken: {{ photo.exif_date_taken }}</p>
+        <p>Focal: {{ photo.exif_focal }}</p>
+        <p>Shutter: {{ photo.exif_shutter }}</p>
         <p>Aperture: {{ photo.exif_aperture }}</p>
-        <p>ISO: {{ photo.exif_iso }}</p>
-        <p>Shutter {{ photo.exif_shutter }}</p>
+        <p>ISO {{ photo.exif_iso }}</p>
       </section>
       <section class="photoNav">
         {% if photos.has_prev %}
-        <a href="{{ url_for('gallery_photo_view',gallery_id=photos.prev().items[0].gallery.id, gallery_pos=photos.prev().items[0].gallery_pos) }}">
+        <a id="nav-left" href="{{ url_for('gallery_photo_view',gallery_id=photos.prev().items[0].gallery.id, gallery_pos=photos.prev().items[0].gallery_pos) }}">
           <button class="photo-nav-button">
             <icon class="icon-arrow-left"></icon>
           </button>
@@ -53,18 +53,16 @@
             <icon class="icon-home"></icon>
           </button>
         </a>
-        <a href="#">
-          <button class="photo-nav-button">
-            <icon class="icon-info"></icon>
-          </button>
-        </a>
+        <button class="photo-nav-button">
+          <icon class="icon-info"></icon>
+        </button>
         <a href="download">
           <button class="photo-nav-button">
             <icon class="icon-cloud-download small-centered"></icon>
           </button>
         </a>
         {% if photos.has_next %}
-        <a href="{{ url_for('gallery_photo_view',gallery_id=photos.next().items[0].gallery.id, gallery_pos=photos.next().items[0].gallery_pos) }}">
+        <a id="nav-right" href="{{ url_for('gallery_photo_view',gallery_id=photos.next().items[0].gallery.id, gallery_pos=photos.next().items[0].gallery_pos) }}">
           <button class="photo-nav-button">
             <icon class="icon-arrow-right"></icon>
           </button>

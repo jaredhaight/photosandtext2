@@ -72,6 +72,10 @@ def get_image_info(image):
         decoded = TAGS.get(tag, tag)
         ret[decoded] = value
     try:
+        model = ret['Model']
+    except:
+        model = None
+    try:
         iso = ret['ISOSpeedRatings']
     except:
         iso = None
@@ -115,5 +119,5 @@ def get_image_info(image):
             orientation = 'portrait'
     except:
         orientation = None
-    d = dict(iso=iso, aperture="f/"+str(aperture), shutter=shutter, focal=str(focal)+"mm", date_taken=date_taken, caption=caption, width=width, height=height, orientation=orientation)
+    d = dict(model=model, iso=iso, aperture="f/"+str(aperture), shutter=shutter, focal=str(focal)+"mm", date_taken=date_taken, caption=caption, width=width, height=height, orientation=orientation)
     return d

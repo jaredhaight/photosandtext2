@@ -5,6 +5,7 @@ from datetime import datetime
 
 from photosandtext2 import db, app
 from photosandtext2.utils.photo import get_image_info, make_crop
+from photosandtext2.utils.general import date_format
 from photosandtext2.queue import low_queue, medium_queue, high_queue
 
 
@@ -51,6 +52,7 @@ def create_initial_crops(photo):
 def update_exif(photo):
     print str(datetime.now())+" Photo "+str(photo.id)+": Updating EXIF"
     exif = get_image_info(PHOTO_STORE+"/"+photo.image)
+    photo.exif_model = exif['model']
     photo.exif_aperture = exif['aperture']
     photo.exif_date_taken = exif['date_taken']
     photo.exif_focal = exif['focal']
@@ -75,6 +77,7 @@ def add_photo_to_gallery(gallery, photoId):
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     desc = db.Column(db.UnicodeText, nullable=True)
+    exif_model = db.Column(db.String(50), nullable=True)
     exif_iso = db.Column(db.String(10), nullable=True)
     exif_aperture = db.Column(db.String(10), nullable=True)
     exif_shutter = db.Column(db.String(10), nullable=True)
@@ -205,7 +208,8 @@ class Gallery(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256))
     description = db.Column(db.UnicodeText)
-    date = db.Column(db.Date)
+    start_date = db.Column(db.DateTime, nullable=True)
+    end_date = db.Column(db.DateTime, nullable=True)
     photos = db.relationship('Photo', backref=db.backref('gallery'), lazy='dynamic')
     created = db.Column(db.DateTime, nullable=True)
     updated = db.Column(db.DateTime, nullable=True)
@@ -243,13 +247,20 @@ class Gallery(db.Model):
         for photo in self.photos:
             if photo.crops.count() < 3:
                 return "Initial crops being created"
-            if photo.crops.count() <= 17:
+            if photo.crops.count() < 17:
                 return "Other crops being created"
         return "Ready"
 
+
+    def dates(self):
+        if self.start_date and self.end_date:
+            return date_format(self.start_date, self.end_date)
+        else:
+            return None
+
     def update(self):
         print "Gallery update called"
-        if not self.date:
+        if not self.created:
             self.created = datetime.utcnow()
         if not self.permissions:
             self.permissions = "private"
@@ -259,7 +270,7 @@ class Gallery(db.Model):
 
     def save(self):
         print "Gallery save called"
-        if not self.date:
+        if not self.created:
             self.created = datetime.utcnow()
         self.updated = datetime.utcnow()
         if not self.permissions:
@@ -267,6 +278,8 @@ class Gallery(db.Model):
         if self.photos.first():
             self.update_thumbnails()
             self.update_positions()
+            self.start_date = self.photos.order_by(Photo.exif_date_taken)[0].exif_date_taken
+            self.end_date = self.photos.order_by(Photo.exif_date_taken)[-1].exif_date_taken
         db.session.add(self)
         db.session.commit()
 

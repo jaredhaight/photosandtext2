@@ -8,10 +8,11 @@ from werkzeug import secure_filename
 from photosandtext2 import app, manager, login_manager
 from photosandtext2.models.photo import Photo, Crop, Gallery
 from photosandtext2.models.user import User
-from photosandtext2.utils.general import allowed_file, date_format
+from photosandtext2.utils.general import allowed_file
 from photosandtext2.forms import LoginForm
 
 import os
+from time import sleep
 
 #User loader for Flask-Login
 @login_manager.user_loader
@@ -49,8 +50,7 @@ def gallery_view(gallery_id):
     if ((gallery.permissions == 'private') and (current_user.is_authenticated() == False)):
         abort(401)
     photos = gallery.photos.order_by(Photo.gallery_pos)
-    dates = date_format(photos[0].exif_date_taken, photos[-1].exif_date_taken)
-    return render_template('gallery.html', gallery=gallery, photos=photos, dates=dates, user=current_user)
+    return render_template('gallery.html', gallery=gallery, photos=photos, user=current_user)
 
 @app.route('/gallery/<int:gallery_id>/photo/<int:gallery_pos>')
 def gallery_photo_view(gallery_id, gallery_pos):
@@ -198,7 +198,10 @@ def gallery_upload_view(gallery_id):
             result['status'] = 'success'
             result['id'] = photo.id
             upload_results.append(result)
-    gallery.update()
+    while gallery.status() != 'Ready':
+        print "Waiting on Gallery "+str(gallery.id)+": "+gallery.status()
+        sleep(2)
+    gallery.save()
     resp = dict()
     resp['status'] = 'success'
     resp['objects'] = upload_results

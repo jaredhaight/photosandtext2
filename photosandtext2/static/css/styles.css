@@ -181,7 +181,7 @@ h4 {
 
 .gallery-title {
     position: absolute;
-    top: 20%;
+    top: 10%;
     left: 15px;
     right: 15px;
     bottom: 0;
@@ -204,6 +204,13 @@ h4 {
     font-weight: 100;
 }
 
+.gallery-date {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    color: #f2f2f2;
+}
 .gallery-private-msg {
     position: absolute;
     right: 0;
@@ -299,6 +306,8 @@ h4 {
     margin-top: 1em;
     margin-bottom: 1em;
     padding-bottom: 1em;
+    margin-right: 10px;
+    margin-left: 10px;
     text-align: center;
     border-bottom: #e2e2e2;
     border-bottom-style: solid;
@@ -318,7 +327,12 @@ h4 {
 
 .photo-view-sidebar-exif {
     display: none;
-    color: #808080;
+    position: absolute;
+    bottom: 54px;
+    background: #ECF081;
+    right: 0;
+    left: 0;
+    padding: 10px;
 }
 
 .photo-view-sidebar-exif p {
@@ -578,8 +592,9 @@ h4 {
     .photo-view-sidebar {
         position: fixed;
         top: 0;
-        right: 1%;
-        width: 20%;
+        right: 0;
+        bottom: 0;
+        left: 78%;
     }
 
     .photo-view-sidebar-section {
