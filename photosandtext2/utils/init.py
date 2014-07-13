@@ -1,3 +1,7 @@
+import os
+import sys
+sys.path.append(os.getcwd())
+
 from photosandtext2 import app, db
 from photosandtext2.models.photo import *
 from photosandtext2.models.user import *
