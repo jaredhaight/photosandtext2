@@ -106,6 +106,7 @@ h4 {
 /* Homepage CSS */
 .header-wrap {
     max-width: 1580px;
+    margin: 0 auto;
     position: relative;
     overflow: hidden;
     height: 400px;
@@ -156,6 +157,11 @@ h4 {
 .header-text h1 {
     color: #222;
     margin: 0;
+}
+
+.home-gallery-wrap {
+    max-width: 1580px;
+    margin: 0 auto;
 }
 
 .galleries {
