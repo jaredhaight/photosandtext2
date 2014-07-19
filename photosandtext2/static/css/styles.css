@@ -1,7 +1,6 @@
 /* Foundation Overides */
 body {
     font-family: "soleil",'helvetica neue', 'helvetica', sans-serif;
-    max-width: 1580px;
     margin: 0 auto;
 }
 
@@ -106,6 +105,7 @@ h4 {
 
 /* Homepage CSS */
 .header-wrap {
+    max-width: 1580px;
     position: relative;
     overflow: hidden;
     height: 400px;
@@ -571,11 +571,6 @@ h4 {
         left: 0;
         right: 0;
         word-wrap:break-word;
-        overflow: scroll;
-        overflow-style: none;
-        -webkit-overflow-style: none;
-        -moz-overflow-style: none;
-        -ie-overflow-style: none;
     }
 
     .photo.portrait img {
