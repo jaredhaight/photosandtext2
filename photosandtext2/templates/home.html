@@ -39,10 +39,15 @@
     <div id="gallery-wrap" class="row">
       <div>
         {% for gallery in galleries.items %}
+          {% if gallery.description %}
+            {% set gallery_description = gallery.description %}
+          {% else %}
+            {% set gallery_description = "" %}
+          {% endif %}
           <div class="small-12 medium-6 large-3 columns galleries">
           {% set crop = gallery.thumbnails.filter_by(name="thumb400").first() %}
-          <a class="gallery-link" href="{{ url_for('gallery_view', gallery_id=gallery.id) }}" data-name="{{ gallery.name }}" data-description="{{ gallery.description }}">
-            <img src="{{ crop.url }}" alt="{{ gallery.description }}">
+          <a class="gallery-link" href="{{ url_for('gallery_view', gallery_id=gallery.id) }}" data-name="{{ gallery.name }}" data-description="{{ gallery_description }}">
+            <img src="{{ crop.url }}" alt="{{ gallery_description }}">
             <div class="gallery-title-bg"></div>
             <div class="gallery-title">
               <h3>{{ gallery.name }}</h3>
