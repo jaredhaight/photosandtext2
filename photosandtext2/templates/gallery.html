@@ -37,7 +37,9 @@
   {% endif %}
   <div class="row">
     <div class="small-12 columns gallery-meta">
-      <p><icon class="icon-calendar"></icon> {{ gallery.dates() }}</p>
+      {% if gallery.dates() %}
+        <p><icon class="icon-calendar"></icon> {{ gallery.dates() }}</p>
+      {% endif %}
       {% if gallery.location %}
           <p><icon class="icon-location"></icon> {{ gallery.location }}</p>
       {% endif %}
