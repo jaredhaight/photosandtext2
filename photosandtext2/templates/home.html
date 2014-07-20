@@ -41,6 +41,8 @@
         {% for gallery in galleries.items %}
           {% if gallery.description %}
             {% set gallery_description = gallery.description %}
+          {% else %}
+            {% set gallery_description = "" %}
           {% endif %}
           <div class="small-12 medium-6 large-3 columns galleries">
           {% set crop = gallery.thumbnails.filter_by(name="thumb400").first() %}
