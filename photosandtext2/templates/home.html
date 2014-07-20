@@ -41,12 +41,14 @@
         {% for gallery in galleries.items %}
           {% if gallery.description %}
             {% set gallery_description = gallery.description %}
-          {% else %}
-            {% set gallery_description = "" %}
           {% endif %}
           <div class="small-12 medium-6 large-3 columns galleries">
           {% set crop = gallery.thumbnails.filter_by(name="thumb400").first() %}
-          <a class="gallery-link" href="{{ url_for('gallery_view', gallery_id=gallery.id) }}" data-name="{{ gallery.name }}" data-description="{{ gallery_description }}">
+          <a class="gallery-link" href="{{ url_for('gallery_view', gallery_id=gallery.id) }}" data-name="{{ gallery.name }}"
+            {% if gallery_description %}
+             data-description="{{ gallery_description }}"
+            {% endif %}
+          >
             <img src="{{ crop.url }}" alt="{{ gallery_description }}">
             <div class="gallery-title-bg"></div>
             <div class="gallery-title">
@@ -83,9 +85,11 @@ $(document).ready(function() {
   if (isMobile.matches == false){
     $(".gallery-link").hover(
       function(){
-        var description = $(this).attr("data-description");
-        $(this).find(".gallery-title").html("<p>"+description+"</p>");
-        $(this).find(".gallery-title-bg").addClass("gallery-title-bg-hover");
+        if ($(this).attr("data-description")) {
+          var description = $(this).attr("data-description");
+          $(this).find(".gallery-title").html("<p>"+description+"</p>");
+        }
+      $(this).find(".gallery-title-bg").addClass("gallery-title-bg-hover");
       },
       function(){
         var name = $(this).attr("data-name");
