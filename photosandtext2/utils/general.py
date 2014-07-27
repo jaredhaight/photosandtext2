@@ -43,3 +43,7 @@ def date_format(date1, date2):
         return (date1.strftime("%B %d")+" to "+date2.strftime("%d, %Y"))
     else:
         return (date1.strftime("%B %d")+" to "+date2.strftime("%B %d, %Y"))
+
+def save_galleries():
+    for gallery in Gallery.query.filter(Gallery.thumbnails!=None).order_by(Gallery.updated.desc()):
+        gallery.save()
